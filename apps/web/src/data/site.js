@@ -7,7 +7,12 @@ export const MEETUP_URL = 'https://www.meetup.com/aiyatra/';
 export const EVENT_URL = 'https://www.meetup.com/aiyatra/events/316241516/';
 export const PAST_EVENTS_URL = 'https://www.meetup.com/aiyatra/events/past/';
 
-export const AI_YATRA_LOGO = '/aiyatra-mark.png';
+// Local mark in public/. Prefixed with Vite's BASE_URL ("/" on Vercel,
+// "/aiyatra.io-website/" on GitHub Pages) so it resolves on every host.
+// A plain "/aiyatra-mark.png" string would 404 under a subpath.
+const BASE_URL = import.meta.env.BASE_URL || '/';
+
+export const AI_YATRA_LOGO = `${BASE_URL}aiyatra-mark.png`;
 
 export const GROUP_STATS = {
 	members: 2957,
