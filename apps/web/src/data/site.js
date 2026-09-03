@@ -11,7 +11,7 @@ export const AI_YATRA_LOGO = '/aiyatra-mark.png';
 
 export const GROUP_STATS = {
 	members: 2957,
-	eventsHosted: 11,
+	eventsHosted: 14,
 	rating: 4.6,
 	ratingsCount: 90,
 	venue: 'LSEG, International Tech Park, Madhapur, Hyderabad',

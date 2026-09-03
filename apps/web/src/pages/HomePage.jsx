@@ -96,6 +96,7 @@ function Header() {
 				<nav className="hidden items-center gap-7 text-sm font-medium text-ink md:flex">
 					<a href="#events" className="transition-colors hover:text-tone-blue-deep">Events</a>
 					<a href="#moments" className="transition-colors hover:text-tone-blue-deep">Moments</a>
+					<a href="#method" className="transition-colors hover:text-tone-blue-deep">The Method</a>
 					<a href="#voices" className="transition-colors hover:text-tone-blue-deep">Voices</a>
 					<a href="#about" className="transition-colors hover:text-tone-blue-deep">About</a>
 				</nav>
@@ -513,6 +514,84 @@ function Moments() {
 	);
 }
 
+const methodSteps = [
+	{
+		n: '01',
+		kicker: 'Research',
+		title: 'Research',
+		body: 'We read the papers, trace the math, and ask the naive questions out loud — so nobody has to pretend they already know.',
+		tone: 'bg-tone-violet',
+	},
+	{
+		n: '02',
+		kicker: 'Build',
+		title: 'Build',
+		body: 'Laptops open, code on screen. Every session ships something real — a training loop, an agent harness, a working demo.',
+		tone: 'bg-tone-green',
+	},
+	{
+		n: '03',
+		kicker: 'Transform',
+		title: 'Transform',
+		body: 'Skills become careers, side projects become products, and strangers become collaborators. That is the yatra — the journey.',
+		tone: 'bg-tone-coral',
+	},
+];
+
+function Method() {
+	return (
+		<section id="method" className="bg-ink text-paper">
+			<div className="wrap py-20">
+				<Reveal>
+					<div className="max-w-2xl">
+						<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-yellow">The AIYatra way</p>
+						<h2 className="mt-3 font-hand text-5xl font-bold leading-tight sm:text-6xl">
+							First you research.<br />
+							Then you build.<br />
+							Then you <span className="text-tone-yellow">transform.</span>
+						</h2>
+						<p className="mt-6 text-lg leading-relaxed text-paper/70">
+							Yatra means journey. Ours takes you from curious onlooker to confident builder — through
+							research, build, and transform, repeated every single meetup.
+						</p>
+					</div>
+				</Reveal>
+
+				<div className="mt-12 grid items-stretch gap-6 md:grid-cols-3">
+					{methodSteps.map((s, i) => (
+						<Reveal key={s.n} delay={i * 0.08} className="flex">
+							<article className="flex flex-1 flex-col rounded-2xl border-2 border-paper/20 bg-paper-soft p-6 text-ink shadow-paper-soft sm:p-7">
+								<span className={`inline-flex w-fit items-center rounded-full border-2 border-ink ${s.tone} px-3 py-1 font-hand text-xl font-bold`}>
+									{s.n} · {s.kicker}
+								</span>
+								<h3 className="mt-4 font-hand text-4xl font-bold leading-tight">{s.title}</h3>
+								<p className="mt-3 flex-1 text-base leading-relaxed text-ink/80">{s.body}</p>
+							</article>
+						</Reveal>
+					))}
+				</div>
+
+				<Reveal delay={0.1}>
+					<div className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-3">
+						{[
+							{ value: GROUP_STATS.eventsHosted, suffix: '', label: 'Meetups hosted' },
+							{ value: 2, suffix: 'hr', label: 'Per session' },
+							{ value: 100, suffix: '%', label: 'Free, always' },
+						].map((s) => (
+							<div key={s.label} className="rounded-xl border-2 border-paper/25 bg-paper/5 px-3 py-4 text-center">
+								<p className="font-hand text-3xl font-bold text-tone-yellow">
+									<CountUp value={s.value} suffix={s.suffix || ''} />
+								</p>
+								<p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-paper/55">{s.label}</p>
+							</div>
+						))}
+					</div>
+				</Reveal>
+			</div>
+		</section>
+	);
+}
+
 function Testimonials() {
 	const row = [...testimonials, ...testimonials];
 	return (
@@ -797,6 +876,7 @@ export default function HomePage() {
 				<Hero />
 				<Events />
 				<Moments />
+				<Method />
 				<Testimonials />
 				<About />
 				<FinalCta />
