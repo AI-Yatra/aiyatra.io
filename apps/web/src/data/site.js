@@ -6,6 +6,9 @@
 export const MEETUP_URL = 'https://www.meetup.com/aiyatra/';
 export const EVENT_URL = 'https://www.meetup.com/aiyatra/events/316241516/';
 export const PAST_EVENTS_URL = 'https://www.meetup.com/aiyatra/events/past/';
+export const CONTACT_EMAIL = 'global.aiyatra@gmail.com';
+export const LINKEDIN_URL = 'https://www.linkedin.com/company/aiyatra/';
+export const GITHUB_URL = 'https://github.com/AI-Yatra';
 
 // Local mark in public/. Prefixed with Vite's BASE_URL ("/" on the custom
 // domain) so it resolves on every host.
@@ -192,6 +195,7 @@ export const PAST_EVENTS = ALL_EVENTS.filter((e) => e.status === 'past');
 
 // Real faces from the live group — organizer + recent attendees (meetupstatic avatars)
 export const HOST_PHOTO = `${BASE_URL}jagadeeswara-reddy.jpg`;
+export const AMBASSADOR_CREST = `${BASE_URL}ambassador-crest.jpg`;
 
 export const COMMUNITY_FACES = [
 	{

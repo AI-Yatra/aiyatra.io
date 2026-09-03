@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import {
 	ArrowRight, ArrowUpRight, CalendarDays, MapPin, Users, Star, Sparkles,
-	Quote, Compass, Ticket, Clock, Building2, Github, Linkedin, Mail,
-	MessageCircle, Heart, Camera, BookOpen, ChevronLeft, ChevronRight,
+	Quote, Compass, Ticket, Clock, Building2,
+	Camera, BookOpen, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import CountUp from '@/components/CountUp';
+import { Header, Footer } from '@/components/SiteChrome';
+import { Link } from 'react-router-dom';
 import {
-	MEETUP_URL, PAST_EVENTS_URL, EVENT_URL, AI_YATRA_LOGO, EVENTS,
-	PAST_EVENTS, GROUP_STATS, COMMUNITY_FACES, HOST_PHOTO,
+	MEETUP_URL, PAST_EVENTS_URL, EVENT_URL, EVENTS,
+	PAST_EVENTS, GROUP_STATS, COMMUNITY_FACES, HOST_PHOTO, AMBASSADOR_CREST,
 } from '@/data/site';
 
 // Every section on this page uses the same `.wrap` shell (max 1480px +
@@ -61,57 +63,6 @@ const essentials = [
 	{ icon: Ticket, label: 'Cost', value: 'Free, always — learning should be' },
 	{ icon: Building2, label: 'Bring', value: 'A laptop, Python 3.10+, and curiosity' },
 ];
-
-function Logo() {
-	// Local transparent mark (public/aiyatra-mark.png, cut from the brand
-	// artwork) plus a typeset wordmark — crisp at any size, no white box,
-	// and the ink text melts into the paper theme on every background.
-	return (
-		<span className="flex items-center gap-2.5">
-			<img
-				src={AI_YATRA_LOGO}
-				alt=""
-				aria-hidden="true"
-				className="h-14 w-14 shrink-0 object-contain sm:h-16 sm:w-16"
-			/>
-			<span className="flex flex-col leading-none">
-				<span className="text-[22px] font-extrabold tracking-tight text-ink sm:text-2xl">
-					AI Yatra
-				</span>
-				<span className="mt-1 hidden text-[10px] font-bold uppercase tracking-[0.22em] text-ink/55 sm:block">
-					Research · Build · Transform
-				</span>
-			</span>
-		</span>
-	);
-}
-
-function Header() {
-	return (
-		<header className="sticky top-0 z-50 border-b-2 border-ink bg-paper/95 backdrop-blur-sm">
-			<div className="wrap flex h-[76px] items-center justify-between gap-5">
-				<a href="#top" className="flex shrink-0 items-center" aria-label="AI Yatra home">
-					<Logo />
-				</a>
-				<nav className="hidden items-center gap-7 text-sm font-medium text-ink md:flex">
-					<a href="#events" className="transition-colors hover:text-tone-blue-deep">Events</a>
-					<a href="#moments" className="transition-colors hover:text-tone-blue-deep">Moments</a>
-					<a href="#method" className="transition-colors hover:text-tone-blue-deep">The Method</a>
-					<a href="#voices" className="transition-colors hover:text-tone-blue-deep">Voices</a>
-					<a href="#about" className="transition-colors hover:text-tone-blue-deep">About</a>
-				</nav>
-				<a
-					href={MEETUP_URL}
-					target="_blank"
-					rel="noreferrer"
-					className="active-press inline-flex h-10 shrink-0 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-4 text-sm font-semibold text-paper shadow-paper-sm transition-transform hover:-translate-y-0.5"
-				>
-					Join on Meetup <ArrowUpRight className="h-4 w-4" />
-				</a>
-			</div>
-		</header>
-	);
-}
 
 function HeroCard() {
 	return (
@@ -373,7 +324,7 @@ function Moments() {
 			<div className="wrap py-20">
 				<Reveal>
 					<p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">
-						<Camera className="h-4 w-4" /> Moments from the yatra
+						<Camera className="h-4 w-4" /> Field notes
 					</p>
 					<h2 className="mt-3 font-hand text-5xl font-bold leading-tight sm:text-6xl">
 						Real rooms. Real laptops.<br />Real people.
@@ -562,7 +513,7 @@ function Method() {
 			<div className="wrap py-20">
 				<Reveal>
 					<div className="max-w-2xl">
-						<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-yellow">The AIYatra way</p>
+						<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-yellow">The Yatra way</p>
 						<h2 className="mt-3 font-hand text-5xl font-bold leading-tight sm:text-6xl">
 							First you research.<br />
 							Then you build.<br />
@@ -618,7 +569,7 @@ function Testimonials() {
 				<Reveal>
 					<div className="flex flex-wrap items-end justify-between gap-6">
 						<div>
-							<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">Community voices</p>
+							<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">Kind words</p>
 							<h2 className="mt-3 font-hand text-5xl font-bold leading-tight sm:text-6xl">
 								Rated {GROUP_STATS.rating}★ by the people<br />who show up.
 							</h2>
@@ -663,13 +614,50 @@ function Testimonials() {
 	);
 }
 
+function AmbassadorBand() {
+	return (
+		<section className="border-b-2 border-ink bg-tone-blue/30">
+			<div className="wrap py-14">
+				<Reveal>
+					<div className="flex flex-col items-center gap-8 rounded-2xl border-2 border-ink bg-paper p-6 shadow-paper sm:p-8 lg:flex-row">
+						<img
+							src={AMBASSADOR_CREST}
+							alt="AIYatra Student Ambassador Program crest"
+							loading="lazy"
+							className="h-36 w-36 shrink-0 rounded-2xl border-2 border-ink object-cover shadow-paper-sm sm:h-44 sm:w-44"
+						/>
+						<div className="min-w-0 flex-1 text-center lg:text-left">
+							<p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">
+								New chapter · Student Ambassador Program
+							</p>
+							<p className="mt-2 font-hand text-3xl font-bold leading-tight sm:text-4xl">
+								Carry the yatra to your campus.
+							</p>
+							<p className="mx-auto mt-2 max-w-2xl text-sm font-medium leading-relaxed text-ink/70 lg:mx-0">
+								Rally your batch to Saturday meetups, host campus mini-sessions, and earn
+								recognition, mentorship and speaker slots — free, always.
+							</p>
+						</div>
+						<Link
+							to="/ambassadors"
+							className="active-press inline-flex h-12 shrink-0 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-6 text-base font-semibold text-paper shadow-paper transition-transform hover:-translate-y-0.5"
+						>
+							Explore the program <ArrowRight className="h-5 w-5" />
+						</Link>
+					</div>
+				</Reveal>
+			</div>
+		</section>
+	);
+}
+
 function About() {
 	return (
 		<section id="about" className="bg-tone-green/40">
 			<div className="wrap grid gap-12 py-20 lg:grid-cols-2 lg:items-stretch lg:gap-[clamp(44px,6vw,96px)]">
 				<Reveal className="flex">
 					<div className="flex flex-1 flex-col justify-center">
-						<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">About the community</p>
+						<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">The movement</p>
 						<h2 className="mt-3 font-hand text-5xl font-bold leading-tight sm:text-6xl">
 							An open door into AI,<br />in the heart of Hyderabad.
 						</h2>
@@ -745,140 +733,6 @@ function FinalCta() {
 	);
 }
 
-function FooterHeading({ children }) {
-	return (
-		<p className="text-[11px] font-bold uppercase tracking-[0.25em] text-tone-yellow">
-			{children}
-		</p>
-	);
-}
-
-function Footer() {
-	return (
-		<footer className="bg-ink text-paper" style={{ borderTop: '5px solid hsl(var(--tone-yellow))' }}>
-			<div className="wrap grid gap-12 py-14 sm:grid-cols-2 lg:grid-cols-[1.3fr_0.9fr_1fr_0.9fr]">
-				{/* Brand */}
-				<div>
-					<a href="#top" className="flex items-center gap-2.5" aria-label="AI Yatra home">
-						<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" className="h-14 w-14 shrink-0 object-contain" />
-						<span className="flex flex-col leading-none">
-							<span className="text-[22px] font-extrabold tracking-tight text-paper">AI Yatra</span>
-							<span className="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-paper/60">
-								Research · Build · Transform
-							</span>
-						</span>
-					</a>
-					<p className="mt-5 font-hand text-2xl font-bold leading-snug text-paper">
-						AI Yatra — Research. Build. Transform.
-					</p>
-					<p className="mt-2 max-w-sm text-sm leading-relaxed text-paper/70">
-						Hyderabad's open AI community. We research, build, and transform — one hands-on Saturday
-						at a time. Free, forever, and open to everyone.
-					</p>
-					<div className="mt-5 flex flex-wrap gap-3">
-						<a
-							href={MEETUP_URL}
-							target="_blank"
-							rel="noreferrer"
-							className="active-press inline-flex h-10 items-center gap-2 rounded-xl border-2 border-paper bg-tone-yellow px-4 text-sm font-bold text-ink transition-transform hover:-translate-y-0.5"
-						>
-							Join on Meetup <ArrowUpRight className="h-4 w-4" />
-						</a>
-						<a
-							href={EVENT_URL}
-							target="_blank"
-							rel="noreferrer"
-							className="active-press inline-flex h-10 items-center gap-2 rounded-xl border-2 border-paper/40 px-4 text-sm font-semibold text-paper transition-colors hover:border-paper"
-						>
-							Next: Sep 5
-						</a>
-					</div>
-				</div>
-
-				{/* Explore */}
-				<div>
-					<FooterHeading>Explore</FooterHeading>
-					<ul className="mt-4 space-y-2.5 text-sm font-semibold">
-						<li><a href="#events" className="text-paper/75 transition-colors hover:text-tone-yellow">Upcoming &amp; past events</a></li>
-						<li><a href="#moments" className="text-paper/75 transition-colors hover:text-tone-yellow">Moments from the yatra</a></li>
-						<li><a href="#voices" className="text-paper/75 transition-colors hover:text-tone-yellow">Community voices</a></li>
-						<li><a href="#about" className="text-paper/75 transition-colors hover:text-tone-yellow">About the community</a></li>
-						<li><a href={MEETUP_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-paper/75 transition-colors hover:text-tone-yellow">Meetup chapter page <ArrowUpRight className="h-3.5 w-3.5" /></a></li>
-					</ul>
-				</div>
-
-				{/* Show up */}
-				<div>
-					<FooterHeading>Show up</FooterHeading>
-					<ul className="mt-4 space-y-3 text-sm">
-						<li className="flex items-start gap-3 text-paper/75">
-							<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border-2 border-paper/25 bg-paper/10">
-								<MapPin className="h-4 w-4 text-tone-yellow" />
-							</span>
-							<span className="leading-snug">{GROUP_STATS.venue}</span>
-						</li>
-						<li className="flex items-center gap-3 text-paper/75">
-							<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border-2 border-paper/25 bg-paper/10">
-								<CalendarDays className="h-4 w-4 text-tone-yellow" />
-							</span>
-							<span>Saturdays · mornings, IST</span>
-						</li>
-						<li className="flex items-center gap-3 text-paper/75">
-							<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border-2 border-paper/25 bg-paper/10">
-								<Ticket className="h-4 w-4 text-tone-yellow" />
-							</span>
-							<span>Free, always</span>
-						</li>
-					</ul>
-				</div>
-
-				{/* Follow */}
-				<div>
-					<FooterHeading>Follow the yatra</FooterHeading>
-					<ul className="mt-4 space-y-3 text-sm font-semibold">
-						<li>
-							<a href="mailto:hello@aiyatra.com" className="inline-flex items-center gap-2 text-paper/75 transition-colors hover:text-tone-yellow">
-								<Mail className="h-4 w-4" /> hello@aiyatra.com
-							</a>
-						</li>
-						<li>
-							<a href={MEETUP_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-paper/75 transition-colors hover:text-tone-yellow">
-								<MessageCircle className="h-4 w-4" /> Message us on Meetup
-							</a>
-						</li>
-					</ul>
-					<div className="mt-5 flex items-center gap-3">
-						<a href={MEETUP_URL} target="_blank" rel="noreferrer" aria-label="Meetup" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border-2 border-paper/30 text-paper/75 transition-colors hover:border-tone-yellow hover:text-tone-yellow">
-							<Users className="h-5 w-5" />
-						</a>
-						<a href="https://github.com/aiyatra" target="_blank" rel="noreferrer" aria-label="GitHub" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border-2 border-paper/30 text-paper/75 transition-colors hover:border-tone-yellow hover:text-tone-yellow">
-							<Github className="h-5 w-5" />
-						</a>
-						<a href="https://www.linkedin.com/company/aiyatra" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border-2 border-paper/30 text-paper/75 transition-colors hover:border-tone-yellow hover:text-tone-yellow">
-							<Linkedin className="h-5 w-5" />
-						</a>
-						<a href="mailto:hello@aiyatra.com" aria-label="Email" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border-2 border-paper/30 text-paper/75 transition-colors hover:border-tone-yellow hover:text-tone-yellow">
-							<Mail className="h-5 w-5" />
-						</a>
-					</div>
-				</div>
-			</div>
-
-			<div className="border-t border-paper/15">
-				<div className="wrap flex flex-col items-center justify-between gap-2 py-5 text-xs sm:flex-row">
-					<p className="inline-flex items-center gap-1.5 tracking-wide text-paper/60">
-						Made with <Heart className="h-3.5 w-3.5 fill-tone-coral text-tone-coral" /> in Hyderabad
-					</p>
-					<p className="tracking-wide text-paper/60">© 2026 AIYatra · Research. Build. Transform.</p>
-					<a href="#top" className="font-semibold text-paper/75 transition-colors hover:text-tone-yellow">
-						Back to top
-					</a>
-				</div>
-			</div>
-		</footer>
-	);
-}
-
 export default function HomePage() {
 	return (
 		<div className="grain min-h-screen bg-paper text-ink antialiased">
@@ -896,6 +750,7 @@ export default function HomePage() {
 				<Moments />
 				<Method />
 				<Testimonials />
+				<AmbassadorBand />
 				<About />
 				<FinalCta />
 			</main>
