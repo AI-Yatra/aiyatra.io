@@ -14,7 +14,7 @@ const duties = [
 	{
 		icon: Megaphone,
 		tone: 'bg-tone-yellow',
-		title: 'Carry the yatra to campus',
+		title: 'Carry the AI Yatra to campus',
 		body: 'Spread the word in your college — posters, classroom shout-outs, WhatsApp groups and tech clubs. You are the bridge between AIYatra and your campus.',
 	},
 	{
@@ -79,7 +79,7 @@ const steps = [
 	{
 		n: '01',
 		title: 'Say hello',
-		body: 'Email us with your name, college, year, and one paragraph on why you want to carry the yatra to your campus.',
+		body: 'Email us with your name, college, year, and one paragraph on why you want to carry the AI Yatra to your campus.',
 	},
 	{
 		n: '02',
@@ -100,7 +100,7 @@ export default function AmbassadorsPage() {
 				<title>Student Ambassador Program — AIYatra</title>
 				<meta
 					name="description"
-					content="Become an AIYatra Student Ambassador: carry the yatra to your campus, host mini-sessions, earn recognition, mentorship and speaker slots. Free, open to every college student."
+					content="Become an AIYatra Student Ambassador: carry the AI Yatra to your campus, host mini-sessions, earn recognition, mentorship and speaker slots. Free, open to every college student."
 				/>
 			</Helmet>
 			<Header />
@@ -116,7 +116,7 @@ export default function AmbassadorsPage() {
 							</Reveal>
 							<Reveal delay={0.08}>
 								<h1 className="mt-6 font-hand text-6xl font-bold leading-[0.95] tracking-tight sm:text-7xl">
-									Carry the yatra<br />
+									Carry the AI Yatra<br />
 									to <span className="text-tone-blue-deep underline decoration-tone-coral decoration-4 underline-offset-8">your campus.</span>
 								</h1>
 							</Reveal>
@@ -222,14 +222,14 @@ export default function AmbassadorsPage() {
 
 				{/* Who fits + how to apply */}
 				<section className="bg-tone-green/40">
-					<div className="wrap grid gap-12 py-20 lg:grid-cols-2 lg:items-start lg:gap-[clamp(44px,6vw,96px)]">
+					<div className="wrap grid gap-12 py-20 lg:grid-cols-2 lg:items-stretch lg:gap-[clamp(44px,6vw,96px)]">
 						<Reveal className="flex">
 							<div className="flex flex-1 flex-col rounded-2xl border-2 border-ink bg-paper-soft p-6 shadow-paper sm:p-8">
 								<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">Who fits</p>
 								<h2 className="mt-3 font-hand text-4xl font-bold leading-tight sm:text-5xl">
 									Built for students<br />who show up.
 								</h2>
-								<ul className="mt-6 flex-1 space-y-4">
+								<ul className="mt-6 flex flex-1 flex-col justify-between gap-4 py-1">
 									{whoFits.map((w, i) => (
 										<li key={i} className="flex items-start gap-3 text-sm font-medium leading-relaxed text-ink/80">
 											<span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-tone-green text-xs font-bold">
@@ -280,7 +280,7 @@ export default function AmbassadorsPage() {
 								<GraduationCap className="h-4 w-4" /> One campus at a time
 							</span>
 							<h2 className="mx-auto mt-8 max-w-3xl font-hand text-5xl font-bold leading-tight sm:text-7xl">
-								Your campus is<br />the next <span className="text-tone-yellow">yatra.</span>
+								Your campus is<br />the next <span className="text-tone-yellow">AI Yatra.</span>
 							</h2>
 							<p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-paper/70">
 								Write to us today — or come experience a Saturday first, then decide.
