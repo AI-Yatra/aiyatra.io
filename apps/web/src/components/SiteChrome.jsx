@@ -121,13 +121,13 @@ export function Footer() {
 				<div>
 					<FooterHeading>Explore</FooterHeading>
 					<ul className="mt-4 space-y-2.5 text-sm font-semibold">
-						<li><Link to="/ambassadors" className="text-tone-yellow transition-colors hover:text-paper">Student Ambassadors — new</Link></li>
+						<li><Link to="/ambassadors" className="text-tone-yellow transition-colors hover:text-paper">Ambassadors — new</Link></li>
 						<li><Link to="/blog" className="text-paper/75 transition-colors hover:text-tone-yellow">Blog</Link></li>
-						<li><Link to="/#events" className="text-paper/75 transition-colors hover:text-tone-yellow">Gatherings, upcoming &amp; past</Link></li>
-						<li><Link to="/#moments" className="text-paper/75 transition-colors hover:text-tone-yellow">Field notes from the yatra</Link></li>
-						<li><Link to="/#voices" className="text-paper/75 transition-colors hover:text-tone-yellow">Kind words from the community</Link></li>
-						<li><Link to="/#about" className="text-paper/75 transition-colors hover:text-tone-yellow">The movement</Link></li>
-						<li><a href={MEETUP_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-paper/75 transition-colors hover:text-tone-yellow">Meetup chapter page <ArrowUpRight className="h-3.5 w-3.5" /></a></li>
+						<li><Link to="/#events" className="text-paper/75 transition-colors hover:text-tone-yellow">Gatherings</Link></li>
+						<li><Link to="/#moments" className="text-paper/75 transition-colors hover:text-tone-yellow">Field Notes</Link></li>
+						<li><Link to="/#voices" className="text-paper/75 transition-colors hover:text-tone-yellow">Kind Words</Link></li>
+						<li><Link to="/#about" className="text-paper/75 transition-colors hover:text-tone-yellow">Movement</Link></li>
+						<li><a href={MEETUP_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-paper/75 transition-colors hover:text-tone-yellow">Meetup <ArrowUpRight className="h-3.5 w-3.5" /></a></li>
 					</ul>
 				</div>
 
@@ -158,7 +158,7 @@ export function Footer() {
 
 				{/* Follow */}
 				<div>
-					<FooterHeading>Follow the yatra</FooterHeading>
+					<FooterHeading>Follow</FooterHeading>
 					<ul className="mt-4 space-y-3 text-sm font-semibold">
 						<li>
 							<a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-2 text-paper/75 transition-colors hover:text-tone-yellow">
@@ -167,7 +167,7 @@ export function Footer() {
 						</li>
 						<li>
 							<a href={MEETUP_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-paper/75 transition-colors hover:text-tone-yellow">
-								<MessageCircle className="h-4 w-4" /> Message us on Meetup
+								<MessageCircle className="h-4 w-4" /> Meetup inbox
 							</a>
 						</li>
 					</ul>
