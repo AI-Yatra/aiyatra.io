@@ -9,7 +9,7 @@ import Reveal from '@/components/Reveal';
 import CountUp from '@/components/CountUp';
 import {
 	MEETUP_URL, PAST_EVENTS_URL, EVENT_URL, AI_YATRA_LOGO, EVENTS,
-	PAST_EVENTS, GROUP_STATS, COMMUNITY_FACES,
+	PAST_EVENTS, GROUP_STATS, COMMUNITY_FACES, HOST_PHOTO,
 } from '@/data/site';
 
 // Every section on this page uses the same `.wrap` shell (max 1480px +
@@ -466,7 +466,7 @@ function Moments() {
 							A small volunteer crew plans the curriculum, hosts every Saturday session at LSEG Madhapur,
 							reviews RSVPs, and mentors newcomers — so every meetup stays hands-on, free, and welcoming.
 						</p>
-						<div className="mt-6 grid items-stretch gap-4 md:grid-cols-2">
+						<div className="mt-6 grid items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3">
 							<div className="flex flex-col rounded-xl border-2 border-ink bg-tone-yellow p-5">
 								<div className="flex items-center gap-4">
 									<img
@@ -501,6 +501,24 @@ function Moments() {
 								<p className="mt-3 flex-1 text-sm font-medium leading-relaxed text-ink/75">
 									Co-hosts sessions and keeps the room running — demos, hands-on labs, Q&A, and
 									making sure no learner leaves stuck.
+								</p>
+							</div>
+							<div className="flex flex-col rounded-xl border-2 border-ink bg-tone-blue p-5">
+								<div className="flex items-center gap-4">
+									<img
+										src={HOST_PHOTO}
+										alt="Jagadeeswara Reddy"
+										loading="lazy"
+										className="h-16 w-16 shrink-0 rounded-full border-2 border-ink object-cover shadow-paper-sm"
+									/>
+									<div className="min-w-0">
+										<p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/60">Host & Educator</p>
+										<p className="mt-1 text-lg font-bold leading-tight">Jagadeeswara Reddy</p>
+									</div>
+								</div>
+								<p className="mt-3 flex-1 text-sm font-medium leading-relaxed text-ink/75">
+									Hosts sessions and leads talks on educational material — turning dense topics into
+									clear, hands-on learning the community can actually use.
 								</p>
 							</div>
 						</div>
