@@ -369,6 +369,7 @@ logger.error = (msg, options) => {
 }
 
 export default defineConfig({
+	base: process.env.GITHUB_PAGES ? '/aiyatra.io/' : '/',
 	optimizeDeps: {
 		include: allDeps,
 	},
