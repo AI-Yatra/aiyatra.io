@@ -1,2 +1,6 @@
 ## Pages
+- [Admin — AIYatra](/admin): No description available
 - [AIYatra — Democratizing AI Learning | Hyderabad AI Community](/): AIYatra is Hyderabad
+- [Chronicle not found — AIYatra](/blog/:slug): No description available
+- [Chronicles — the AIYatra blog](/blog): Session recaps and field notes from every AIYatra meetup — PyTorch, transformers, DeepSeek-V3, agentic AI and more. Written from the room, free forever.
+- [Student Ambassador Program — AIYatra](/ambassadors): Become an AIYatra Student Ambassador: carry the AI Yatra to your campus, host mini-sessions, earn recognition, mentorship and speaker slots. Free, open to every college student.
