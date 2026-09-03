@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "DM Sans", sans-serif;
+  overflow-x: clip;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.font-hand {
+  font-family: "Caveat", cursive;
+}
+
+/*
+  ---break---
+*/
+
+@layer base {
+  :root {
+    --background: 43 46% 93%;
+    --foreground: 45 10% 14%;
+    --card: 45 40% 96%;
+    --card-foreground: 45 10% 14%;
+    --popover: 45 40% 96%;
+    --popover-foreground: 45 10% 14%;
+    --primary: 45 10% 14%;
+    --primary-foreground: 43 46% 95%;
+    --secondary: 42 30% 88%;
+    --secondary-foreground: 45 10% 14%;
+    --muted: 42 26% 88%;
+    --muted-foreground: 40 7% 38%;
+    --accent: 204 45% 88%;
+    --accent-foreground: 45 10% 14%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 45 10% 14%;
+    --input: 40 12% 80%;
+    --ring: 45 10% 14%;
+    --radius: 0.9rem;
+
+    /* AI Yatra paper-and-ink palette */
+    --paper: 43 46% 93%;
+    --paper-soft: 45 40% 96%;
+    --ink: 45 10% 14%;
+    --ink-soft: 40 7% 38%;
+    --tone-blue: 204 48% 87%;
+    --tone-blue-deep: 205 38% 45%;
+    --tone-green: 110 32% 86%;
+    --tone-yellow: 46 78% 82%;
+    --tone-coral: 18 60% 87%;
+    --tone-violet: 262 38% 89%;
+  }
+}
+
+@layer utilities {
+  /* ——— OpenShut-style uniform shell ———
+     One container for the whole site: 1480px max, fluid 6vw gutters.
+     Every section uses .wrap so nothing feels centered-narrow vs full-bleed. */
+  .wrap {
+    width: 100%;
+    max-width: 1480px;
+    margin-inline: auto;
+    padding-inline: clamp(22px, 6vw, 92px);
+  }
+  .wrap-narrow {
+    width: 100%;
+    max-width: 1100px;
+    margin-inline: auto;
+    padding-inline: clamp(22px, 6vw, 92px);
+  }
+
+  /* NOTE: paper, ink and tone colors live in tailwind.config.js so every
+     color variant (text, bg, border, fill, decoration, with opacity) is
+     generated. Do not re-declare them here. */
+
+  /* hard offset "paper" shadow */
+  .shadow-paper { box-shadow: 5px 5px 0 0 hsl(var(--ink) / 0.9); }
+  .shadow-paper-sm { box-shadow: 3px 3px 0 0 hsl(var(--ink) / 0.9); }
+  .shadow-paper-soft { box-shadow: 6px 6px 0 0 hsl(var(--ink) / 0.14); }
+  .hover-lift { transition: transform 180ms ease-out, box-shadow 180ms ease-out; }
+  .hover-lift:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 0 hsl(var(--ink) / 0.9); }
+  .active-press:active { transform: translate(1px, 1px) scale(0.99); }
+}
+
+/* paper grain overlay */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+/* marquee ticker */
+@keyframes yatra-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: yatra-marquee 28s linear infinite;
+  will-change: transform;
+}
+
+/* reverse marquee (content travels left → right) */
+@keyframes yatra-marquee-reverse {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.marquee-track-reverse {
+  animation: yatra-marquee-reverse 40s linear infinite;
+  will-change: transform;
+}
+.marquee-slow { animation-duration: 48s; }
+
+/* pause on hover for readable marquee cards */
+.marquee-pause:hover .marquee-track,
+.marquee-pause:hover .marquee-track-reverse { animation-play-state: paused; }
+
+/* gentle float for hero stickers */
+@keyframes yatra-float {
+  0%, 100% { transform: translateY(0) rotate(var(--float-rot, 0deg)); }
+  50% { transform: translateY(-7px) rotate(var(--float-rot, 0deg)); }
+}
+.float-soft { animation: yatra-float 5.5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track, .marquee-track-reverse, .float-soft { animation: none; }
+}
