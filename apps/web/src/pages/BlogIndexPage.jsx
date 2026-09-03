@@ -16,7 +16,7 @@ function PostCard({ post, tone }) {
 			<Link to={`/blog/${post.slug}`} className="relative block aspect-[16/9] overflow-hidden border-b-2 border-ink bg-tone-blue/30">
 				<img src={post.cover} alt={post.title} loading="lazy" className="h-full w-full object-cover" />
 				<span className={`absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full border-2 border-ink ${tone} px-3 py-1 text-[11px] font-bold uppercase tracking-wide`}>
-					<BookOpen className="h-3.5 w-3.5" /> Chronicle
+					<BookOpen className="h-3.5 w-3.5" /> Story
 				</span>
 			</Link>
 			<div className="flex flex-1 flex-col p-6">
@@ -43,7 +43,7 @@ export default function BlogIndexPage() {
 	return (
 		<div className="grain min-h-screen bg-paper text-ink antialiased">
 			<Helmet>
-				<title>Chronicles — the AIYatra blog</title>
+				<title>Blog — AIYatra</title>
 				<meta
 					name="description"
 					content="Session recaps and field notes from every AIYatra meetup — PyTorch, transformers, DeepSeek-V3, agentic AI and more. Written from the room, free forever."
@@ -55,7 +55,7 @@ export default function BlogIndexPage() {
 					<div className="wrap pb-10 pt-14 lg:pb-12 lg:pt-[74px]">
 						<Reveal>
 							<span className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-tone-yellow px-4 py-1.5 text-sm font-semibold shadow-paper-sm">
-								<Sparkles className="h-4 w-4" /> Chronicles · {posts.length} stories and counting
+								<Sparkles className="h-4 w-4" /> Blog · {posts.length} stories and counting
 							</span>
 						</Reveal>
 						<Reveal delay={0.08}>

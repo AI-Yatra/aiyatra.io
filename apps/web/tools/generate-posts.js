@@ -112,7 +112,7 @@ function main() {
 		'## Pages',
 		'- [AIYatra — Democratizing AI Learning | Hyderabad AI Community](/): AIYatra is Hyderabad’s open AI community — free hands-on meetups on agentic AI, PyTorch, and machine learning.',
 		'- [Student Ambassador Program — AIYatra](/ambassadors): Carry the AI Yatra to your campus as a student ambassador.',
-		'- [Chronicles — the AIYatra blog](/blog): Session recaps and field notes from every AIYatra meetup.',
+		'- [Blog — AIYatra](/blog): Session recaps and field notes from every AIYatra meetup.',
 		...posts.map((p) => `- [${p.title}](/blog/${p.slug}): ${p.excerpt}`),
 		'',
 	].join('\n');

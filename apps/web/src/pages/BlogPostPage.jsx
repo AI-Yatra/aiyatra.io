@@ -12,12 +12,12 @@ function NotFound() {
 	return (
 		<div className="grain min-h-screen bg-paper text-ink antialiased">
 			<Helmet>
-				<title>Chronicle not found — AIYatra</title>
+				<title>Post not found — AIYatra</title>
 			</Helmet>
 			<Header />
 			<main>
 				<section className="wrap py-24 text-center">
-					<p className="font-hand text-6xl font-bold">No such chronicle.</p>
+					<p className="font-hand text-6xl font-bold">No such post.</p>
 					<p className="mx-auto mt-4 max-w-md text-lg text-ink-soft">
 						That story does not exist — but {getAllPosts().length} real ones do.
 					</p>
@@ -25,7 +25,7 @@ function NotFound() {
 						to="/blog"
 						className="active-press mt-8 inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-6 text-base font-semibold text-paper shadow-paper transition-transform hover:-translate-y-0.5"
 					>
-						<ArrowLeft className="h-5 w-5" /> Back to Chronicles
+						<ArrowLeft className="h-5 w-5" /> Back to Blog
 					</Link>
 				</section>
 			</main>
@@ -45,7 +45,7 @@ export default function BlogPostPage() {
 	return (
 		<div className="grain min-h-screen bg-paper text-ink antialiased">
 			<Helmet>
-				<title>{`${post.title} — AIYatra Chronicles`}</title>
+				<title>{`${post.title} — AIYatra Blog`}</title>
 				<meta name="description" content={post.excerpt} />
 			</Helmet>
 			<Header />
@@ -54,7 +54,7 @@ export default function BlogPostPage() {
 					<div className="wrap pb-10 pt-14 lg:pt-[74px]">
 						<Reveal>
 							<Link to="/blog" className="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep">
-								<ArrowLeft className="h-4 w-4" /> All chronicles
+								<ArrowLeft className="h-4 w-4" /> All posts
 							</Link>
 						</Reveal>
 						<Reveal delay={0.08}>
@@ -112,7 +112,7 @@ export default function BlogPostPage() {
 									<BookOpen className="h-4 w-4" /> Keep reading
 								</p>
 								<h2 className="mt-3 font-hand text-4xl font-bold leading-tight sm:text-5xl">
-									More chronicles.
+									More stories.
 								</h2>
 							</Reveal>
 							<div className="mt-8 grid items-stretch gap-6 md:grid-cols-3">

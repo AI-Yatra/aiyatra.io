@@ -264,7 +264,7 @@ export default function AdminPage() {
 							<Lock className="h-4 w-4" /> Restricted area
 						</p>
 						<h1 className="mt-3 font-hand text-5xl font-bold leading-tight sm:text-6xl">
-							Chronicle editor.
+							Blog editor.
 						</h1>
 						<p className="mt-4 max-w-2xl text-lg text-ink-soft">
 							Sign in with Gmail, paste a GitHub token, and publish — posts commit straight

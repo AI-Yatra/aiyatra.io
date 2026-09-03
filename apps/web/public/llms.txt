@@ -1,7 +1,7 @@
 ## Pages
 - [AIYatra — Democratizing AI Learning | Hyderabad AI Community](/): AIYatra is Hyderabad’s open AI community — free hands-on meetups on agentic AI, PyTorch, and machine learning.
 - [Student Ambassador Program — AIYatra](/ambassadors): Carry the AI Yatra to your campus as a student ambassador.
-- [Chronicles — the AIYatra blog](/blog): Session recaps and field notes from every AIYatra meetup.
+- [Blog — AIYatra](/blog): Session recaps and field notes from every AIYatra meetup.
 - [PyTorch Foundations — Tensors, Autograd and the Training Loop](/blog/pytorch-foundations): Tensors, autograd and the training loop — the foundations every AI engineer stands on. We rebuilt nn.Linear from scratch.
 - [Linear Algebra for AI Engineers — From Vectors to Transformers](/blog/linear-algebra-to-transformers): Vectors to attention — embeddings, Q/K/V projections, LoRA and SVD, the math beneath the models, by hand.
 - [Building DeepSeek-V3 From Scratch — MLA, MoE and RoPE in PyTorch](/blog/deepseek-v3-from-scratch): Multi-head latent attention, MoE load balancing and RoPE scaling — the DeepSeek-V3 paper, live-coded in PyTorch.
