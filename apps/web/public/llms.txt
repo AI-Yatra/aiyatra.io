@@ -1,2 +1,14 @@
 ## Pages
-- [AIYatra — Democratizing AI Learning | Hyderabad AI Community](/): AIYatra is Hyderabad
+- [AIYatra — Democratizing AI Learning | Hyderabad AI Community](/): AIYatra is Hyderabad’s open AI community — free hands-on meetups on agentic AI, PyTorch, and machine learning.
+- [Student Ambassador Program — AIYatra](/ambassadors): Carry the AI Yatra to your campus as a student ambassador.
+- [Chronicles — the AIYatra blog](/blog): Session recaps and field notes from every AIYatra meetup.
+- [PyTorch Foundations — Tensors, Autograd and the Training Loop](/blog/pytorch-foundations): Tensors, autograd and the training loop — the foundations every AI engineer stands on. We rebuilt nn.Linear from scratch.
+- [Linear Algebra for AI Engineers — From Vectors to Transformers](/blog/linear-algebra-to-transformers): Vectors to attention — embeddings, Q/K/V projections, LoRA and SVD, the math beneath the models, by hand.
+- [Building DeepSeek-V3 From Scratch — MLA, MoE and RoPE in PyTorch](/blog/deepseek-v3-from-scratch): Multi-head latent attention, MoE load balancing and RoPE scaling — the DeepSeek-V3 paper, live-coded in PyTorch.
+- [Goose AI Agent — Providers, MCP Extensions and Recipes, End to End](/blog/goose-ai-agent-demo): Providers, context engineering, MCP extensions and recipes — a full end-to-end run of the open-source Goose agent.
+- [Speculative Decoding — 2-3x Faster Inference in 60 Lines of PyTorch](/blog/speculative-decoding-lab): Draft-verify-accept in 60 lines of PyTorch, then HF assisted generation and llama.cpp — faster inference, proven lossless.
+- ['Hitchhiker''s Guide to Agentic AI — Session 4: The Finale'](/blog/agentic-ai-reading-4): 'Book-reading series finale: agentic patterns, discussion and reading together — online, open to everyone.'
+- ['Hitchhiker''s Guide to Agentic AI — Session 3: Agents, Tools and Workflows'](/blog/agentic-ai-reading-3): Session three of the Hitchhiker's Guide series — agents, tools and workflows, read and debated together.
+- ['Hitchhiker''s Guide to Agentic AI — Session 2: Deeper Into the Loop'](/blog/agentic-ai-reading-2): Session two of the reading series — continuing the guided tour through agentic AI, online in the evening.
+- ['Hitchhiker''s Guide to Agentic AI — Session 1: Where the Journey Began'](/blog/agentic-ai-reading-1): Where the reading journey began — session one of the Hitchhiker's Guide to Agentic AI, online and free.
+- [Master the Transformer — From Attention Is All You Need to Running Code](/blog/transformer-paper-to-code): From Attention Is All You Need to running source code — the transformer, line by line, from paper to PyTorch.

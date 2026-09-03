@@ -16,6 +16,7 @@ export const NAV_LINKS = [
 	{ to: '/#voices', label: 'Kind Words' },
 	{ to: '/#about', label: 'The Movement' },
 	{ to: '/ambassadors', label: 'Ambassadors' },
+	{ to: '/blog', label: 'Chronicles' },
 ];
 
 function Logo() {
@@ -121,6 +122,7 @@ export function Footer() {
 					<FooterHeading>Explore</FooterHeading>
 					<ul className="mt-4 space-y-2.5 text-sm font-semibold">
 						<li><Link to="/ambassadors" className="text-tone-yellow transition-colors hover:text-paper">Student Ambassadors — new</Link></li>
+						<li><Link to="/blog" className="text-paper/75 transition-colors hover:text-tone-yellow">Chronicles — the blog</Link></li>
 						<li><Link to="/#events" className="text-paper/75 transition-colors hover:text-tone-yellow">Gatherings, upcoming &amp; past</Link></li>
 						<li><Link to="/#moments" className="text-paper/75 transition-colors hover:text-tone-yellow">Field notes from the yatra</Link></li>
 						<li><Link to="/#voices" className="text-paper/75 transition-colors hover:text-tone-yellow">Kind words from the community</Link></li>

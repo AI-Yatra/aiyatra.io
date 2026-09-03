@@ -1,0 +1,102 @@
+[
+  {
+    "slug": "pytorch-foundations",
+    "title": "PyTorch Foundations — Tensors, Autograd and the Training Loop",
+    "date": "2026-08-22",
+    "excerpt": "Tensors, autograd and the training loop — the foundations every AI engineer stands on. We rebuilt nn.Linear from scratch.",
+    "cover": "https://secure.meetupstatic.com/photos/event/1/0/a/b/highres_535684267.jpeg",
+    "eventUrl": "https://www.meetup.com/aiyatra/events/316136710/",
+    "attendees": 146,
+    "html": "<p>Tensors, autograd and the training loop — the foundations every AI engineer stands on. We rebuilt nn.Linear from scratch.</p>\n<h2>What we covered</h2>\n<p>Most PyTorch tutorials start with <code>model.fit</code> and never look underneath. We went the other way: raw tensors first, then the autograd engine, then the training loop — so every abstraction above feels earned, not magical.</p>\n<ul>\n<li><strong>Tensors as the lingua franca</strong> — shapes, strides, broadcasting, and why <code>(batch, features)</code> runs the world.</li>\n<li><strong>Autograd by hand</strong> — a tiny scalar engine that builds the computation graph and backpropagates, before touching <code>torch.autograd</code>.</li>\n<li><strong>The training loop, deconstructed</strong> — forward, loss, backward, step, zero-grad. Every line explained, nothing hidden behind a trainer class.</li>\n</ul>\n<h2>What we built</h2>\n<p>By the end of the morning, every laptop in the room had a from-scratch linear layer training on real data — then we swapped in <code>nn.Linear</code> and watched the same loop run on the real thing. Same math, same gradients, zero mystery.</p>\n<h2>Takeaways</h2>\n<ul>\n<li>If you can implement <code>backward()</code> for a scalar graph on paper, PyTorch stops being a black box forever.</li>\n<li>Shape errors are the compiler telling you your mental model is wrong — read them, don&#39;t fear them.</li>\n<li>The training loop is five lines. Everything else is convenience.</li>\n</ul>\n<h2>Join the next one</h2>\n<p>We run sessions like this every Saturday in Hyderabad — free, hands-on, and open to everyone. <a href=\"https://www.meetup.com/aiyatra/events/316136710/\">RSVP on Meetup</a> and bring a laptop with Python 3.10+.</p>\n"
+  },
+  {
+    "slug": "linear-algebra-to-transformers",
+    "title": "Linear Algebra for AI Engineers — From Vectors to Transformers",
+    "date": "2026-08-15",
+    "excerpt": "Vectors to attention — embeddings, Q/K/V projections, LoRA and SVD, the math beneath the models, by hand.",
+    "cover": "https://secure.meetupstatic.com/photos/event/5/f/e/highres_535561534.jpeg",
+    "eventUrl": "https://www.meetup.com/aiyatra/events/316031457/",
+    "attendees": 207,
+    "html": "<p>Vectors to attention: embeddings, Q/K/V projections, LoRA and SVD — the math beneath the models, by hand.</p>\n<h2>What we covered</h2>\n<p>Transformers feel like magic until you do the linear algebra yourself. We started with vectors and worked up to attention — every step computed by hand before it ever touched PyTorch.</p>\n<ul>\n<li><strong>Vectors, dot products, and projections</strong> — what &quot;similarity&quot; actually means geometrically.</li>\n<li><strong>Embeddings as learned coordinates</strong> — why words become points and what the space between them encodes.</li>\n<li><strong>Q/K/V projections</strong> — attention as three linear maps plus a weighted sum. Nothing more.</li>\n<li><strong>LoRA and SVD</strong> — low-rank updates and decompositions: how giant models get fine-tuned on small GPUs.</li>\n</ul>\n<h2>What we built</h2>\n<p>A miniature attention head from NumPy primitives, then the same computation in PyTorch — matching outputs to the decimal. 207 learners watched the &quot;magic&quot; dissolve into matrix multiplies.</p>\n<h2>Takeaways</h2>\n<ul>\n<li>Attention is arithmetic, not alchemy — QK^T, scale, softmax, times V.</li>\n<li>SVD explains why LoRA works: big matrices hide small structure.</li>\n<li>Doing one head by hand teaches more than reading ten blog posts about transformers.</li>\n</ul>\n<h2>Join the next one</h2>\n<p>We run sessions like this every Saturday in Hyderabad — free, hands-on, and open to everyone. <a href=\"https://www.meetup.com/aiyatra/events/316031457/\">RSVP on Meetup</a> and bring a laptop with Python 3.10+.</p>\n"
+  },
+  {
+    "slug": "deepseek-v3-from-scratch",
+    "title": "Building DeepSeek-V3 From Scratch — MLA, MoE and RoPE in PyTorch",
+    "date": "2026-08-08",
+    "excerpt": "Multi-head latent attention, MoE load balancing and RoPE scaling — the DeepSeek-V3 paper, live-coded in PyTorch.",
+    "cover": "https://secure.meetupstatic.com/photos/event/b/6/a/3/highres_535486755.jpeg",
+    "eventUrl": "https://www.meetup.com/aiyatra/events/315949835/",
+    "attendees": 286,
+    "html": "<p>Multi-head latent attention, MoE load balancing and RoPE scaling — the DeepSeek-V3 paper, live-coded in PyTorch.</p>\n<h2>What we covered</h2>\n<p>Reading a frontier-model paper is one thing; rebuilding its core ideas on your own machine is another. We took DeepSeek-V3 apart into three ideas anyone can implement.</p>\n<ul>\n<li><strong>Multi-head latent attention (MLA)</strong> — compressing the KV cache into a latent vector, and why it slashes inference memory.</li>\n<li><strong>Mixture-of-Experts with load balancing</strong> — sparse routing, expert parallelism in miniature, and the auxiliary losses that keep experts honest.</li>\n<li><strong>RoPE scaling</strong> — rotary position embeddings and how context windows stretch without retraining from scratch.</li>\n</ul>\n<h2>What we built</h2>\n<p>Working miniature versions of MLA, a toy MoE layer with observable routing, and RoPE applied to a small transformer — 286 attendees watching each piece click into place live.</p>\n<h2>Takeaways</h2>\n<ul>\n<li>Frontier papers are mostly three good ideas plus engineering — isolate the ideas and they become buildable.</li>\n<li>MLA&#39;s insight is compression, MoE&#39;s is conditional compute, RoPE&#39;s is geometry. Each fits in a Saturday.</li>\n<li>Rebuilding beats reading: you keep the intuition, not just the vocabulary.</li>\n</ul>\n<h2>Join the next one</h2>\n<p>We run sessions like this every Saturday in Hyderabad — free, hands-on, and open to everyone. <a href=\"https://www.meetup.com/aiyatra/events/315949835/\">RSVP on Meetup</a> and bring a laptop with Python 3.10+.</p>\n"
+  },
+  {
+    "slug": "goose-ai-agent-demo",
+    "title": "Goose AI Agent — Providers, MCP Extensions and Recipes, End to End",
+    "date": "2026-08-01",
+    "excerpt": "Providers, context engineering, MCP extensions and recipes — a full end-to-end run of the open-source Goose agent.",
+    "cover": "https://secure.meetupstatic.com/photos/event/6/6/2/6/highres_535226150.jpeg",
+    "eventUrl": "https://www.meetup.com/aiyatra/events/315704127/",
+    "attendees": 142,
+    "html": "<p>Providers, context engineering, MCP extensions and recipes — a full end-to-end run of the open-source Goose agent.</p>\n<h2>What we covered</h2>\n<p>Agents stop being demos when they can touch your tools. We ran Goose — the open-source coding agent — through its full loop on real tasks.</p>\n<ul>\n<li><strong>Providers and models</strong> — swapping backends, what changes in behavior, and how to pick one for offline vs. frontier work.</li>\n<li><strong>Context engineering</strong> — what the agent sees, how it remembers, and where runs go off the rails.</li>\n<li><strong>MCP extensions</strong> — giving the agent new tools via the Model Context Protocol, live.</li>\n<li><strong>Recipes</strong> — packaging a working session into a repeatable workflow others can run.</li>\n</ul>\n<h2>What we built</h2>\n<p>A Goose session that went from blank machine to a verified change — tools wired, extensions loaded, recipe saved — with 142 learners following along on their own laptops.</p>\n<h2>Takeaways</h2>\n<ul>\n<li>The agent loop is simple; the leverage is all in tools and context.</li>\n<li>MCP turns &quot;my agent can&#39;t do that&quot; into a fifteen-minute extension.</li>\n<li>Recipes are the missing artifact: record the run, share the run, replay the run.</li>\n</ul>\n<h2>Join the next one</h2>\n<p>We run sessions like this every Saturday in Hyderabad — free, hands-on, and open to everyone. <a href=\"https://www.meetup.com/aiyatra/events/315704127/\">RSVP on Meetup</a> and bring a laptop with Python 3.10+.</p>\n"
+  },
+  {
+    "slug": "speculative-decoding-lab",
+    "title": "Speculative Decoding — 2-3x Faster Inference in 60 Lines of PyTorch",
+    "date": "2026-07-25",
+    "excerpt": "Draft-verify-accept in 60 lines of PyTorch, then HF assisted generation and llama.cpp — faster inference, proven lossless.",
+    "cover": "https://secure.meetupstatic.com/photos/event/3/5/0/c/highres_535213580.jpeg",
+    "eventUrl": "https://www.meetup.com/aiyatra/events/315688657/",
+    "attendees": 64,
+    "html": "<p>Draft-verify-accept in ~60 lines of PyTorch, then HF assisted generation + llama.cpp — 2–3× faster inference, proven lossless.</p>\n<h2>What we covered</h2>\n<p>Autoregressive decoding is slow because it generates one token per forward pass. Speculative decoding breaks that bottleneck — with zero change in outputs.</p>\n<ul>\n<li><strong>Draft-verify-accept</strong> — a small draft model proposes tokens, the big model verifies them in parallel. Accept the matches, keep the guarantees.</li>\n<li><strong>Why it is lossless</strong> — the acceptance criterion provably preserves the target distribution. Speed without sampling drift.</li>\n<li><strong>HF assisted generation + llama.cpp</strong> — the same idea in production tooling, configured and benchmarked live.</li>\n</ul>\n<h2>What we built</h2>\n<p>A 60-line PyTorch draft-verify-accept loop, then assisted generation in Transformers and a llama.cpp run — speedups measured on the room&#39;s own machines, outputs verified identical.</p>\n<h2>Takeaways</h2>\n<ul>\n<li>The fastest token is the one you don&#39;t recompute — verification parallelizes, drafting is cheap.</li>\n<li>Lossless matters: speculation is an exact optimization, not an approximation.</li>\n<li>64 people, one lab, every laptop showing the same speedup. That is the AIYatra format.</li>\n</ul>\n<h2>Join the next one</h2>\n<p>We run sessions like this every Saturday in Hyderabad — free, hands-on, and open to everyone. <a href=\"https://www.meetup.com/aiyatra/events/315688657/\">RSVP on Meetup</a> and bring a laptop with Python 3.10+.</p>\n"
+  },
+  {
+    "slug": "agentic-ai-reading-4",
+    "title": "'Hitchhiker''s Guide to Agentic AI — Session 4: The Finale'",
+    "date": "2026-07-14",
+    "excerpt": "'Book-reading series finale: agentic patterns, discussion and reading together — online, open to everyone.'",
+    "cover": "https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg",
+    "eventUrl": "https://www.meetup.com/aiyatra/events/315595570/",
+    "attendees": 40,
+    "html": "<p>Book-reading series finale: agentic patterns, discussion and reading together — online, open to everyone.</p>\n<h2>What we covered</h2>\n<p>Four sessions, one arc. The finale tied the whole series together — from &quot;what is an agent&quot; to patterns the community now uses in real builds.</p>\n<ul>\n<li><strong>The full pattern map</strong> — tools, planning, memory, workflows: how the pieces compose.</li>\n<li><strong>From reading to building</strong> — which series ideas already showed up in Saturday labs (Goose, harness engineering, guardrails).</li>\n<li><strong>Where next</strong> — the community voted with its curiosity: what the next reading series should take on.</li>\n</ul>\n<h2>What we built</h2>\n<p>A finished series and a room of 40 readers-turned-builders — the finale doubled as a launchpad into the hands-on agentic AI sessions that followed.</p>\n<h2>Takeaways</h2>\n<ul>\n<li>A reading series works when it ends in a build queue, not just a bookshelf.</li>\n<li>40 people on a Monday evening proves the format: short, live, discussed — never lectured.</li>\n<li>The Hitchhiker&#39;s Guide arc now lives on as the conceptual backbone of our agent sessions.</li>\n</ul>\n<h2>Join the next one</h2>\n<p>We run sessions like this regularly — free, welcoming, and open to everyone. <a href=\"https://www.meetup.com/aiyatra/events/315595570/\">RSVP on Meetup</a> and bring your questions.</p>\n"
+  },
+  {
+    "slug": "agentic-ai-reading-3",
+    "title": "'Hitchhiker''s Guide to Agentic AI — Session 3: Agents, Tools and Workflows'",
+    "date": "2026-07-05",
+    "excerpt": "Session three of the Hitchhiker's Guide series — agents, tools and workflows, read and debated together.",
+    "cover": "https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg",
+    "eventUrl": "https://www.meetup.com/aiyatra/events/315542060/",
+    "attendees": 16,
+    "html": "<p>Session three of the Hitchhiker’s Guide series — agents, tools and workflows, read and debated together.</p>\n<h2>What we covered</h2>\n<p>Small room, deep discussion. Session three took on the workflow question: how do agent steps compose into reliable work?</p>\n<ul>\n<li><strong>Single-agent vs. multi-agent</strong> — when one loop suffices and when to split roles.</li>\n<li><strong>Handoffs and supervision</strong> — patterns for agents checking each other&#39;s work.</li>\n<li><strong>Workflows as code</strong> — where the graph is explicit, where it is emergent, and how to test either.</li>\n</ul>\n<h2>What we built</h2>\n<p>A whiteboard of workflow patterns argued over by 16 regulars — the kind of session where everyone talks and the notes write themselves.</p>\n<h2>Takeaways</h2>\n<ul>\n<li>Small sessions go deepest: 16 people, zero lurkers, every voice in the mix.</li>\n<li>Multi-agent is an organizational pattern first and a technical one second.</li>\n<li>If you cannot draw the workflow on a whiteboard, you cannot debug it in production.</li>\n</ul>\n<h2>Join the next one</h2>\n<p>We run sessions like this regularly — free, welcoming, and open to everyone. <a href=\"https://www.meetup.com/aiyatra/events/315542060/\">RSVP on Meetup</a> and bring your questions.</p>\n"
+  },
+  {
+    "slug": "agentic-ai-reading-2",
+    "title": "'Hitchhiker''s Guide to Agentic AI — Session 2: Deeper Into the Loop'",
+    "date": "2026-07-02",
+    "excerpt": "Session two of the reading series — continuing the guided tour through agentic AI, online in the evening.",
+    "cover": "https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg",
+    "eventUrl": "https://www.meetup.com/aiyatra/events/315492739/",
+    "attendees": 35,
+    "html": "<p>Session two of the reading series — continuing the guided tour through agentic AI, online in the evening.</p>\n<h2>What we covered</h2>\n<p>With the foundations set, session two went deeper into how agents are actually put together — the patterns that separate a demo from a system.</p>\n<ul>\n<li><strong>Tools and function calling</strong> — how agents reach outside the model: schemas, validation, and failure modes.</li>\n<li><strong>Planning vs. reacting</strong> — when to decompose up front and when to let the loop figure it out.</li>\n<li><strong>Memory that matters</strong> — what to keep, what to summarize, and what to throw away between steps.</li>\n</ul>\n<h2>What we built</h2>\n<p>Shared notes and a growing pattern catalogue — 35 learners comparing implementations and war stories from their own experiments between sessions.</p>\n<h2>Takeaways</h2>\n<ul>\n<li>Most agent failures are tool-design failures, not model failures.</li>\n<li>Planning is a spectrum: the right point on it depends on the task, not the fashion.</li>\n<li>Evening online sessions hit different — 35 people showed up mid-week for this one.</li>\n</ul>\n<h2>Join the next one</h2>\n<p>We run sessions like this regularly — free, welcoming, and open to everyone. <a href=\"https://www.meetup.com/aiyatra/events/315492739/\">RSVP on Meetup</a> and bring your questions.</p>\n"
+  },
+  {
+    "slug": "agentic-ai-reading-1",
+    "title": "'Hitchhiker''s Guide to Agentic AI — Session 1: Where the Journey Began'",
+    "date": "2026-06-30",
+    "excerpt": "Where the reading journey began — session one of the Hitchhiker's Guide to Agentic AI, online and free.",
+    "cover": "https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg",
+    "eventUrl": "https://www.meetup.com/aiyatra/events/315451083/",
+    "attendees": 25,
+    "html": "<p>Where the reading journey began — session one of the Hitchhiker’s Guide to Agentic AI, online and free.</p>\n<h2>What we covered</h2>\n<p>Some topics are best learned together, out loud. We opened our book-reading series on agentic AI with the foundations — read, debated, and questioned as a group.</p>\n<ul>\n<li><strong>What an agent actually is</strong> — goals, tools, environment, and the loop that connects them.</li>\n<li><strong>Why now</strong> — what changed to make agents work: models, context windows, and tool protocols.</li>\n<li><strong>The reading format</strong> — how the series works: short sections, live discussion, zero lectures.</li>\n</ul>\n<h2>What we built</h2>\n<p>A shared vocabulary and a reading circle — 25 learners finishing session one with the same mental model of agentic systems and a plan for the weeks ahead.</p>\n<h2>Takeaways</h2>\n<ul>\n<li>Reading together beats reading alone: every confusing paragraph meets someone who just figured it out.</li>\n<li>Agents demystify fast once you name the loop: perceive, decide, act, observe.</li>\n<li>The series is open to everyone, online, and free — show up having read nothing and leave having learned plenty.</li>\n</ul>\n<h2>Join the next one</h2>\n<p>We run sessions like this regularly — free, welcoming, and open to everyone. <a href=\"https://www.meetup.com/aiyatra/events/315451083/\">RSVP on Meetup</a> and bring your questions.</p>\n"
+  },
+  {
+    "slug": "transformer-paper-to-code",
+    "title": "Master the Transformer — From Attention Is All You Need to Running Code",
+    "date": "2026-06-20",
+    "excerpt": "From Attention Is All You Need to running source code — the transformer, line by line, from paper to PyTorch.",
+    "cover": "https://secure.meetupstatic.com/photos/event/4/5/f/8/highres_534617912.jpeg",
+    "eventUrl": "https://www.meetup.com/aiyatra/events/315145175/",
+    "attendees": 56,
+    "html": "<p>From “Attention Is All You Need” to running source code — the transformer, line by line, from paper to PyTorch.</p>\n<h2>What we covered</h2>\n<p>The paper that started it all, read the way it deserves: with an editor open beside it. We walked the original transformer section by section and implemented as we went.</p>\n<ul>\n<li><strong>Attention, from the equation outward</strong> — scaled dot-product attention derived, then coded, then tested against PyTorch&#39;s own.</li>\n<li><strong>Multi-head as parallel subspaces</strong> — why heads split the work and how they rejoin.</li>\n<li><strong>Positionals, residuals, norms</strong> — the unglamorous pieces that make depth trainable.</li>\n<li><strong>The full encoder block</strong> — assembled live, forward pass verified end to end.</li>\n</ul>\n<h2>What we built</h2>\n<p>A working transformer encoder block, built line-by-line from the paper — 56 learners watching each equation become running code on their own machines.</p>\n<h2>Takeaways</h2>\n<ul>\n<li>Papers are specifications, not scripture — implement as you read and confusion becomes debugging.</li>\n<li>The transformer is six ideas stacked well. None of them requires permission to understand.</li>\n<li>This session set the template for everything AIYatra does: paper → code → running laptop.</li>\n</ul>\n<h2>Join the next one</h2>\n<p>We run sessions like this every Saturday in Hyderabad — free, hands-on, and open to everyone. <a href=\"https://www.meetup.com/aiyatra/events/315145175/\">RSVP on Meetup</a> and bring a laptop with Python 3.10+.</p>\n"
+  }
+]

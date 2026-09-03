@@ -3,6 +3,9 @@ import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import HomePage from './pages/HomePage';
 import AmbassadorsPage from './pages/AmbassadorsPage';
+import BlogIndexPage from './pages/BlogIndexPage';
+import BlogPostPage from './pages/BlogPostPage';
+import AdminPage from './pages/AdminPage';
 
 function App() {
     // Served from "/" (custom domain + Vercel).
@@ -16,6 +19,9 @@ function App() {
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/ambassadors" element={<AmbassadorsPage />} />
+                <Route path="/blog" element={<BlogIndexPage />} />
+                <Route path="/blog/:slug" element={<BlogPostPage />} />
+                <Route path="/admin" element={<AdminPage />} />
             </Routes>
         </Router>
     );

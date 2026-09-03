@@ -9,6 +9,7 @@ export const PAST_EVENTS_URL = 'https://www.meetup.com/aiyatra/events/past/';
 export const CONTACT_EMAIL = 'global.aiyatra@gmail.com';
 export const LINKEDIN_URL = 'https://www.linkedin.com/company/aiyatra/';
 export const GITHUB_URL = 'https://github.com/AI-Yatra';
+export const ADMIN_EMAILS = ['global.aiyatra@gmail.com'];
 
 // Local mark in public/. Prefixed with Vite's BASE_URL ("/" on the custom
 // domain) so it resolves on every host.
