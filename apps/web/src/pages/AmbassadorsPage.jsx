@@ -229,7 +229,7 @@ export default function AmbassadorsPage() {
 								<h2 className="mt-3 font-hand text-4xl font-bold leading-tight sm:text-5xl">
 									Built for students<br />who show up.
 								</h2>
-								<ul className="mt-6 flex flex-1 flex-col justify-between gap-4 py-1">
+								<ul className="mt-6 space-y-4">
 									{whoFits.map((w, i) => (
 										<li key={i} className="flex items-start gap-3 text-sm font-medium leading-relaxed text-ink/80">
 											<span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-tone-green text-xs font-bold">
@@ -239,6 +239,22 @@ export default function AmbassadorsPage() {
 										</li>
 									))}
 								</ul>
+								<div className="mt-5 flex flex-1 flex-col justify-center rounded-xl border-2 border-ink bg-tone-yellow p-5">
+									<p className="flex items-center gap-2 font-hand text-2xl font-bold leading-tight">
+										<Heart className="h-5 w-5 fill-ink" /> Missing one? Apply anyway.
+									</p>
+									<p className="mt-2 text-sm font-medium leading-relaxed text-ink/75">
+										Curiosity and follow-through beat credentials — most ambassadors started as
+										first-timers in the back row. No prior speaking experience or big following
+										needed. Write to us and we will figure out the rest together.
+									</p>
+									<a
+										href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('AIYatra Student Ambassador — Question')}`}
+										className="mt-3 inline-flex w-fit items-center gap-1.5 text-sm font-bold underline underline-offset-4 transition-colors hover:text-tone-blue-deep"
+									>
+										Ask us anything <ArrowRight className="h-4 w-4" />
+									</a>
+								</div>
 							</div>
 						</Reveal>
 						<Reveal delay={0.12} className="flex">
