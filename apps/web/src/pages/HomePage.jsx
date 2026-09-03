@@ -72,7 +72,7 @@ function Logo() {
 				src={AI_YATRA_LOGO}
 				alt=""
 				aria-hidden="true"
-				className="h-11 w-11 shrink-0 object-contain sm:h-12 sm:w-12"
+				className="h-14 w-14 shrink-0 object-contain sm:h-16 sm:w-16"
 			/>
 			<span className="flex flex-col leading-none">
 				<span className="text-[22px] font-extrabold tracking-tight text-ink sm:text-2xl">
@@ -742,7 +742,7 @@ function Footer() {
 				{/* Brand */}
 				<div>
 					<a href="#top" className="flex items-center gap-2.5" aria-label="AI Yatra home">
-						<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" className="h-11 w-11 shrink-0 object-contain" />
+						<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" className="h-14 w-14 shrink-0 object-contain" />
 						<span className="flex flex-col leading-none">
 							<span className="text-[22px] font-extrabold tracking-tight text-paper">AI Yatra</span>
 							<span className="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-paper/60">
