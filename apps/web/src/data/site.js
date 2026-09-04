@@ -196,6 +196,7 @@ export const PAST_EVENTS = ALL_EVENTS.filter((e) => e.status === 'past');
 
 // Real faces from the live group — organizer + recent attendees (meetupstatic avatars)
 export const HOST_PHOTO = `${BASE_URL}jagadeeswara-reddy.jpg`;
+export const MONIKA_PHOTO = `${BASE_URL}monika-kusumanchi.jpg`;
 export const AMBASSADOR_CREST = `${BASE_URL}ambassador-crest.jpg`;
 
 export const COMMUNITY_FACES = [

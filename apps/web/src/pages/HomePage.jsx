@@ -11,7 +11,7 @@ import { Header, Footer } from '@/components/SiteChrome';
 import { Link } from 'react-router-dom';
 import {
 	MEETUP_URL, PAST_EVENTS_URL, EVENT_URL, EVENTS,
-	PAST_EVENTS, GROUP_STATS, COMMUNITY_FACES, HOST_PHOTO, AMBASSADOR_CREST,
+	PAST_EVENTS, GROUP_STATS, COMMUNITY_FACES, HOST_PHOTO, MONIKA_PHOTO, AMBASSADOR_CREST,
 } from '@/data/site';
 
 // Every section on this page uses the same `.wrap` shell (max 1480px +
@@ -417,7 +417,7 @@ function Moments() {
 							A small volunteer crew plans the curriculum, hosts every Saturday session at LSEG Madhapur,
 							reviews RSVPs, and mentors newcomers — so every meetup stays hands-on, free, and welcoming.
 						</p>
-						<div className="mt-6 grid items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3">
+						<div className="mt-6 grid items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-4">
 							<div className="flex flex-col rounded-xl border-2 border-ink bg-tone-yellow p-5">
 								<div className="flex items-center gap-4">
 									<img
@@ -471,6 +471,32 @@ function Moments() {
 									Hosts sessions and leads talks on educational material — turning dense topics into
 									clear, hands-on learning the community can actually use.
 								</p>
+							</div>
+							<div className="flex flex-col rounded-xl border-2 border-ink bg-tone-coral p-5">
+								<div className="flex items-center gap-4">
+									<img
+										src={MONIKA_PHOTO}
+										alt="Monika Kusumanchi"
+										loading="lazy"
+										className="h-16 w-16 shrink-0 rounded-full border-2 border-ink object-cover shadow-paper-sm"
+									/>
+									<div className="min-w-0">
+										<p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/60">Host · Researcher · AI Educator</p>
+										<p className="mt-1 text-lg font-bold leading-tight">Monika Kusumanchi</p>
+									</div>
+								</div>
+								<p className="mt-3 flex-1 text-sm font-medium leading-relaxed text-ink/75">
+									Hosts deep dives into the latest in AI, explores cutting-edge research, and
+									transforms complex ideas into engaging, practical learning for the AIYatra community.
+								</p>
+								<a
+									href="https://image-and-story.vercel.app/"
+									target="_blank"
+									rel="noreferrer"
+									className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep"
+								>
+									My app <ArrowUpRight className="h-4 w-4" />
+								</a>
 							</div>
 						</div>
 						<a href={MEETUP_URL} target="_blank" rel="noreferrer" className="mt-6 inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep">
