@@ -3,6 +3,7 @@ import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import HomePage from './pages/HomePage';
 import AmbassadorsPage from './pages/AmbassadorsPage';
+import LabsPage from './pages/LabsPage';
 import BlogIndexPage from './pages/BlogIndexPage';
 import BlogPostPage from './pages/BlogPostPage';
 import AdminPage from './pages/AdminPage';
@@ -19,6 +20,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/ambassadors" element={<AmbassadorsPage />} />
+                <Route path="/labs" element={<LabsPage />} />
                 <Route path="/blog" element={<BlogIndexPage />} />
                 <Route path="/blog/:slug" element={<BlogPostPage />} />
                 <Route path="/admin" element={<AdminPage />} />

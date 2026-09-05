@@ -16,6 +16,7 @@ export const NAV_LINKS = [
 	{ to: '/#voices', label: 'Kind Words' },
 	{ to: '/#about', label: 'The Movement' },
 	{ to: '/ambassadors', label: 'Ambassadors' },
+	{ to: '/labs', label: 'Labs' },
 	{ to: '/blog', label: 'Blog' },
 ];
 
@@ -122,6 +123,7 @@ export function Footer() {
 					<FooterHeading>Explore</FooterHeading>
 					<ul className="mt-4 space-y-2.5 text-sm font-semibold">
 						<li><Link to="/ambassadors" className="text-tone-yellow transition-colors hover:text-paper">Ambassadors — new</Link></li>
+						<li><Link to="/labs" className="text-tone-yellow transition-colors hover:text-paper">Labs — research tracks</Link></li>
 						<li><Link to="/blog" className="text-paper/75 transition-colors hover:text-tone-yellow">Blog</Link></li>
 						<li><Link to="/#events" className="text-paper/75 transition-colors hover:text-tone-yellow">Gatherings</Link></li>
 						<li><Link to="/#moments" className="text-paper/75 transition-colors hover:text-tone-yellow">Field Notes</Link></li>

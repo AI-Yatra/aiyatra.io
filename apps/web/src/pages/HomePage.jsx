@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import {
 	ArrowRight, ArrowUpRight, CalendarDays, MapPin, Users, Star, Sparkles,
-	Quote, Compass, Ticket, Clock, Building2,
+	Quote, Compass, Ticket, Clock, Building2, FlaskConical,
 	Camera, BookOpen, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
@@ -13,6 +13,7 @@ import {
 	MEETUP_URL, PAST_EVENTS_URL, EVENT_URL, EVENTS,
 	PAST_EVENTS, GROUP_STATS, COMMUNITY_FACES, HOST_PHOTO, MONIKA_PHOTO, AMBASSADOR_CREST,
 } from '@/data/site';
+import { LABS_CATEGORIES, LABS_TOTAL_PAPERS } from '@/data/labs';
 
 // Every section on this page uses the same `.wrap` shell (max 1480px +
 // fluid 6vw gutters, OpenShut-style) so nothing feels narrow-centered in one
@@ -677,6 +678,59 @@ function AmbassadorBand() {
 	);
 }
 
+function LabsBand() {
+	const tones = ['bg-tone-green', 'bg-tone-yellow', 'bg-tone-blue', 'bg-tone-coral'];
+	return (
+		<section className="border-b-2 border-ink bg-tone-violet/25">
+			<div className="wrap py-14">
+				<Reveal>
+					<div className="flex flex-col gap-8 rounded-2xl border-2 border-ink bg-paper p-6 shadow-paper sm:p-8">
+						<div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center">
+							<span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border-2 border-ink bg-tone-violet">
+								<FlaskConical className="h-8 w-8" />
+							</span>
+							<div className="min-w-0 flex-1 text-center lg:text-left">
+								<p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">
+									New wing · AI Yatra Labs · {LABS_TOTAL_PAPERS} papers
+								</p>
+								<p className="mt-2 font-hand text-3xl font-bold leading-tight sm:text-4xl">
+									Read the papers. Build the future.
+								</p>
+								<p className="mx-auto mt-2 max-w-2xl text-sm font-medium leading-relaxed text-ink/70 lg:mx-0">
+									Four research tracks — small language models, agent harnesses,
+									transformer layers, new architectures — each with a curated shelf
+									of arXiv + AlphaXiv papers. No filler, only what we study and build.
+								</p>
+							</div>
+							<Link
+								to="/labs"
+								className="active-press inline-flex h-12 shrink-0 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-6 text-base font-semibold text-paper shadow-paper transition-transform hover:-translate-y-0.5"
+							>
+								Explore Labs <ArrowRight className="h-5 w-5" />
+							</Link>
+						</div>
+						<div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+							{LABS_CATEGORIES.map((c, i) => (
+								<Link
+									key={c.id}
+									to={`/labs#${c.id}`}
+									className="hover-lift rounded-xl border-2 border-ink bg-paper-soft p-4"
+								>
+									<span className={`inline-flex rounded-lg border-2 border-ink ${tones[i % tones.length]} px-2.5 py-0.5 font-hand text-lg font-bold`}>
+										{c.index}
+									</span>
+									<span className="mt-2 block text-sm font-bold leading-tight">{c.title}</span>
+									<span className="mt-0.5 block text-xs font-semibold text-ink/60">{c.papers.length} papers · arXiv + AlphaXiv</span>
+								</Link>
+							))}
+						</div>
+					</div>
+				</Reveal>
+			</div>
+		</section>
+	);
+}
+
 function About() {
 	return (
 		<section id="about" className="bg-tone-green/40">
@@ -777,6 +831,7 @@ export default function HomePage() {
 				<Method />
 				<Testimonials />
 				<AmbassadorBand />
+				<LabsBand />
 				<About />
 				<FinalCta />
 			</main>

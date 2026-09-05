@@ -89,6 +89,7 @@ function main() {
 	const urls = [
 		{ loc: `${SITE_URL}/`, changefreq: 'daily', priority: '1' },
 		{ loc: `${SITE_URL}/ambassadors`, changefreq: 'weekly', priority: '0.9' },
+		{ loc: `${SITE_URL}/labs`, changefreq: 'weekly', priority: '0.9' },
 		{ loc: `${SITE_URL}/blog`, changefreq: 'daily', priority: '0.9' },
 		...posts.map((p) => ({ loc: `${SITE_URL}/blog/${p.slug}`, changefreq: 'monthly', priority: '0.7' })),
 	];
@@ -112,6 +113,7 @@ function main() {
 		'## Pages',
 		'- [AIYatra — Democratizing AI Learning | Hyderabad AI Community](/): AIYatra is Hyderabad’s open AI community — free hands-on meetups on agentic AI, PyTorch, and machine learning.',
 		'- [Student Ambassador Program — AIYatra](/ambassadors): Carry the AI Yatra to your campus as a student ambassador.',
+		'- [AI Yatra Labs — AIYatra](/labs): Curated arXiv and AlphaXiv reading lists across small language models, agent harnesses, transformer layers, and new architectures.',
 		'- [Blog — AIYatra](/blog): Session recaps and field notes from every AIYatra meetup.',
 		...posts.map((p) => `- [${p.title}](/blog/${p.slug}): ${p.excerpt}`),
 		'',
