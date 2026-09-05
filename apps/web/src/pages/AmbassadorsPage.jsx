@@ -3,12 +3,12 @@ import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import {
 	ArrowRight, ArrowUpRight, GraduationCap, Megaphone, Users, CalendarDays,
-	BookOpen, Sparkles, BadgeCheck, Mail, MapPin, Compass, Camera, Heart,
+	BookOpen, Sparkles, BadgeCheck, Mail, MapPin, Compass, Camera, Heart, Download,
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import { Header, Footer } from '@/components/SiteChrome';
 import { MEETUP_URL, CONTACT_EMAIL } from '@/data/site';
-import { AMBASSADOR_CREST } from '@/data/site';
+import { AMBASSADOR_CREST, DECKS } from '@/data/site';
 
 const duties = [
 	{
@@ -134,6 +134,13 @@ export default function AmbassadorsPage() {
 										className="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-6 text-base font-semibold text-paper shadow-paper transition-transform hover:-translate-y-0.5"
 									>
 										Apply by email <ArrowRight className="h-5 w-5" />
+									</a>
+									<a
+										href={DECKS.ambassador}
+										download
+										className="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-tone-yellow px-6 text-base font-semibold text-ink shadow-paper transition-transform hover:-translate-y-0.5"
+									>
+										<Download className="h-5 w-5" /> Program deck (.pptx)
 									</a>
 									<Link
 										to="/#events"

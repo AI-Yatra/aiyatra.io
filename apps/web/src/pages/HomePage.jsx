@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import {
 	ArrowRight, ArrowUpRight, CalendarDays, MapPin, Users, Star, Sparkles,
 	Quote, Compass, Ticket, Clock, Building2, FlaskConical,
-	Camera, BookOpen, ChevronLeft, ChevronRight,
+	Camera, BookOpen, ChevronLeft, ChevronRight, Download,
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import CountUp from '@/components/CountUp';
@@ -11,7 +11,7 @@ import { Header, Footer } from '@/components/SiteChrome';
 import { Link } from 'react-router-dom';
 import {
 	MEETUP_URL, PAST_EVENTS_URL, EVENT_URL, EVENTS,
-	PAST_EVENTS, GROUP_STATS, COMMUNITY_FACES, HOST_PHOTO, MONIKA_PHOTO, AMBASSADOR_CREST,
+	PAST_EVENTS, GROUP_STATS, COMMUNITY_FACES, HOST_PHOTO, MONIKA_PHOTO, AMBASSADOR_CREST, DECKS,
 } from '@/data/site';
 import { LABS_CATEGORIES, LABS_TOTAL_PAPERS } from '@/data/labs';
 
@@ -665,12 +665,21 @@ function AmbassadorBand() {
 								recognition, mentorship and speaker slots — free, always.
 							</p>
 						</div>
-						<Link
-							to="/ambassadors"
-							className="active-press inline-flex h-12 shrink-0 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-6 text-base font-semibold text-paper shadow-paper transition-transform hover:-translate-y-0.5"
-						>
-							Explore the program <ArrowRight className="h-5 w-5" />
-						</Link>
+						<div className="flex shrink-0 flex-col gap-3">
+							<Link
+								to="/ambassadors"
+								className="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-6 text-base font-semibold text-paper shadow-paper transition-transform hover:-translate-y-0.5"
+							>
+								Explore the program <ArrowRight className="h-5 w-5" />
+							</Link>
+							<a
+								href={DECKS.ambassador}
+								download
+								className="active-press inline-flex h-11 items-center justify-center gap-2 rounded-xl border-2 border-ink bg-paper-soft px-6 text-sm font-semibold text-ink shadow-paper-sm transition-transform hover:-translate-y-0.5"
+							>
+								<Download className="h-4 w-4" /> Program deck (.pptx)
+							</a>
+						</div>
 					</div>
 				</Reveal>
 			</div>
@@ -750,6 +759,15 @@ function About() {
 							Led by super organizer <strong className="text-ink">{GROUP_STATS.organizer}</strong> and a crew of
 							passionate volunteers, we meet at {GROUP_STATS.venue}.
 						</p>
+						<div className="mt-6">
+							<a
+								href={DECKS.journey}
+								download
+								className="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-paper-soft px-6 text-base font-semibold text-ink shadow-paper transition-transform hover:-translate-y-0.5"
+							>
+								<Download className="h-5 w-5" /> Our journey deck (.pptx)
+							</a>
+						</div>
 					</div>
 				</Reveal>
 				<Reveal delay={0.15} className="flex">

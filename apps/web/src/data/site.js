@@ -199,6 +199,13 @@ export const HOST_PHOTO = `${BASE_URL}jagadeeswara-reddy.jpg`;
 export const MONIKA_PHOTO = `${BASE_URL}monika-kusumanchi.jpg`;
 export const AMBASSADOR_CREST = `${BASE_URL}ambassador-crest.jpg`;
 
+// Downloadable pitch decks (built by presentations/build_decks_v2.py,
+// copied to public/decks/ so they ship with the site).
+export const DECKS = {
+	journey: `${BASE_URL}decks/AIYatra-Journey-From-Start-Till-Now.pptx`,
+	ambassador: `${BASE_URL}decks/AIYatra-Student-Ambassador-Program.pptx`,
+};
+
 export const COMMUNITY_FACES = [
 	{
 		name: 'Khaja Moinuddin Mohammed',
