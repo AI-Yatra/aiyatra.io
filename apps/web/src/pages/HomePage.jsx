@@ -291,6 +291,18 @@ function Events() {
 	return (
 		<section id="events" className="bg-tone-blue/30">
 			<div className="wrap pb-16 pt-8">
+				<Reveal>
+					<p className="mt-6 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">
+						<CalendarDays className="h-4 w-4" /> Events
+					</p>
+					<h2 className="mt-3 font-hand text-5xl font-bold leading-tight sm:text-6xl">
+						Saturdays are for building.
+					</h2>
+					<p className="mt-4 max-w-2xl text-lg text-ink-soft">
+						Hands-on meetups and the full archive of past sessions — every one free,
+						in person, and open to all.
+					</p>
+				</Reveal>
 				<PastEventsCarousel />
 
 				<Reveal delay={0.1}>
@@ -325,7 +337,7 @@ function Moments() {
 			<div className="wrap py-20">
 				<Reveal>
 					<p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">
-						<Camera className="h-4 w-4" /> Field notes
+						<Camera className="h-4 w-4" /> Community
 					</p>
 					<h2 className="mt-3 font-hand text-5xl font-bold leading-tight sm:text-6xl">
 						Real rooms. Real laptops.<br />Real people.
@@ -413,7 +425,7 @@ function Moments() {
 						<p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">
 							<Users className="h-4 w-4" /> Organizers
 						</p>
-						<p className="mt-2 font-hand text-3xl font-bold">The people who run the yatra</p>
+						<p className="mt-2 font-hand text-3xl font-bold">The people behind AIYatra</p>
 						<p className="mt-2 max-w-2xl text-sm font-medium leading-relaxed text-ink/70">
 							A small volunteer crew plans the curriculum, hosts every Saturday session at LSEG Madhapur,
 							reviews RSVPs, and mentors newcomers — so every meetup stays hands-on, free, and welcoming.
@@ -529,7 +541,7 @@ const methodSteps = [
 		n: '03',
 		kicker: 'Transform',
 		title: 'Transform',
-		body: 'Skills become careers, side projects become products, and strangers become collaborators. That is the yatra — the journey.',
+		body: 'Skills become careers, side projects become products, and strangers become collaborators. That is the AIYatra journey.',
 		tone: 'bg-tone-coral',
 	},
 ];
@@ -540,7 +552,7 @@ function Method() {
 			<div className="wrap py-20">
 				<Reveal>
 					<div className="max-w-2xl">
-						<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-yellow">The Yatra way</p>
+						<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-yellow">Our approach</p>
 						<h2 className="mt-3 font-hand text-5xl font-bold leading-tight sm:text-6xl">
 							First you research.<br />
 							Then you build.<br />
@@ -596,7 +608,7 @@ function Testimonials() {
 				<Reveal>
 					<div className="flex flex-wrap items-end justify-between gap-6">
 						<div>
-							<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">Kind words</p>
+							<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">Testimonials</p>
 							<h2 className="mt-3 font-hand text-5xl font-bold leading-tight sm:text-6xl">
 								Rated {GROUP_STATS.rating}★ by the people<br />who show up.
 							</h2>
@@ -634,7 +646,7 @@ function Testimonials() {
 
 			<div className="wrap py-10 text-center">
 				<p className="font-hand text-xl text-ink-soft rotate-[-1deg]">
-					every voice from the community — hover to pause the loop.
+					real stories from the community — hover to pause the loop.
 				</p>
 			</div>
 		</section>
@@ -746,7 +758,7 @@ function About() {
 			<div className="wrap grid gap-12 py-20 lg:grid-cols-2 lg:items-stretch lg:gap-[clamp(44px,6vw,96px)]">
 				<Reveal className="flex">
 					<div className="flex flex-1 flex-col justify-center">
-						<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">The movement</p>
+						<p className="text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">About AIYatra</p>
 						<h2 className="mt-3 font-hand text-5xl font-bold leading-tight sm:text-6xl">
 							An open door into AI,<br />in the heart of Hyderabad.
 						</h2>

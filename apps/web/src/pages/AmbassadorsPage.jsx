@@ -122,7 +122,7 @@ export default function AmbassadorsPage() {
 							</Reveal>
 							<Reveal delay={0.16}>
 								<p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-									AIYatra Student Ambassadors are the face of the movement in their colleges —
+									AIYatra Student Ambassadors are the face of AIYatra in their colleges —
 									rallying classmates to Saturday meetups, hosting campus mini-sessions, and turning
 									dense AI topics into hands-on learning their batch can actually use.
 								</p>
@@ -171,7 +171,7 @@ export default function AmbassadorsPage() {
 								<Sparkles className="h-4 w-4" /> The mandate
 							</p>
 							<h2 className="mt-3 max-w-2xl font-hand text-5xl font-bold leading-tight sm:text-6xl">
-								Six duties.<br />One movement.
+								Six duties.<br />One community.
 							</h2>
 							<p className="mt-4 max-w-2xl text-lg text-ink-soft">
 								A term runs one semester. Hit these six notes and you renew with honors —

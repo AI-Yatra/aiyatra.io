@@ -130,7 +130,7 @@ def header(slide, dark=False):
     tb(slide, GX + Inches(0.64), Inches(0.10), Inches(1.6), Inches(0.32), "AI Yatra", 13, True, tc, BODY)
     tb(slide, GX + Inches(0.64), Inches(0.34), Inches(1.6), Inches(0.22), "RESEARCH · BUILD · TRANSFORM", 6.5, True, sc, BODY)
     # nav (same labels as NAV_LINKS)
-    nav = "Gatherings     Field Notes     The Yatra Way     Kind Words     Movement     Ambassadors     Blog"
+    nav = "Events     Community     Approach     Testimonials     About     Ambassadors     Blog"
     nbox = tb(slide, Inches(3.6), Inches(0.14), Inches(6.4), Inches(0.44), nav, 8, False, sc, BODY, PP_ALIGN.CENTER)
     nbox.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
     # join button
@@ -194,9 +194,9 @@ def deck1():
     btn(s, cx + Inches(0.3), cy + Inches(4.4), Inches(4.25), Inches(0.5), "RSVP now  →")
     footer(s)
 
-    # -- 2. Gatherings (events bg = tone-blue/30) --
+    # -- 2. Events (events bg = tone-blue/30) --
     s = prs.slides.add_slide(blank); bg(s, EVENTS_BG); header(s)
-    kicker_line(s, Inches(1.0), "●  GATHERINGS  ·  PAST SESSIONS")
+    kicker_line(s, Inches(1.0), "●  EVENTS  ·  PAST SESSIONS")
     h_hand(s, Inches(1.28), "Hands-on Saturdays, archived on Meetup.", 32)
     cards = [
         ("Past event", "PyTorch Foundations", "Tensors, autograd and the training loop — the foundations every AI engineer stands on. Rebuilt nn.Linear from scratch.", "Sat, Aug 22 · 10:00 AM IST · 146 attended", T_BLUE),
@@ -217,9 +217,9 @@ def deck1():
     btn(s, GX + Inches(9.0), Inches(5.65), Inches(2.8), Inches(0.5), "View all on Meetup ↗", PAPER_SOFT, INK)
     footer(s)
 
-    # -- 3. Field notes (paper-soft, border-y ink) --
+    # -- 3. Community (paper-soft, border-y ink) --
     s = prs.slides.add_slide(blank); bg(s, PAPER_SOFT); header(s)
-    kicker_line(s, Inches(1.0), "◉  FIELD NOTES")
+    kicker_line(s, Inches(1.0), "◉  COMMUNITY")
     h_hand(s, Inches(1.28), "Real rooms. Real laptops. Real people.", 32)
     tb(s, GX, Inches(1.95), Inches(8.5), Inches(0.35),
        "10 hands-on sessions since Hyderabad — the numbers tell the story of rooms at LSEG, International Tech Park, Madhapur where 2,957 members learn together.",
@@ -249,15 +249,15 @@ def deck1():
         tb(s, GX + Inches(8.9), Inches(3.35 + i * 0.85), Inches(2.9), Inches(0.5), b2, 8.5, False, INK_SOFT, BODY)
     footer(s)
 
-    # -- 4. Yatra way (ink dark, exact) --
+    # -- 4. Approach (ink dark, exact) --
     s = prs.slides.add_slide(blank); bg(s, INK); header(s, dark=True)
-    tb(s, GX, Inches(1.0), GW, Inches(0.3), "THE YATRA WAY", 9, True, T_YELLOW, BODY)
+    tb(s, GX, Inches(1.0), GW, Inches(0.3), "OUR APPROACH", 9, True, T_YELLOW, BODY)
     tb(s, GX, Inches(1.3), Inches(8.0), Inches(1.2), "First you research. Then you build. Then you transform.", 30, True, PAPER_SOFT, HEAD)
     tb(s, GX, Inches(2.35), Inches(8.0), Inches(0.5), "Yatra means journey. Ours takes you from curious onlooker to confident builder — through research, build, and transform, repeated every single meetup.", 11, False, PAPER_SOFT, BODY)
     steps = [
         ("01 · Research", "Research", "We read the papers, trace the math, and ask the naive questions out loud — so nobody has to pretend they already know.", T_VIOLET),
         ("02 · Build", "Build", "Laptops open, code on screen. Every session ships something real — a training loop, an agent harness, a working demo.", T_GREEN),
-        ("03 · Transform", "Transform", "Skills become careers, side projects become products, and strangers become collaborators. That is the yatra — the journey.", T_CORAL),
+        ("03 · Transform", "Transform", "Skills become careers, side projects become products, and strangers become collaborators. That is the AIYatra journey.", T_CORAL),
     ]
     for i, (kick, title, body, tone) in enumerate(steps):
         x = GX + Inches(i * 4.15)
@@ -268,9 +268,9 @@ def deck1():
     tb(s, GX, Inches(5.85), GW, Inches(0.3), "14 Meetups hosted   •   2hr Per session   •   100% Free, always", 9, True, T_YELLOW, BODY, PP_ALIGN.CENTER)
     footer(s)
 
-    # -- 5. Kind words (paper) --
+    # -- 5. Testimonials (paper) --
     s = prs.slides.add_slide(blank); bg(s, PAPER); header(s)
-    kicker_line(s, Inches(1.0), "KIND WORDS")
+    kicker_line(s, Inches(1.0), "TESTIMONIALS")
     h_hand(s, Inches(1.28), "Rated 4.6★ by the people who show up.", 32)
     tb(s, GX + Inches(9.2), Inches(1.15), Inches(3.0), Inches(0.4), "★  4.6 · 90 ratings on Meetup", 9, True, INK, BODY)
     quotes = [
@@ -298,12 +298,12 @@ def deck1():
     tb(s, GX + Inches(3.0), Inches(2.9), Inches(5.5), Inches(0.7), "Rally your batch to Saturday meetups, host campus mini-sessions, and earn recognition, mentorship and speaker slots — free, always.", 11, False, INK_SOFT, BODY)
     btn(s, GX + Inches(3.0), Inches(3.85), Inches(2.7), Inches(0.52), "Explore the program  →")
     # organizers strip (exact tiles, compact)
-    tb(s, GX, Inches(5.35), GW, Inches(0.35), "The people who run the yatra — Khaja Moinuddin Mohammed (Super Organizer) · Azeez Syed (Co-organizer & Host) · Jagadeeswara Reddy (Host & Educator)", 9, True, INK, BODY, PP_ALIGN.CENTER)
+    tb(s, GX, Inches(5.35), GW, Inches(0.35), "The people behind AIYatra — Khaja Moinuddin Mohammed (Super Organizer) · Azeez Syed (Co-organizer & Host) · Jagadeeswara Reddy (Host & Educator)", 9, True, INK, BODY, PP_ALIGN.CENTER)
     footer(s)
 
-    # -- 7. Movement (about green tint, exact) --
+    # -- 7. About (about green tint, exact) --
     s = prs.slides.add_slide(blank); bg(s, ABOUT_BG); header(s)
-    kicker_line(s, Inches(1.0), "THE MOVEMENT")
+    kicker_line(s, Inches(1.0), "ABOUT AIYATRA")
     tb(s, GX, Inches(1.28), Inches(6.4), Inches(1.1), "An open door into AI, in the heart of Hyderabad.", 32, True, INK, HEAD)
     tb(s, GX, Inches(2.3), Inches(6.4), Inches(1.3),
        "AIYatra is for anyone exploring AI applications, diving into Artificial Intelligence: A Modern Approach, building recommender systems, or mastering machine learning with Python. Beginner or expert — you get knowledge sharing, networking, and collaborative projects.\nLed by super organizer Khaja Moinuddin Mohammed and a crew of passionate volunteers, we meet at LSEG, International Tech Park, Madhapur, Hyderabad.",
@@ -334,7 +334,7 @@ def deck1():
     tb(s, GX, Inches(1.1), GW, Inches(0.6), "AI Yatra — Research. Build. Transform.", 30, True, PAPER_SOFT, HEAD)
     tb(s, GX, Inches(1.7), Inches(7.0), Inches(0.4), "Hyderabad's open AI community. We research, build, and transform — one hands-on Saturday at a time. Free, forever, and open to everyone.", 10.5, False, PAPER_SOFT, BODY)
     cols = [
-        ("EXPLORE", "Ambassadors — new\nBlog\nGatherings\nField Notes\nKind Words"),
+        ("EXPLORE", "Ambassadors — new\nBlog\nEvents\nCommunity\nTestimonials"),
         ("SHOW UP", "LSEG, International Tech Park, Madhapur\nSaturdays · mornings, IST\nFree, always"),
         ("FOLLOW", f"{EMAIL}\nMeetup inbox\nGitHub: {GITHUB_SHORT}\nLinkedIn: {LINKEDIN_SHORT}"),
         ("VISIT", f"{WEBSITE}\n{WEBSITE}/ambassadors\n{WEBSITE}/blog\n{MEETUP_SHORT}"),
@@ -364,7 +364,7 @@ def deck2():
     pill(s, GX, Inches(1.0), Inches(4.2), Inches(0.38), "🎓  New chapter · Student Ambassador Program", T_BLUE)
     tb(s, GX, Inches(1.5), Inches(7.0), Inches(1.5), "Carry the AI Yatra to your campus.", 44, True, INK, HEAD)
     tb(s, GX, Inches(2.7), Inches(6.6), Inches(0.8),
-       "AIYatra Student Ambassadors are the face of the movement in their colleges — rallying classmates to Saturday meetups, hosting campus mini-sessions, and turning dense AI topics into hands-on learning their batch can actually use.",
+       "AIYatra Student Ambassadors are the face of AIYatra in their colleges — rallying classmates to Saturday meetups, hosting campus mini-sessions, and turning dense AI topics into hands-on learning their batch can actually use.",
        11.5, False, INK_SOFT, BODY)
     btn(s, GX, Inches(3.75), Inches(2.4), Inches(0.52), "Apply by email  →")
     _rounded(s, GX + Inches(2.6), Inches(3.75), Inches(2.7), Inches(0.52), PAPER_SOFT, INK, 1.5, True, 0.18)
@@ -379,7 +379,7 @@ def deck2():
     # 2 Mandate (paper-soft, exact duties)
     s = prs.slides.add_slide(blank); bg(s, PAPER_SOFT); header(s)
     kicker_line(s, Inches(1.0), "✦  THE MANDATE")
-    h_hand(s, Inches(1.28), "Six duties. One movement.", 32)
+    h_hand(s, Inches(1.28), "Six duties. One community.", 32)
     tb(s, GX, Inches(1.9), GW, Inches(0.35), "A term runs one semester. Hit these six notes and you renew with honors — and a letter that actually says something.", 10.5, False, INK_SOFT, BODY)
     duties = [
         ("Carry the AI Yatra to campus", "Spread the word in your college — posters, classroom shout-outs, WhatsApp groups and tech clubs. You are the bridge between AIYatra and your campus.", T_YELLOW),

@@ -10,11 +10,11 @@ import {
 } from '@/data/site';
 
 export const NAV_LINKS = [
-	{ to: '/#events', label: 'Gatherings' },
-	{ to: '/#moments', label: 'Field Notes' },
-	{ to: '/#method', label: 'The Yatra Way' },
-	{ to: '/#voices', label: 'Kind Words' },
-	{ to: '/#about', label: 'The Movement' },
+	{ to: '/#events', label: 'Events' },
+	{ to: '/#moments', label: 'Community' },
+	{ to: '/#method', label: 'Approach' },
+	{ to: '/#voices', label: 'Testimonials' },
+	{ to: '/#about', label: 'About' },
 	{ to: '/ambassadors', label: 'Ambassadors' },
 	{ to: '/labs', label: 'Labs' },
 	{ to: '/blog', label: 'Blog' },
@@ -125,10 +125,11 @@ export function Footer() {
 						<li><Link to="/ambassadors" className="text-tone-yellow transition-colors hover:text-paper">Ambassadors — new</Link></li>
 						<li><Link to="/labs" className="text-tone-yellow transition-colors hover:text-paper">Labs — research tracks</Link></li>
 						<li><Link to="/blog" className="text-paper/75 transition-colors hover:text-tone-yellow">Blog</Link></li>
-						<li><Link to="/#events" className="text-paper/75 transition-colors hover:text-tone-yellow">Gatherings</Link></li>
-						<li><Link to="/#moments" className="text-paper/75 transition-colors hover:text-tone-yellow">Field Notes</Link></li>
-						<li><Link to="/#voices" className="text-paper/75 transition-colors hover:text-tone-yellow">Kind Words</Link></li>
-						<li><Link to="/#about" className="text-paper/75 transition-colors hover:text-tone-yellow">Movement</Link></li>
+					<li><Link to="/#events" className="text-paper/75 transition-colors hover:text-tone-yellow">Events</Link></li>
+					<li><Link to="/#moments" className="text-paper/75 transition-colors hover:text-tone-yellow">Community</Link></li>
+					<li><Link to="/#method" className="text-paper/75 transition-colors hover:text-tone-yellow">Approach</Link></li>
+					<li><Link to="/#voices" className="text-paper/75 transition-colors hover:text-tone-yellow">Testimonials</Link></li>
+					<li><Link to="/#about" className="text-paper/75 transition-colors hover:text-tone-yellow">About</Link></li>
 						<li><a href={MEETUP_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-paper/75 transition-colors hover:text-tone-yellow">Meetup <ArrowUpRight className="h-3.5 w-3.5" /></a></li>
 					</ul>
 				</div>
