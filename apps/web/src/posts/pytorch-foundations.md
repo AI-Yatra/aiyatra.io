@@ -4,7 +4,7 @@ date: 2026-08-22
 excerpt: Tensors, autograd and the training loop — the foundations every AI engineer stands on. We rebuilt nn.Linear from scratch.
 cover: https://secure.meetupstatic.com/photos/event/1/0/a/b/highres_535684267.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/316136710/
-attendees: 146
+attendees: 145
 ---
 
 Tensors, autograd and the training loop — the foundations every AI engineer stands on. We rebuilt nn.Linear from scratch.

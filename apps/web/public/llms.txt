@@ -3,6 +3,8 @@
 - [Student Ambassador Program — AIYatra](/ambassadors): Carry the AI Yatra to your campus as a student ambassador.
 - [AI Yatra Labs — AIYatra](/labs): Curated arXiv and AlphaXiv reading lists across small language models, agent harnesses, transformer layers, and new architectures.
 - [Blog — AIYatra](/blog): Session recaps and field notes from every AIYatra meetup.
+- [Supervised Fine-Tuning to Reinforcement Learning — Train Models to Think Better](/blog/sft-to-rl): SFT with LoRA, DPO and GRPO on a pretrained model — rewards, preferences and the hard question — better at the task, or just better at the reward?
+- [Harnessing Agentic AI — Build Tools That Build Code](/blog/harnessing-agentic-ai): Build the loop, the tools and the guardrails — and make your own coding agent that reads, plans, edits, tests and repairs its way to a verified pull request. 100% offline, zero API keys.
 - [PyTorch Foundations — Tensors, Autograd and the Training Loop](/blog/pytorch-foundations): Tensors, autograd and the training loop — the foundations every AI engineer stands on. We rebuilt nn.Linear from scratch.
 - [Linear Algebra for AI Engineers — From Vectors to Transformers](/blog/linear-algebra-to-transformers): Vectors to attention — embeddings, Q/K/V projections, LoRA and SVD, the math beneath the models, by hand.
 - [Building DeepSeek-V3 From Scratch — MLA, MoE and RoPE in PyTorch](/blog/deepseek-v3-from-scratch): Multi-head latent attention, MoE load balancing and RoPE scaling — the DeepSeek-V3 paper, live-coded in PyTorch.

@@ -113,7 +113,7 @@ export function Footer() {
 							rel="noreferrer"
 							className="active-press inline-flex h-10 items-center gap-2 rounded-xl border-2 border-paper/40 px-4 text-sm font-semibold text-paper transition-colors hover:border-paper"
 						>
-							Next: Sep 5
+							Next: Sep 26
 						</a>
 					</div>
 				</div>

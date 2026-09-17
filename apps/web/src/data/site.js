@@ -4,7 +4,7 @@
 // Photos are the real featuredEventPhoto values served from meetupstatic.
 
 export const MEETUP_URL = 'https://www.meetup.com/aiyatra/';
-export const EVENT_URL = 'https://www.meetup.com/aiyatra/events/316241516/';
+export const EVENT_URL = 'https://www.meetup.com/aiyatra/events/316525443/';
 export const PAST_EVENTS_URL = 'https://www.meetup.com/aiyatra/events/past/';
 export const CONTACT_EMAIL = 'global.aiyatra@gmail.com';
 export const LINKEDIN_URL = 'https://www.linkedin.com/company/aiyatra/';
@@ -19,10 +19,10 @@ const BASE_URL = import.meta.env.BASE_URL || '/';
 export const AI_YATRA_LOGO = `${BASE_URL}aiyatra-mark.png`;
 
 export const GROUP_STATS = {
-	members: 2957,
-	eventsHosted: 14,
-	rating: 4.6,
-	ratingsCount: 90,
+	members: 3843,
+	eventsHosted: 16,
+	rating: 4.7,
+	ratingsCount: 133,
 	venue: 'LSEG, International Tech Park, Madhapur, Hyderabad',
 	city: 'Hyderabad, IN',
 	organizer: 'Khaja Moinuddin Mohammed',
@@ -30,6 +30,8 @@ export const GROUP_STATS = {
 
 export const PHOTO = {
 	// Real featured photos from the live Meetup group (highres meetupstatic)
+	diffusion: 'https://secure.meetupstatic.com/photos/event/4/c/c/4/highres_536179652.jpeg',
+	sft: 'https://secure.meetupstatic.com/photos/event/4/b/d/c/highres_535999420.jpeg',
 	agenticAi: 'https://secure.meetupstatic.com/photos/event/3/c/0/a/highres_535815370.jpeg',
 	pytorch: 'https://secure.meetupstatic.com/photos/event/1/0/a/b/highres_535684267.jpeg',
 	linearAlgebra: 'https://secure.meetupstatic.com/photos/event/5/f/e/highres_535561534.jpeg',
@@ -49,12 +51,36 @@ export const PHOTO = {
 // exported newest-first for display. `photo` = real meetupstatic cover.
 export const ALL_EVENTS = [
 	{
+		id: '316525443',
+		title: 'Diffusion Models from First Principles: From Images to Video & Text',
+		shortTitle: 'Diffusion Models, First Principles',
+		date: 'Sat, Sep 26 · 9:00 AM IST',
+		attendees: 135,
+		status: 'upcoming',
+		url: 'https://www.meetup.com/aiyatra/events/316525443/',
+		photo: 'https://secure.meetupstatic.com/photos/event/4/c/c/4/highres_536179652.jpeg',
+		blurb:
+			'From noise to images, video, audio, text and omni-generation — DDPM, latent diffusion, DiT and flow matching, then a live from-scratch build on 6 GB VRAM.',
+	},
+	{
+		id: '316434319',
+		title: 'Supervised Fine-Tuning to Reinforcement Learning: Train Models to Think Better',
+		shortTitle: 'SFT → RL: Train to Think',
+		date: 'Sat, Sep 12 · 9:00 AM IST',
+		attendees: 286,
+		status: 'past',
+		url: 'https://www.meetup.com/aiyatra/events/316434319/',
+		photo: 'https://secure.meetupstatic.com/photos/event/4/b/d/c/highres_535999420.jpeg',
+		blurb:
+			'SFT with LoRA, DPO and GRPO on a pretrained model — rewards, preferences and the hard question: better at the task, or just better at the reward?',
+	},
+	{
 		id: '316241516',
 		title: 'Harnessing Agentic AI: Build Tools That Build Code',
 		shortTitle: 'Harnessing Agentic AI',
 		date: 'Sat, Sep 5 · 9:00 AM IST',
-		attendees: 319,
-		status: 'upcoming',
+		attendees: 282,
+		status: 'past',
 		url: 'https://www.meetup.com/aiyatra/events/316241516/',
 		photo: 'https://secure.meetupstatic.com/photos/event/3/c/0/a/highres_535815370.jpeg',
 		blurb:
@@ -62,10 +88,10 @@ export const ALL_EVENTS = [
 	},
 	{
 		id: '316136710',
-		title: 'Pytorch Session #1 - PyTorch Foundations',
+		title: 'Pytorch Session# 1 - PyTorch Foundations',
 		shortTitle: 'PyTorch Foundations',
 		date: 'Sat, Aug 22 · 10:00 AM IST',
-		attendees: 146,
+		attendees: 145,
 		status: 'past',
 		url: 'https://www.meetup.com/aiyatra/events/316136710/',
 		photo: 'https://secure.meetupstatic.com/photos/event/1/0/a/b/highres_535684267.jpeg',
@@ -184,11 +210,13 @@ export const ALL_EVENTS = [
 
 // Convenience slices (back-compat with existing imports)
 export const EVENTS = {
-	agenticAi: ALL_EVENTS[0],
-	pytorch: ALL_EVENTS[1],
-	linearAlgebra: ALL_EVENTS[2],
-	deepseek: ALL_EVENTS[3],
-	goose: ALL_EVENTS[4],
+	diffusion: ALL_EVENTS[0],
+	sft: ALL_EVENTS[1],
+	agenticAi: ALL_EVENTS[2],
+	pytorch: ALL_EVENTS[3],
+	linearAlgebra: ALL_EVENTS[4],
+	deepseek: ALL_EVENTS[5],
+	goose: ALL_EVENTS[6],
 };
 
 export const UPCOMING_EVENTS = ALL_EVENTS.filter((e) => e.status === 'upcoming');
@@ -247,5 +275,5 @@ export const GALLERY = [
 	ALL_EVENTS[3],
 	ALL_EVENTS[4],
 	ALL_EVENTS[5],
-	ALL_EVENTS[10],
+	ALL_EVENTS[12],
 ];

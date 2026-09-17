@@ -77,29 +77,29 @@ function HeroCard() {
 				</span>
 			</div>
 
-			<h3 className="mt-5 font-hand text-4xl font-bold leading-[1.05] sm:text-5xl">{EVENTS.agenticAi.shortTitle}</h3>
-			<p className="mt-2 text-base font-medium text-ink-soft">{EVENTS.agenticAi.blurb}</p>
+			<h3 className="mt-5 font-hand text-4xl font-bold leading-[1.05] sm:text-5xl">{EVENTS.diffusion.shortTitle}</h3>
+			<p className="mt-2 text-base font-medium text-ink-soft">{EVENTS.diffusion.blurb}</p>
 
 			<div className="mt-5 grid grid-cols-2 gap-3">
 				<div className="rounded-xl border-2 border-ink bg-tone-blue p-3.5">
 					<p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide text-ink/60">
 						<CalendarDays className="h-3.5 w-3.5" /> When
 					</p>
-					<p className="mt-1.5 text-sm font-bold leading-snug">Sat, Sep 5<br />9:00 AM IST</p>
+					<p className="mt-1.5 text-sm font-bold leading-snug">Sat, Sep 26<br />9:00 AM IST</p>
 				</div>
 				<div className="rounded-xl border-2 border-ink bg-tone-green p-3.5">
 					<p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide text-ink/60">
 						<Users className="h-3.5 w-3.5" /> Attending
 					</p>
-					<p className="mt-1.5 text-sm font-bold leading-snug">{EVENTS.agenticAi.attendees} learners<br />& counting</p>
+					<p className="mt-1.5 text-sm font-bold leading-snug">{EVENTS.diffusion.attendees} learners<br />& counting</p>
 				</div>
 			</div>
 
 			<ul className="mt-4 space-y-2">
 				{[
-					'The agent loop — the core inside Claude Code & Codex',
-					'Tools, planning & self-repair in pure Python',
-					'Guardrails & sandboxing — 100% offline',
+					'Forward diffusion → reverse denoising, from first principles',
+					'DDPM, DDIM, latent diffusion, DiT & flow matching',
+					'Live from-scratch build — runs on 6 GB VRAM',
 				].map((t, i) => (
 					<li key={i} className="flex items-start gap-2.5 text-sm font-medium text-ink/80">
 						<span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-tone-yellow text-[11px] font-bold">
@@ -382,7 +382,7 @@ function Moments() {
 								</li>
 								<li className="rounded-xl border border-ink/50 bg-paper-soft px-4 py-3">
 									<span className="font-bold text-ink">Agents.</span> Goose end-to-end demo, DeepSeek-V3
-									architecture, and the Sep 5 coding-agent build.
+									architecture, the Sep 5 coding-agent build and Sep 12 SFT → RL.
 								</li>
 								<li className="rounded-xl border border-ink/50 bg-paper-soft px-4 py-3">
 									<span className="font-bold text-ink">Reading room.</span> A four-part evening series through
@@ -834,7 +834,7 @@ function FinalCta() {
 							rel="noreferrer"
 							className="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-paper/50 px-7 text-base font-semibold text-paper transition-colors hover:border-paper"
 						>
-							RSVP: Agentic AI, Sep 5
+							RSVP: Diffusion Models, Sep 26
 						</a>
 					</div>
 				</Reveal>
@@ -850,7 +850,7 @@ export default function HomePage() {
 				<title>AIYatra — Democratizing AI Learning | Hyderabad AI Community</title>
 				<meta
 					name="description"
-					content="AIYatra is Hyderabad's open AI community. Through research, build and transform — join 2,957 members at hands-on meetups on agentic AI, PyTorch, and machine learning. Free, forever."
+					content="AIYatra is Hyderabad's open AI community. Through research, build and transform — join 3,843 members at hands-on meetups on diffusion models, agentic AI, PyTorch, and machine learning. Free, forever."
 				/>
 			</Helmet>
 			<Header />
