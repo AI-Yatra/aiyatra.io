@@ -4,8 +4,7 @@ Allow: /
 User-agent: OAI-SearchBot
 Allow: /
 
-User-agent: ChatGPT-User
-Allow: /
-
 User-agent: *
 Allow: /
+
+Sitemap: https://aiyatra.io/sitemap.xml
