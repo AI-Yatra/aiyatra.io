@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import { Header, Footer } from '@/components/SiteChrome';
+import { photoProps } from '@/data/site';
 import { getPost, getRelated, getPrevNext, getAllPosts } from '@/lib/posts';
 
 function NotFound() {
@@ -15,7 +16,7 @@ function NotFound() {
 				<title>Post not found — AIYatra</title>
 			</Helmet>
 			<Header />
-			<main>
+			<main id="main">
 				<section className="wrap py-24 text-center">
 					<p className="font-hand text-6xl font-bold">No such post.</p>
 					<p className="mx-auto mt-4 max-w-md text-lg text-ink-soft">
@@ -49,7 +50,7 @@ export default function BlogPostPage() {
 				<meta name="description" content={post.excerpt} />
 			</Helmet>
 			<Header />
-			<main>
+			<main id="main">
 				<section id="top" className="relative overflow-hidden">
 					<div className="wrap pb-10 pt-14 lg:pt-[74px]">
 						<Reveal>
@@ -78,7 +79,7 @@ export default function BlogPostPage() {
 					<div className="wrap py-14">
 						<Reveal>
 							<div className="overflow-hidden rounded-2xl border-2 border-ink shadow-paper">
-								<img src={post.cover} alt={post.title} className="aspect-[21/9] w-full object-cover" />
+								<img {...photoProps(post.cover, '(min-width: 1100px) 1000px, 100vw')} alt={post.title} decoding="async" width="1024" height="576" className="aspect-[21/9] w-full object-cover" />
 							</div>
 						</Reveal>
 						<Reveal delay={0.08}>
@@ -120,7 +121,7 @@ export default function BlogPostPage() {
 									<Reveal key={r.slug} className="h-full">
 										<Link to={`/blog/${r.slug}`} className="hover-lift flex h-full flex-col overflow-hidden rounded-2xl border-2 border-ink bg-paper-soft shadow-paper-sm">
 											<div className="aspect-[16/9] overflow-hidden border-b-2 border-ink">
-												<img src={r.cover} alt={r.title} loading="lazy" className="h-full w-full object-cover" />
+												<img {...photoProps(r.cover)} alt={r.title} loading="lazy" decoding="async" width="676" height="380" className="h-full w-full object-cover" />
 											</div>
 											<div className="flex flex-1 flex-col p-5">
 												<p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">{r.date} · {r.attendees} attended</p>

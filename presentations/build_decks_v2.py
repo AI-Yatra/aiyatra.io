@@ -222,7 +222,7 @@ def deck1():
     kicker_line(s, Inches(1.0), "◉  COMMUNITY")
     h_hand(s, Inches(1.28), "Real rooms. Real laptops. Real people.", 32)
     tb(s, GX, Inches(1.95), Inches(8.5), Inches(0.35),
-       "10 hands-on sessions since Hyderabad — the numbers tell the story of rooms at LSEG, International Tech Park, Madhapur where 2,957 members learn together.",
+       "10 hands-on sessions since Hyderabad — the numbers tell the story of rooms where 2,957 members learn together.",
        10.5, False, INK_SOFT, BODY)
     # col 1 biggest rooms (tone-yellow)
     _rounded(s, GX, Inches(2.5), Inches(3.93), Inches(3.4), T_YELLOW, INK, 1.5, True, 0.08)
@@ -242,7 +242,7 @@ def deck1():
     # col 3 saturday (tone-green)
     _rounded(s, GX + Inches(8.3), Inches(2.5), Inches(3.93), Inches(3.4), T_GREEN, INK, 1.5, True, 0.08)
     tb(s, GX + Inches(8.6), Inches(2.65), Inches(3.3), Inches(0.3), "▦  WHAT A SATURDAY LOOKS LIKE", 8, True, INK_SOFT, BODY)
-    for i, (a, b2) in enumerate([("9:00 — Doors & check-in", "RSVP plus the event Google form at the LSEG gate, then laptops open."),
+    for i, (a, b2) in enumerate([("9:00 — Doors & check-in", "RSVP plus the event Google form at the gate, then laptops open."),
                                   ("Morning — Build, not slides", "Live coding you follow along: tensors, attention, agent loops."),
                                   ("Close — Verify & network", "Demos, Q&A, and the hallway track where teams form.")]):
         tb(s, GX + Inches(8.9), Inches(3.1 + i * 0.85), Inches(2.9), Inches(0.3), f"{i+1}  {a}", 9, True, INK, BODY)
@@ -306,11 +306,11 @@ def deck1():
     kicker_line(s, Inches(1.0), "ABOUT AIYATRA")
     tb(s, GX, Inches(1.28), Inches(6.4), Inches(1.1), "An open door into AI, in the heart of Hyderabad.", 32, True, INK, HEAD)
     tb(s, GX, Inches(2.3), Inches(6.4), Inches(1.3),
-       "AIYatra is for anyone exploring AI applications, diving into Artificial Intelligence: A Modern Approach, building recommender systems, or mastering machine learning with Python. Beginner or expert — you get knowledge sharing, networking, and collaborative projects.\nLed by super organizer Khaja Moinuddin Mohammed and a crew of passionate volunteers, we meet at LSEG, International Tech Park, Madhapur, Hyderabad.",
+       "AIYatra is for anyone exploring AI applications, diving into Artificial Intelligence: A Modern Approach, building recommender systems, or mastering machine learning with Python. Beginner or expert — you get knowledge sharing, networking, and collaborative projects.\nLed by super organizer Khaja Moinuddin Mohammed and a crew of passionate volunteers, we meet every Saturday in Hyderabad.",
        10.5, False, INK_SOFT, BODY)
     _rounded(s, GX + Inches(7.0), Inches(1.3), Inches(5.23), Inches(4.3), PAPER_SOFT, INK, 1.5, True, 0.08)
     tb(s, GX + Inches(7.4), Inches(1.55), Inches(4.4), Inches(0.4), "The essentials", 24, True, INK, HEAD)
-    for i, (k, v) in enumerate([("Where", "LSEG, International Tech Park, Madhapur, Hyderabad"), ("When", "Saturdays · mornings, IST"), ("Cost", "Free, always — learning should be"), ("Bring", "A laptop, Python 3.10+, and curiosity")]):
+    for i, (k, v) in enumerate([("Where", "Hyderabad · venue shared with RSVPs"), ("When", "Saturdays · mornings, IST"), ("Cost", "Free, always — learning should be"), ("Bring", "A laptop, Python 3.10+, and curiosity")]):
         _rounded(s, GX + Inches(7.4), Inches(2.15 + i * 0.82), Inches(4.43), Inches(0.68), PAPER, INK, 1.0, False, 0.12)
         tb(s, GX + Inches(7.6), Inches(2.18 + i * 0.82), Inches(4.1), Inches(0.22), k.upper(), 7.5, True, INK_SOFT, BODY)
         tb(s, GX + Inches(7.6), Inches(2.38 + i * 0.82), Inches(4.1), Inches(0.3), v, 9.5, True, INK, BODY)
@@ -335,7 +335,7 @@ def deck1():
     tb(s, GX, Inches(1.7), Inches(7.0), Inches(0.4), "Hyderabad's open AI community. We research, build, and transform — one hands-on Saturday at a time. Free, forever, and open to everyone.", 10.5, False, PAPER_SOFT, BODY)
     cols = [
         ("EXPLORE", "Ambassadors — new\nBlog\nEvents\nCommunity\nTestimonials"),
-        ("SHOW UP", "LSEG, International Tech Park, Madhapur\nSaturdays · mornings, IST\nFree, always"),
+        ("SHOW UP", "Hyderabad · venue shared with RSVPs\nSaturdays · mornings, IST\nFree, always"),
         ("FOLLOW", f"{EMAIL}\nMeetup inbox\nGitHub: {GITHUB_SHORT}\nLinkedIn: {LINKEDIN_SHORT}"),
         ("VISIT", f"{WEBSITE}\n{WEBSITE}/ambassadors\n{WEBSITE}/blog\n{MEETUP_SHORT}"),
     ]

@@ -1,0 +1,83 @@
+# Keeps aiyatra.io current without anyone touching it.
+#
+# Every night at 00:00 IST this pulls the latest events, RSVP counts and group
+# stats from https://www.meetup.com/aiyatra/, commits any change to
+# apps/web/src/data/meetup.json, rebuilds the site and publishes it to the
+# gh-pages branch (GitHub Pages, custom domain aiyatra.io).
+#
+# It also deploys on every push to main, and can be run by hand from the
+# Actions tab ("Run workflow").
+#
+# Between nightly runs the site still rolls over on its own: "next event" is
+# decided in the visitor's browser from the event times, so once a Saturday
+# session ends the following one is shown immediately.
+
+name: Sync events & deploy
+
+on:
+  schedule:
+    - cron: '30 18 * * *' # 18:30 UTC = 00:00 IST
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Pull latest events from Meetup
+        run: npm run sync
+
+      - name: Commit refreshed event data
+        # Keeps a history of the event archive in git. If main is protected
+        # against bot pushes this step is skipped and the deploy still ships
+        # the fresh data.
+        continue-on-error: true
+        run: |
+          if git diff --quiet -- apps/web/src/data/meetup.json; then
+            echo "No event changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/web/src/data/meetup.json
+          git commit -m "Sync events from Meetup"
+          git push
+
+      - name: Build
+        run: npm run build
+
+      - name: Prepare GitHub Pages files
+        run: |
+          # Deep links like /ambassadors are client-side routes: serve the app
+          # for any path GitHub Pages doesn't know.
+          cp dist/apps/web/index.html dist/apps/web/404.html
+          touch dist/apps/web/.nojekyll
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist/apps/web
+          publish_branch: gh-pages
+          cname: aiyatra.io
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_message: 'Deploy: ${{ github.event_name }} ${{ github.sha }}'

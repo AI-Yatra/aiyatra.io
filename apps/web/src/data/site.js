@@ -1,12 +1,16 @@
 // AIYatra — site-wide data & links.
-// All events, dates, attendee counts and photos are the real live values
-// pulled from https://www.meetup.com/aiyatra/ (group + /events/ pages).
-// Photos are the real featuredEventPhoto values served from meetupstatic.
+// Events, RSVP counts, photos and group stats come from src/data/meetup.json,
+// which tools/sync-meetup.js refreshes from https://www.meetup.com/aiyatra/
+// every night at 00:00 IST (see .github/workflows/deploy.yml). Hand-written
+// card copy lives in src/data/event-notes.js.
+
+import MEETUP from './meetup.json';
+import { EVENT_NOTES } from './event-notes';
 
 export const MEETUP_URL = 'https://www.meetup.com/aiyatra/';
-export const EVENT_URL = 'https://www.meetup.com/aiyatra/events/316720553/';
 export const PAST_EVENTS_URL = 'https://www.meetup.com/aiyatra/events/past/';
-export const GOOGLE_FORM_URL = 'https://forms.gle/Gw5wGiLubwhE5u2W9';
+// Subscribing to this keeps every new AIYatra session in your own calendar.
+export const CALENDAR_FEED_URL = 'webcal://www.meetup.com/aiyatra/events/ical/';
 export const CONTACT_EMAIL = 'global.aiyatra@gmail.com';
 export const LINKEDIN_URL = 'https://www.linkedin.com/company/aiyatra/';
 export const GITHUB_URL = 'https://github.com/AI-Yatra';
@@ -17,278 +21,159 @@ export const ADMIN_EMAILS = ['global.aiyatra@gmail.com'];
 // A plain "/aiyatra-mark.png" string would 404 under a subpath.
 const BASE_URL = import.meta.env.BASE_URL || '/';
 
-export const AI_YATRA_LOGO = `${BASE_URL}aiyatra-mark.png`;
+// Small copy for on-page use; the full-size mark stays for favicons and link previews.
+export const AI_YATRA_LOGO = `${BASE_URL}aiyatra-mark-160.png`;
+
+/* ——— events ——— */
+
+const IST = 'Asia/Kolkata';
+const fmtDay = new Intl.DateTimeFormat('en-US', { timeZone: IST, weekday: 'short', month: 'short', day: 'numeric' });
+const fmtTime = new Intl.DateTimeFormat('en-US', { timeZone: IST, hour: 'numeric', minute: '2-digit' });
+const fmtLong = new Intl.DateTimeFormat('en-US', { timeZone: IST, weekday: 'long', month: 'long', day: 'numeric' });
+
+export const formatDay = (ms) => fmtDay.format(ms);
+export const formatTime = (ms) => fmtTime.format(ms);
+export const formatLongDay = (ms) => fmtLong.format(ms);
+
+function shorten(title) {
+	if (title.length <= 34) return title;
+	const head = title.split(/\s*(?::|—|–|\s-\s)\s*/)[0];
+	return head.length >= 12 && head.length <= 44 ? head : `${title.slice(0, 40).replace(/\s+\S*$/, '')}…`;
+}
+
+function toEvent(raw) {
+	const notes = EVENT_NOTES[raw.id] || {};
+	const start = Date.parse(raw.start);
+	// Meetup omits the end time on some older events; assume a 3-hour session.
+	const end = raw.end ? Date.parse(raw.end) : start + 3 * 3600_000;
+	const when = `${formatDay(start)} · ${formatTime(start)} – ${formatTime(end)} IST`;
+	return {
+		id: raw.id,
+		title: raw.title,
+		shortTitle: notes.shortTitle || shorten(raw.title),
+		blurb: notes.blurb || raw.summary || '',
+		url: raw.url,
+		photo: raw.photo,
+		attendees: raw.going ?? 0,
+		online: raw.online,
+		cancelled: raw.status === 'CANCELLED',
+		formUrl: notes.formUrl || raw.formUrl || null,
+		rsvpDeadline: notes.rsvpDeadline ? Date.parse(notes.rsvpDeadline) : null,
+		start,
+		end,
+		date: when,
+	};
+}
+
+// Newest first. Cancelled sessions are dropped everywhere.
+export const ALL_EVENTS = MEETUP.events.map(toEvent).filter((e) => !e.cancelled).sort((a, b) => b.start - a.start);
+
+// Status is decided by the clock, not by the last sync, so the moment a
+// Saturday session ends the site moves on to the next one by itself.
+export const isUpcoming = (e, now = Date.now()) => e.end > now;
+export const upcomingEvents = (now = Date.now()) => ALL_EVENTS.filter((e) => isUpcoming(e, now)).sort((a, b) => a.start - b.start);
+export const pastEvents = (now = Date.now()) => ALL_EVENTS.filter((e) => !isUpcoming(e, now));
+export const nextEvent = (now = Date.now()) => upcomingEvents(now)[0] || null;
+
+export const UPCOMING_EVENTS = upcomingEvents();
+export const PAST_EVENTS = pastEvents();
+export const NEXT_EVENT = nextEvent();
+export const EVENT_URL = NEXT_EVENT?.url || MEETUP_URL;
+export const GOOGLE_FORM_URL = NEXT_EVENT?.formUrl || null;
+export const SYNCED_AT = MEETUP.syncedAt;
 
 export const GROUP_STATS = {
-	members: 5052,
-	eventsHosted: 17,
-	rating: 4.7,
-	ratingsCount: 148,
-	venue: 'LSEG Hyderabad, Inorbit Mall Rd, Madhapur, Hyderabad',
+	members: MEETUP.group?.members ?? 5000,
+	// Meetup's own count at sync time, plus any session that has ended since.
+	eventsHosted: Math.max(
+		(MEETUP.group?.pastEvents ?? 0) + PAST_EVENTS.filter((e) => e.end > Date.parse(MEETUP.syncedAt || 0)).length,
+		PAST_EVENTS.length,
+	),
+	rating: Math.round((MEETUP.group?.rating ?? 4.7) * 10) / 10,
+	ratingsCount: MEETUP.group?.ratingsCount ?? 0,
+	// City only — the exact venue is shared with RSVPs on Meetup.
+	venue: 'Hyderabad',
 	city: 'Hyderabad, IN',
 	organizer: 'Khaja Moinuddin Mohammed',
 };
 
-export const PHOTO = {
-	// Real featured photos from the live Meetup group (highres meetupstatic)
-	jev: 'https://secure.meetupstatic.com/photos/event/b/5/9/c/highres_536326492.jpeg',
-	diffusion: 'https://secure.meetupstatic.com/photos/event/4/c/c/4/highres_536179652.jpeg',
-	sft: 'https://secure.meetupstatic.com/photos/event/4/b/d/c/highres_535999420.jpeg',
-	agenticAi: 'https://secure.meetupstatic.com/photos/event/3/c/0/a/highres_535815370.jpeg',
-	pytorch: 'https://secure.meetupstatic.com/photos/event/1/0/a/b/highres_535684267.jpeg',
-	linearAlgebra: 'https://secure.meetupstatic.com/photos/event/5/f/e/highres_535561534.jpeg',
-	deepseek: 'https://secure.meetupstatic.com/photos/event/b/6/a/3/highres_535486755.jpeg',
-	goose: 'https://secure.meetupstatic.com/photos/event/6/6/2/6/highres_535226150.jpeg',
-	speculative: 'https://secure.meetupstatic.com/photos/event/3/5/0/c/highres_535213580.jpeg',
-	hitchhiker: 'https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg',
-	transformer: 'https://secure.meetupstatic.com/photos/event/4/5/f/8/highres_534617912.jpeg',
-	cover: 'https://secure.meetupstatic.com/photos/event/b/9/7/4/highres_535487476.jpeg',
-	// Back-compat aliases used by older sections
-	research: 'https://secure.meetupstatic.com/photos/event/1/0/a/b/highres_535684267.jpeg',
-	build: 'https://secure.meetupstatic.com/photos/event/3/c/0/a/highres_535815370.jpeg',
-	transform: 'https://secure.meetupstatic.com/photos/event/5/f/e/highres_535561534.jpeg',
-};
-
-// Every session on https://www.meetup.com/aiyatra/events/ — newest last in source,
-// exported newest-first for display. `photo` = real meetupstatic cover.
-export const ALL_EVENTS = [
-	{
-		id: '316720553',
-		title: 'JEV: Building Fast, Structured System-1 AI',
-		shortTitle: 'JEV: Fast System-1 AI',
-		date: 'Sat, Oct 10 · 9:00 AM – 12:30 PM IST',
-		attendees: 225,
-		status: 'upcoming',
-		url: 'https://www.meetup.com/aiyatra/events/316720553/',
-		photo: 'https://secure.meetupstatic.com/photos/event/b/5/9/c/highres_536326492.jpeg',
-		blurb:
-			'Fast, predictable, structured decisions without long reasoning chains — System-1 vs System-2, schema-driven outputs, classification, extraction, routing, validation, confidence scores, and a live end-to-end JEV build. Input → JEV → Schema + Prediction + Confidence → Decision.',
-	},
-	{
-		id: '316525443',
-		title: 'Diffusion Models from First Principles: From Images to Video & Text',
-		shortTitle: 'Diffusion Models, First Principles',
-		date: 'Sat, Sep 26 · 9:00 AM IST',
-		attendees: 240,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/316525443/',
-		photo: 'https://secure.meetupstatic.com/photos/event/4/c/c/4/highres_536179652.jpeg',
-		blurb:
-			'From noise to images, video, audio, text and omni-generation — DDPM, latent diffusion, DiT and flow matching, then a live from-scratch build on 6 GB VRAM.',
-	},
-	{
-		id: '316434319',
-		title: 'Supervised Fine-Tuning to Reinforcement Learning: Train Models to Think Better',
-		shortTitle: 'SFT → RL: Train to Think',
-		date: 'Sat, Sep 12 · 9:00 AM IST',
-		attendees: 279,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/316434319/',
-		photo: 'https://secure.meetupstatic.com/photos/event/4/b/d/c/highres_535999420.jpeg',
-		blurb:
-			'SFT with LoRA, DPO and GRPO on a pretrained model — rewards, preferences and the hard question: better at the task, or just better at the reward?',
-	},
-	{
-		id: '316241516',
-		title: 'Harnessing Agentic AI: Build Tools That Build Code',
-		shortTitle: 'Harnessing Agentic AI',
-		date: 'Sat, Sep 5 · 9:00 AM IST',
-		attendees: 282,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/316241516/',
-		photo: 'https://secure.meetupstatic.com/photos/event/3/c/0/a/highres_535815370.jpeg',
-		blurb:
-			'Build the loop, the tools and the guardrails — and make your own coding agent that reads, plans, edits, tests and repairs its way to a verified pull request. 100% offline, zero API keys.',
-	},
-	{
-		id: '316136710',
-		title: 'Pytorch Session# 1 - PyTorch Foundations',
-		shortTitle: 'PyTorch Foundations',
-		date: 'Sat, Aug 22 · 10:00 AM IST',
-		attendees: 145,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/316136710/',
-		photo: 'https://secure.meetupstatic.com/photos/event/1/0/a/b/highres_535684267.jpeg',
-		blurb:
-			'Tensors, autograd and the training loop — the foundations every AI engineer stands on. Rebuilt nn.Linear from scratch.',
-	},
-	{
-		id: '316031457',
-		title: 'Linear Algebra for AI Engineers: From Vectors to Transformers',
-		shortTitle: 'Linear Algebra → Transformers',
-		date: 'Sat, Aug 15 · 10:00 AM IST',
-		attendees: 207,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/316031457/',
-		photo: 'https://secure.meetupstatic.com/photos/event/5/f/e/highres_535561534.jpeg',
-		blurb:
-			'Vectors to attention: embeddings, Q/K/V projections, LoRA and SVD — the math beneath the models, by hand.',
-	},
-	{
-		id: '315949835',
-		title: 'Building Deepseek v3 from scratch',
-		shortTitle: 'DeepSeek v3 from Scratch',
-		date: 'Sat, Aug 8 · 10:00 AM IST',
-		attendees: 286,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/315949835/',
-		photo: 'https://secure.meetupstatic.com/photos/event/b/6/a/3/highres_535486755.jpeg',
-		blurb:
-			'Multi-head latent attention, MoE load balancing and RoPE scaling — the DeepSeek-V3 paper, live-coded in PyTorch.',
-	},
-	{
-		id: '315704127',
-		title: 'Goose AI Agent - End to End Demo',
-		shortTitle: 'Goose AI Agent Demo',
-		date: 'Sat, Aug 1 · 10:00 AM IST',
-		attendees: 142,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/315704127/',
-		photo: 'https://secure.meetupstatic.com/photos/event/6/6/2/6/highres_535226150.jpeg',
-		blurb:
-			'Providers, context engineering, MCP extensions and recipes — a full end-to-end run of the open-source Goose agent.',
-	},
-	{
-		id: '315688657',
-		title: 'Speculative Decoding: Deconstructed — A 3-Hour Hands-On Lab',
-		shortTitle: 'Speculative Decoding Lab',
-		date: 'Sat, Jul 25 · 10:00 AM IST',
-		attendees: 64,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/315688657/',
-		photo: 'https://secure.meetupstatic.com/photos/event/3/5/0/c/highres_535213580.jpeg',
-		blurb:
-			'Draft-verify-accept in ~60 lines of PyTorch, then HF assisted generation + llama.cpp — 2–3× faster inference, proven lossless.',
-	},
-	{
-		id: '315595570',
-		title: 'The Hitchhiker’s Guide to Agentic AI - Book Reading Series Session #4',
-		shortTitle: 'Agentic AI Reading #4',
-		date: 'Mon, Jul 14 · 8:00 PM IST',
-		attendees: 40,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/315595570/',
-		photo: 'https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg',
-		blurb:
-			'Book-reading series finale: agentic patterns, discussion and reading together — online, open to everyone.',
-	},
-	{
-		id: '315542060',
-		title: 'The Hitchhiker’s Guide to Agentic AI - Book Reading Series Session #3',
-		shortTitle: 'Agentic AI Reading #3',
-		date: 'Sat, Jul 5 · 10:00 AM IST',
-		attendees: 16,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/315542060/',
-		photo: 'https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg',
-		blurb:
-			'Session three of the Hitchhiker’s Guide series — agents, tools and workflows, read and debated together.',
-	},
-	{
-		id: '315492739',
-		title: 'The Hitchhiker’s Guide to Agentic AI - Book Reading Series Session #2',
-		shortTitle: 'Agentic AI Reading #2',
-		date: 'Wed, Jul 2 · 8:30 PM IST',
-		attendees: 35,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/315492739/',
-		photo: 'https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg',
-		blurb:
-			'Session two of the reading series — continuing the guided tour through agentic AI, online in the evening.',
-	},
-	{
-		id: '315451083',
-		title: 'The Hitchhiker’s Guide to Agentic AI - Book Reading Series Session #1',
-		shortTitle: 'Agentic AI Reading #1',
-		date: 'Mon, Jun 30 · 8:30 PM IST',
-		attendees: 25,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/315451083/',
-		photo: 'https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg',
-		blurb:
-			'Where the reading journey began — session one of the Hitchhiker’s Guide to Agentic AI, online and free.',
-	},
-	{
-		id: '315145175',
-		title: 'Master the Transformer Architecture - Paper to Source Code',
-		shortTitle: 'Transformer, Paper → Code',
-		date: 'Sat, Jun 20 · 9:00 AM IST',
-		attendees: 56,
-		status: 'past',
-		url: 'https://www.meetup.com/aiyatra/events/315145175/',
-		photo: 'https://secure.meetupstatic.com/photos/event/4/5/f/8/highres_534617912.jpeg',
-		blurb:
-			'From “Attention Is All You Need” to running source code — the transformer, line by line, from paper to PyTorch.',
-	},
-];
-
-// Convenience slices (back-compat with existing imports)
-export const EVENTS = {
-	jev: ALL_EVENTS[0],
-	diffusion: ALL_EVENTS[1],
-	sft: ALL_EVENTS[2],
-	agenticAi: ALL_EVENTS[3],
-	pytorch: ALL_EVENTS[4],
-	linearAlgebra: ALL_EVENTS[5],
-	deepseek: ALL_EVENTS[6],
-	goose: ALL_EVENTS[7],
-};
-
-export const UPCOMING_EVENTS = ALL_EVENTS.filter((e) => e.status === 'upcoming');
-export const PAST_EVENTS = ALL_EVENTS.filter((e) => e.status === 'past');
+/** Short "where" line for an event card. */
+export function eventPlace(e) {
+	if (!e) return '';
+	if (e.online) return 'Online';
+	return 'Hyderabad';
+}
 
 // Real faces from the live group — organizer + recent attendees (meetupstatic avatars)
-export const HOST_PHOTO = `${BASE_URL}jagadeeswara-reddy.jpg`;
-export const MONIKA_PHOTO = `${BASE_URL}monika-kusumanchi.jpg`;
-export const AMBASSADOR_CREST = `${BASE_URL}ambassador-crest.jpg`;
+export const HOST_PHOTO = `${BASE_URL}jagadeeswara-reddy-200.jpg`;
+export const MONIKA_PHOTO = `${BASE_URL}monika-kusumanchi-200.jpg`;
+export const AMBASSADOR_CREST = `${BASE_URL}ambassador-crest-680.jpg`;
 
 // Downloadable pitch decks (built by presentations/build_decks_v2.py,
 // copied to public/decks/ so they ship with the site).
 export const DECKS = {
 	journey: `${BASE_URL}decks/AIYatra-Journey-From-Start-Till-Now.pptx`,
-	ambassador: `${BASE_URL}decks/AIYatra-Student-Ambassador-Program.pptx`,
+	ambassador: `${BASE_URL}decks/AIYatra-Student-Ambassador-Program-2026.pptx`,
 };
 
 export const COMMUNITY_FACES = [
 	{
 		name: 'Khaja Moinuddin Mohammed',
 		role: 'Super Organizer',
-		photo: 'https://secure.meetupstatic.com/photos/member/8/f/d/8/highres_325116824.jpeg',
+		photo: 'https://secure.meetupstatic.com/photos/member/8/f/d/8/member_325116824.jpeg',
 	},
 	{
 		name: 'Azeez Syed',
 		role: 'Co-organizer',
-		photo: 'https://secure.meetupstatic.com/photos/member/c/2/6/4/highres_323989764.jpeg',
+		photo: 'https://secure.meetupstatic.com/photos/member/c/2/6/4/member_323989764.jpeg',
 	},
 	{
 		name: 'AIYatra member',
 		role: 'Meetup regular',
-		photo: 'https://secure.meetupstatic.com/photos/member/1/3/b/b/highres_324665051.jpeg',
+		photo: 'https://secure.meetupstatic.com/photos/member/1/3/b/b/member_324665051.jpeg',
 	},
 	{
 		name: 'AIYatra member',
 		role: 'Meetup regular',
-		photo: 'https://secure.meetupstatic.com/photos/member/5/b/3/f/highres_263543359.jpeg',
+		photo: 'https://secure.meetupstatic.com/photos/member/5/b/3/f/member_263543359.jpeg',
 	},
 	{
 		name: 'AIYatra member',
 		role: 'Meetup regular',
-		photo: 'https://secure.meetupstatic.com/photos/member/3/8/0/8/highres_324554344.jpeg',
+		photo: 'https://secure.meetupstatic.com/photos/member/3/8/0/8/member_324554344.jpeg',
 	},
 	{
 		name: 'AIYatra member',
 		role: 'Meetup regular',
-		photo: 'https://secure.meetupstatic.com/photos/member/6/8/3/8/highres_325946680.jpeg',
+		photo: 'https://secure.meetupstatic.com/photos/member/6/8/3/8/member_325946680.jpeg',
 	},
 ];
 
-// Gallery = the real event covers, newest first (deduplicated)
-export const GALLERY = [
-	ALL_EVENTS[0],
-	ALL_EVENTS[1],
-	ALL_EVENTS[2],
-	ALL_EVENTS[3],
-	ALL_EVENTS[4],
-	ALL_EVENTS[5],
-	ALL_EVENTS[12],
-];
+/** Pre-filled "add to Google Calendar" link for one event. */
+export function googleCalendarUrl(e) {
+	const stamp = (ms) => new Date(ms).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+	const params = new URLSearchParams({
+		action: 'TEMPLATE',
+		text: `AIYatra: ${e.title}`,
+		dates: `${stamp(e.start)}/${stamp(e.end)}`,
+		details: `RSVP on Meetup: ${e.url}${e.formUrl ? `\nMandatory Google Form: ${e.formUrl}` : ''}`,
+		location: e.online ? 'Online' : GROUP_STATS.venue,
+	});
+	return `https://calendar.google.com/calendar/render?${params}`;
+}
+
+/**
+ * Responsive, lightweight versions of a Meetup event photo. The synced URLs
+ * point at full-size JPEGs (~230 KB); Meetup also serves resized WebP copies
+ * (~25–100 KB), so let the browser pick the smallest one that looks sharp.
+ */
+export function photoProps(url, sizes = '(min-width: 640px) 360px, 82vw') {
+	const m = url && url.match(/highres_(\d+)\.(?:jpe?g|png)/i);
+	if (!m) return { src: url };
+	const base = `https://secure-content.meetupstatic.com/images/classic-events/${m[1]}`;
+	return {
+		src: `${base}/676x380.webp`,
+		srcSet: `${base}/400x225.webp 400w, ${base}/676x380.webp 676w, ${base}/1024x576.webp 1024w`,
+		sizes,
+	};
+}

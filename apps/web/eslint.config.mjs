@@ -54,8 +54,8 @@ export default [
 	},
 	{
 		files: ['**/*.jsx'],
-		plugins: { horizons: unicodeEscapePlugin },
-		rules: { 'horizons/no-unicode-escapes-in-jsx': 'warn' },
+		plugins: { aiyatra: unicodeEscapePlugin },
+		rules: { 'aiyatra/no-unicode-escapes-in-jsx': 'warn' },
 	},
 	{ files: ['tools/**/*.js', 'tailwind.config.js'], languageOptions: { globals: globals.node } },
 ];

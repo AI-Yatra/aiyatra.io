@@ -1,8 +1,9 @@
 ## Pages
-- [AIYatra — Democratizing AI Learning | Hyderabad AI Community](/): AIYatra is Hyderabad’s open AI community — free hands-on meetups on agentic AI, PyTorch, and machine learning.
-- [Student Ambassador Program — AIYatra](/ambassadors): Carry the AI Yatra to your campus as a student ambassador.
+- [AIYatra — Open-Source AI Community](/): Three pillars: free hands-on meetups every Saturday, the Student Ambassador Program, and AIYatra Research Labs.
+- [Student Ambassador Program — AIYatra](/ambassadors): Turn your campus into an AI research and builder chapter — a 9-month journey for B.Tech and M.Sc students.
 - [AI Yatra Labs — AIYatra](/labs): Curated arXiv and AlphaXiv reading lists across small language models, agent harnesses, transformer layers, and new architectures.
 - [Blog — AIYatra](/blog): Session recaps and field notes from every AIYatra meetup.
+- [Contact Us — AIYatra](/contact): Send the AIYatra team a message, or write to global.aiyatra@gmail.com.
 - [Supervised Fine-Tuning to Reinforcement Learning — Train Models to Think Better](/blog/sft-to-rl): SFT with LoRA, DPO and GRPO on a pretrained model — rewards, preferences and the hard question — better at the task, or just better at the reward?
 - [Harnessing Agentic AI — Build Tools That Build Code](/blog/harnessing-agentic-ai): Build the loop, the tools and the guardrails — and make your own coding agent that reads, plans, edits, tests and repairs its way to a verified pull request. 100% offline, zero API keys.
 - [PyTorch Foundations — Tensors, Autograd and the Training Loop](/blog/pytorch-foundations): Tensors, autograd and the training loop — the foundations every AI engineer stands on. We rebuilt nn.Linear from scratch.

@@ -1,4 +1,4 @@
-const RULE_ID = 'horizons/no-unicode-escapes-in-jsx';
+const RULE_ID = 'aiyatra/no-unicode-escapes-in-jsx';
 const MAX_DETAILED_FINDINGS = 25;
 const ESCAPE_FROM_MESSAGE_PATTERN = /^Literal Unicode escape "(\\u(?:[0-9a-fA-F]{4}|\{[0-9a-fA-F]{1,6}\}))"/;
 const GUIDANCE = 'Unicode escapes in JSX text or quoted attributes may be displayed verbatim to website visitors. Replace every escape in affected JSX in place with its intended literal character (for example, use "ç", not "\\u00e7"). Do not move the text into variables, objects, or JSX expressions, and do not wrap escapes in JSX braces ({}).';
@@ -55,7 +55,7 @@ export default function format(results) {
 		}),
 	];
 	const omitted = findings.length - shown.length;
-	lines.push(`Found ${findings.length} Unicode escapes; ${omitted} additional findings omitted. Replace all escapes in affected JSX. [horizons-unicode-escapes] total=${findings.length} shown=${shown.length} omitted=${omitted}`);
+	lines.push(`Found ${findings.length} Unicode escapes; ${omitted} additional findings omitted. Replace all escapes in affected JSX. [aiyatra-unicode-escapes] total=${findings.length} shown=${shown.length} omitted=${omitted}`);
 
 	return `${lines.join('\n')}\n`;
 }

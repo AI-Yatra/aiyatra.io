@@ -91,6 +91,7 @@ function main() {
 		{ loc: `${SITE_URL}/ambassadors`, changefreq: 'weekly', priority: '0.9' },
 		{ loc: `${SITE_URL}/labs`, changefreq: 'weekly', priority: '0.9' },
 		{ loc: `${SITE_URL}/blog`, changefreq: 'daily', priority: '0.9' },
+		{ loc: `${SITE_URL}/contact`, changefreq: 'monthly', priority: '0.6' },
 		...posts.map((p) => ({ loc: `${SITE_URL}/blog/${p.slug}`, changefreq: 'monthly', priority: '0.7' })),
 	];
 	const sitemap = [
@@ -111,10 +112,11 @@ function main() {
 
 	const llms = [
 		'## Pages',
-		'- [AIYatra — Democratizing AI Learning | Hyderabad AI Community](/): AIYatra is Hyderabad’s open AI community — free hands-on meetups on agentic AI, PyTorch, and machine learning.',
-		'- [Student Ambassador Program — AIYatra](/ambassadors): Carry the AI Yatra to your campus as a student ambassador.',
+		'- [AIYatra — Open-Source AI Community](/): Three pillars: free hands-on meetups every Saturday, the Student Ambassador Program, and AIYatra Research Labs.',
+		'- [Student Ambassador Program — AIYatra](/ambassadors): Turn your campus into an AI research and builder chapter — a 9-month journey for B.Tech and M.Sc students.',
 		'- [AI Yatra Labs — AIYatra](/labs): Curated arXiv and AlphaXiv reading lists across small language models, agent harnesses, transformer layers, and new architectures.',
 		'- [Blog — AIYatra](/blog): Session recaps and field notes from every AIYatra meetup.',
+		'- [Contact Us — AIYatra](/contact): Send the AIYatra team a message, or write to global.aiyatra@gmail.com.',
 		...posts.map((p) => `- [${p.title}](/blog/${p.slug}): ${p.excerpt}`),
 		'',
 	].join('\n');

@@ -257,7 +257,7 @@ export default function AdminPage() {
 				<meta name="robots" content="noindex" />
 			</Helmet>
 			<Header />
-			<main>
+			<main id="main">
 				<section id="top" className="wrap py-14">
 					<Reveal>
 						<p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep">

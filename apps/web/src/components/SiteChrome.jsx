@@ -1,40 +1,38 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
 	ArrowUpRight, CalendarDays, MapPin, Users, Github, Linkedin, Mail,
-	MessageCircle, Heart, Ticket, Megaphone,
+	Ticket, Megaphone, Menu, X, GraduationCap, FlaskConical,
 } from 'lucide-react';
 import {
-	MEETUP_URL, EVENT_URL, GOOGLE_FORM_URL, AI_YATRA_LOGO, GROUP_STATS,
-	CONTACT_EMAIL, LINKEDIN_URL, GITHUB_URL,
+	MEETUP_URL, AI_YATRA_LOGO, GROUP_STATS, CONTACT_EMAIL, LINKEDIN_URL, GITHUB_URL,
+	formatDay, formatTime,
 } from '@/data/site';
+import { useEvents } from '@/lib/useEvents';
+import { ScrollProgress, CursorGlow } from '@/components/Fx';
 
 export const NAV_LINKS = [
-	{ to: '/#events', label: 'Events' },
-	{ to: '/#moments', label: 'Community' },
-	{ to: '/#method', label: 'Approach' },
-	{ to: '/#voices', label: 'Testimonials' },
-	{ to: '/#about', label: 'About' },
+	{ to: '/#meetups', label: 'Meetups' },
 	{ to: '/ambassadors', label: 'Ambassadors' },
-	{ to: '/labs', label: 'Labs' },
+	{ to: '/labs', label: 'Research Labs' },
+	{ to: '/#community', label: 'Community' },
 	{ to: '/blog', label: 'Blog' },
+	{ to: '/contact', label: 'Contact Us' },
 ];
 
-function Logo() {
+function Logo({ dark = false }) {
 	return (
 		<span className="flex items-center gap-2.5">
-			<img
-				src={AI_YATRA_LOGO}
-				alt=""
-				aria-hidden="true"
-				className="h-14 w-14 shrink-0 object-contain sm:h-16 sm:w-16"
-			/>
+			<span className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl ${dark ? 'bg-white' : 'bg-white ring-1 ring-tone-blue-deep/15'}`}>
+				<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" className="h-full w-full object-contain" />
+			</span>
 			<span className="flex flex-col leading-none">
-				<span className="text-[22px] font-extrabold tracking-tight text-ink sm:text-2xl">
+				<span className={`font-display text-[22px] font-bold ${dark ? 'text-white' : 'text-ink'}`}>
 					AI Yatra
 				</span>
-				<span className="mt-1 hidden text-[10px] font-bold uppercase tracking-[0.22em] text-ink/55 sm:block">
-					Research · Build · Transform
+				<span className={`mt-1 hidden text-[10px] font-semibold uppercase tracking-[0.22em] sm:block ${dark ? 'text-white/60' : 'text-tone-blue-deep/80'}`}>
+					Open-source AI community
 				</span>
 			</span>
 		</span>
@@ -42,36 +40,33 @@ function Logo() {
 }
 
 export function AnnouncementBar() {
-	const message = 'Oct 10 JEV Workshop — RSVP + Google Form close Tue, Oct 6, EOD · No exceptions — both are mandatory for venue entry';
-	const repeats = Array.from({ length: 6 });
+	const { next: ev, live } = useEvents();
+	let message;
+	if (!ev) message = 'The next Saturday session is being planned · follow AIYatra on Meetup to hear first';
+	else if (live) message = `Happening now: ${ev.shortTitle} · until ${formatTime(ev.end)} IST`;
+	else {
+		message = `Next meetup: ${ev.shortTitle} · ${formatDay(ev.start)}, ${formatTime(ev.start)} IST`;
+		if (ev.rsvpDeadline) message += ` · RSVP${ev.formUrl ? ' + Google Form' : ''} close ${formatDay(ev.rsvpDeadline)} EOD`;
+		if (ev.formUrl) message += ' · both mandatory for venue entry';
+	}
+	const repeats = Array.from({ length: 4 });
+	const pill = 'rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep';
 	return (
-		<div className="border-b-2 border-ink bg-ink text-tone-yellow" role="note" aria-label="RSVP deadline announcement">
-			<div className="marquee-pause overflow-hidden py-2.5">
-				<div className="marquee-track flex w-max items-center gap-8 pr-8">
+		<div className="bg-gradient-to-r from-[hsl(224_76%_33%)] via-tone-blue-deep to-[hsl(224_76%_33%)] text-white" role="note" aria-label="Next meetup announcement">
+			<div className="marquee-pause overflow-hidden py-2">
+				<div className="marquee-track flex w-max items-center gap-10 pr-10">
 					{[...repeats, ...repeats].map((_, i) => (
-						<span key={i} className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[13px] font-bold uppercase tracking-[0.12em]">
-							<Megaphone className="h-4 w-4 shrink-0" aria-hidden="true" />
+						<span key={i} aria-hidden={i > 0} className="flex shrink-0 items-center gap-2.5 whitespace-nowrap text-[12.5px] font-medium tracking-wide">
+							<Megaphone className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden="true" />
 							<span>{message}</span>
-							<a
-								href={EVENT_URL}
-								target="_blank"
-								rel="noreferrer"
-								className="ml-2 underline underline-offset-4 hover:text-paper"
-								tabIndex={i === 0 ? 0 : -1}
-							>
-								RSVP
+							<a href={ev ? ev.url : MEETUP_URL} target="_blank" rel="noreferrer" className={`ml-1 ${pill}`} tabIndex={i === 0 ? 0 : -1}>
+								{ev ? 'RSVP' : 'Meetup'}
 							</a>
-							<span aria-hidden="true">·</span>
-							<a
-								href={GOOGLE_FORM_URL}
-								target="_blank"
-								rel="noreferrer"
-								className="underline underline-offset-4 hover:text-paper"
-								tabIndex={i === 0 ? 0 : -1}
-							>
-								Google Form
-							</a>
-							<span aria-hidden="true" className="ml-6 text-paper/40">///</span>
+							{ev?.formUrl && (
+								<a href={ev.formUrl} target="_blank" rel="noreferrer" className={pill} tabIndex={i === 0 ? 0 : -1}>
+									Google Form
+								</a>
+							)}
 						</span>
 					))}
 				</div>
@@ -81,167 +76,163 @@ export function AnnouncementBar() {
 }
 
 export function Header() {
+	const [open, setOpen] = useState(false);
+	const [scrolled, setScrolled] = useState(false);
+	const location = useLocation();
+
+	useEffect(() => setOpen(false), [location.pathname, location.hash]);
+	useEffect(() => {
+		const onScroll = () => setScrolled(window.scrollY > 12);
+		onScroll();
+		window.addEventListener('scroll', onScroll, { passive: true });
+		return () => window.removeEventListener('scroll', onScroll);
+	}, []);
+
 	return (
 		<>
-			<header className="sticky top-0 z-50 border-b-2 border-ink bg-paper/95 backdrop-blur-sm">
-				<div className="wrap flex h-[76px] items-center justify-between gap-5">
+			<a href="#main" className="skip-link">Skip to content</a>
+			<ScrollProgress />
+			<CursorGlow />
+			<AnnouncementBar />
+			<header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'glass shadow-[0_10px_40px_-20px_hsl(221_83%_53%/0.35)]' : 'bg-white/0'}`}>
+				<div className="wrap flex h-[72px] items-center justify-between gap-5">
 					<Link to="/#top" className="flex shrink-0 items-center" aria-label="AI Yatra home">
 						<Logo />
 					</Link>
-					<nav className="hidden items-center gap-6 text-sm font-medium text-ink md:flex lg:gap-7">
+					<nav className="hidden items-center gap-1 rounded-full border border-tone-blue-deep/10 bg-white/70 p-1 text-sm font-medium text-ink/80 xl:flex">
 						{NAV_LINKS.map((l) => (
-							<Link key={l.label} to={l.to} className="whitespace-nowrap transition-colors hover:text-tone-blue-deep">
+							<Link key={l.label} to={l.to} className="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">
 								{l.label}
 							</Link>
 						))}
 					</nav>
-					<a
-						href={MEETUP_URL}
-						target="_blank"
-						rel="noreferrer"
-						className="active-press inline-flex h-10 shrink-0 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-4 text-sm font-semibold text-paper shadow-paper-sm transition-transform hover:-translate-y-0.5"
-					>
-						Join on Meetup <ArrowUpRight className="h-4 w-4" />
-					</a>
+					<div className="flex items-center gap-2">
+						<a
+							href={MEETUP_URL}
+							target="_blank"
+							rel="noreferrer"
+							className="active-press group relative hidden h-11 shrink-0 items-center gap-2 overflow-hidden rounded-full bg-tone-blue-deep px-5 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_hsl(221_83%_53%/0.8)] transition-transform hover:-translate-y-0.5 sm:inline-flex"
+						>
+							<span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+							Join free <ArrowUpRight className="h-4 w-4" />
+						</a>
+						<button
+							type="button"
+							onClick={() => setOpen((o) => !o)}
+							aria-label={open ? 'Close menu' : 'Open menu'}
+							aria-expanded={open}
+							className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-tone-blue-deep/15 bg-white text-ink xl:hidden"
+						>
+							{open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+						</button>
+					</div>
 				</div>
+				<AnimatePresence>
+					{open && (
+						<motion.nav
+							initial={{ opacity: 0, height: 0 }}
+							animate={{ opacity: 1, height: 'auto' }}
+							exit={{ opacity: 0, height: 0 }}
+							className="glass overflow-hidden border-t border-tone-blue-deep/10 xl:hidden"
+						>
+							<div className="wrap flex flex-col gap-1 py-4">
+								{NAV_LINKS.map((l, i) => (
+									<motion.div key={l.label} initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.05 }}>
+										<Link to={l.to} className="block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">
+											{l.label}
+										</Link>
+									</motion.div>
+								))}
+								<a href={MEETUP_URL} target="_blank" rel="noreferrer" className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-tone-blue-deep font-semibold text-white">
+									Join free on Meetup <ArrowUpRight className="h-4 w-4" />
+								</a>
+							</div>
+						</motion.nav>
+					)}
+				</AnimatePresence>
 			</header>
-			<AnnouncementBar />
 		</>
 	);
 }
 
 function FooterHeading({ children }) {
-	return (
-		<p className="text-[11px] font-bold uppercase tracking-[0.25em] text-tone-yellow">
-			{children}
-		</p>
-	);
+	return <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[hsl(199_89%_70%)]">{children}</p>;
 }
+
+const footerLink = 'text-white/70 transition-colors hover:text-white';
 
 export function Footer() {
 	return (
-		<footer className="bg-ink text-paper" style={{ borderTop: '5px solid hsl(var(--tone-yellow))' }}>
-			<div className="wrap grid gap-12 py-14 sm:grid-cols-2 lg:grid-cols-[1.3fr_0.9fr_1fr_0.9fr]">
-				{/* Brand */}
+		<footer className="relative overflow-hidden bg-ink text-white">
+			<div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 h-80 w-[80%] -translate-x-1/2 glow [--glow:hsl(221_83%_53%/0.45)]" />
+			<div className="wrap relative grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
 				<div>
-					<Link to="/#top" className="flex items-center gap-2.5" aria-label="AI Yatra home">
-						<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" className="h-14 w-14 shrink-0 object-contain" />
-						<span className="flex flex-col leading-none">
-							<span className="text-[22px] font-extrabold tracking-tight text-paper">AI Yatra</span>
-							<span className="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-paper/60">
-								Research · Build · Transform
-							</span>
-						</span>
-					</Link>
-					<p className="mt-5 font-hand text-2xl font-bold leading-snug text-paper">
-						AI Yatra — Research. Build. Transform.
+					<Link to="/#top" aria-label="AI Yatra home"><Logo dark /></Link>
+					<p className="mt-5 max-w-sm text-sm leading-relaxed text-white/65">
+						An open-source AI community from Hyderabad. Saturday meetups, a student ambassador
+						network and an open research lab — free, forever, open to everyone.
 					</p>
-					<p className="mt-2 max-w-sm text-sm leading-relaxed text-paper/70">
-						Hyderabad's open AI community. We research, build, and transform — one hands-on Saturday
-						at a time. Free, forever, and open to everyone.
-					</p>
-					<div className="mt-5 flex flex-wrap gap-3">
-						<a
-							href={MEETUP_URL}
-							target="_blank"
-							rel="noreferrer"
-							className="active-press inline-flex h-10 items-center gap-2 rounded-xl border-2 border-paper bg-tone-yellow px-4 text-sm font-bold text-ink transition-transform hover:-translate-y-0.5"
-						>
-							Join on Meetup <ArrowUpRight className="h-4 w-4" />
-						</a>
-						<a
-							href={EVENT_URL}
-							target="_blank"
-							rel="noreferrer"
-							className="active-press inline-flex h-10 items-center gap-2 rounded-xl border-2 border-paper/40 px-4 text-sm font-semibold text-paper transition-colors hover:border-paper"
-						>
-							Next: Oct 10
-						</a>
+					<div className="mt-6 flex items-center gap-2.5">
+						{[
+							{ href: MEETUP_URL, label: 'Meetup', Icon: Users },
+							{ href: GITHUB_URL, label: 'GitHub', Icon: Github },
+							{ href: LINKEDIN_URL, label: 'LinkedIn', Icon: Linkedin },
+							{ href: `mailto:${CONTACT_EMAIL}`, label: 'Email', Icon: Mail },
+						].map(({ href, label, Icon }) => (
+							<a key={label} href={href} target={href.startsWith('mailto') ? undefined : '_blank'} rel="noreferrer" aria-label={label} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/75 transition-all hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-ink">
+								<Icon className="h-[18px] w-[18px]" />
+							</a>
+						))}
 					</div>
 				</div>
 
-				{/* Explore */}
+				<div>
+					<FooterHeading>Three verticals</FooterHeading>
+					<ul className="mt-4 space-y-3 text-sm font-medium">
+						<li><Link to="/#meetups" className={`inline-flex items-center gap-2 ${footerLink}`}><CalendarDays className="h-4 w-4" /> Saturday Meetups</Link></li>
+						<li><Link to="/ambassadors" className={`inline-flex items-center gap-2 ${footerLink}`}><GraduationCap className="h-4 w-4" /> Student Ambassadors</Link></li>
+						<li><Link to="/labs" className={`inline-flex items-center gap-2 ${footerLink}`}><FlaskConical className="h-4 w-4" /> Research Labs</Link></li>
+					</ul>
+				</div>
+
 				<div>
 					<FooterHeading>Explore</FooterHeading>
-					<ul className="mt-4 space-y-2.5 text-sm font-semibold">
-						<li><Link to="/ambassadors" className="text-tone-yellow transition-colors hover:text-paper">Ambassadors — new</Link></li>
-						<li><Link to="/labs" className="text-tone-yellow transition-colors hover:text-paper">Labs — research tracks</Link></li>
-						<li><Link to="/blog" className="text-paper/75 transition-colors hover:text-tone-yellow">Blog</Link></li>
-					<li><Link to="/#events" className="text-paper/75 transition-colors hover:text-tone-yellow">Events</Link></li>
-					<li><Link to="/#moments" className="text-paper/75 transition-colors hover:text-tone-yellow">Community</Link></li>
-					<li><Link to="/#method" className="text-paper/75 transition-colors hover:text-tone-yellow">Approach</Link></li>
-					<li><Link to="/#voices" className="text-paper/75 transition-colors hover:text-tone-yellow">Testimonials</Link></li>
-					<li><Link to="/#about" className="text-paper/75 transition-colors hover:text-tone-yellow">About</Link></li>
-						<li><a href={MEETUP_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-paper/75 transition-colors hover:text-tone-yellow">Meetup <ArrowUpRight className="h-3.5 w-3.5" /></a></li>
+					<ul className="mt-4 space-y-3 text-sm font-medium">
+						<li><Link to="/blog" className={footerLink}>Blog & recaps</Link></li>
+						<li><Link to="/#community" className={footerLink}>People & voices</Link></li>
+						<li><Link to="/#faq" className={footerLink}>Quick answers</Link></li>
+						<li><Link to="/contact" className={footerLink}>Contact us</Link></li>
+						<li><a href={MEETUP_URL} target="_blank" rel="noreferrer" className={`inline-flex items-center gap-1 ${footerLink}`}>Meetup group <ArrowUpRight className="h-3.5 w-3.5" /></a></li>
 					</ul>
 				</div>
 
-				{/* Show up */}
 				<div>
 					<FooterHeading>Show up</FooterHeading>
-					<ul className="mt-4 space-y-3 text-sm">
-						<li className="flex items-start gap-3 text-paper/75">
-							<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border-2 border-paper/25 bg-paper/10">
-								<MapPin className="h-4 w-4 text-tone-yellow" />
-							</span>
-							<span className="leading-snug">{GROUP_STATS.venue}</span>
-						</li>
-						<li className="flex items-center gap-3 text-paper/75">
-							<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border-2 border-paper/25 bg-paper/10">
-								<CalendarDays className="h-4 w-4 text-tone-yellow" />
-							</span>
-							<span>Saturdays · mornings, IST</span>
-						</li>
-						<li className="flex items-center gap-3 text-paper/75">
-							<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border-2 border-paper/25 bg-paper/10">
-								<Ticket className="h-4 w-4 text-tone-yellow" />
-							</span>
-							<span>Free, always</span>
-						</li>
+					<ul className="mt-4 space-y-3 text-sm text-white/70">
+						<li className="flex items-start gap-2.5"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[hsl(199_89%_70%)]" /> {GROUP_STATS.venue}</li>
+						<li className="flex items-center gap-2.5"><CalendarDays className="h-4 w-4 shrink-0 text-[hsl(199_89%_70%)]" /> Every Saturday · mornings IST</li>
+						<li className="flex items-center gap-2.5"><Ticket className="h-4 w-4 shrink-0 text-[hsl(199_89%_70%)]" /> Free, always</li>
+						<li className="flex items-center gap-2.5"><Mail className="h-4 w-4 shrink-0 text-[hsl(199_89%_70%)]" /> <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-white">{CONTACT_EMAIL}</a></li>
 					</ul>
-				</div>
-
-				{/* Follow */}
-				<div>
-					<FooterHeading>Follow</FooterHeading>
-					<ul className="mt-4 space-y-3 text-sm font-semibold">
-						<li>
-							<a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-2 text-paper/75 transition-colors hover:text-tone-yellow">
-								<Mail className="h-4 w-4" /> {CONTACT_EMAIL}
-							</a>
-						</li>
-						<li>
-							<a href={MEETUP_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-paper/75 transition-colors hover:text-tone-yellow">
-								<MessageCircle className="h-4 w-4" /> Meetup inbox
-							</a>
-						</li>
-					</ul>
-					<div className="mt-5 flex items-center gap-3">
-						<a href={MEETUP_URL} target="_blank" rel="noreferrer" aria-label="Meetup" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border-2 border-paper/30 text-paper/75 transition-colors hover:border-tone-yellow hover:text-tone-yellow">
-							<Users className="h-5 w-5" />
-						</a>
-						<a href={GITHUB_URL} target="_blank" rel="noreferrer" aria-label="GitHub" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border-2 border-paper/30 text-paper/75 transition-colors hover:border-tone-yellow hover:text-tone-yellow">
-							<Github className="h-5 w-5" />
-						</a>
-						<a href={LINKEDIN_URL} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border-2 border-paper/30 text-paper/75 transition-colors hover:border-tone-yellow hover:text-tone-yellow">
-							<Linkedin className="h-5 w-5" />
-						</a>
-						<a href={`mailto:${CONTACT_EMAIL}`} aria-label="Email" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border-2 border-paper/30 text-paper/75 transition-colors hover:border-tone-yellow hover:text-tone-yellow">
-							<Mail className="h-5 w-5" />
-						</a>
-					</div>
 				</div>
 			</div>
 
-			<div className="border-t border-paper/15">
-				<div className="wrap flex flex-col items-center justify-between gap-2 py-5 text-xs sm:flex-row">
-					<p className="inline-flex items-center gap-1.5 tracking-wide text-paper/60">
-						Made with <Heart className="h-3.5 w-3.5 fill-tone-coral text-tone-coral" /> in Hyderabad
-					</p>
-					<p className="tracking-wide text-paper/60">© 2026 AIYatra · Research. Build. Transform.</p>
-					<a href="#top" className="font-semibold text-paper/75 transition-colors hover:text-tone-yellow">
-						Back to top
-					</a>
+			<div className="relative overflow-hidden border-t border-white/10">
+				{/* Giant wordmark that rises out of the bottom edge */}
+				<motion.p
+					aria-hidden="true"
+					initial={{ y: '35%', opacity: 0 }}
+					whileInView={{ y: '0%', opacity: 1 }}
+					viewport={{ once: true }}
+					transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+					className="pointer-events-none select-none whitespace-nowrap bg-gradient-to-b from-white/[0.16] via-white/[0.07] to-transparent bg-clip-text pt-6 text-center font-display text-[19vw] font-bold leading-[0.8] tracking-[-0.05em] text-transparent [font-size-adjust:none]"
+				>
+					AI YATRA
+				</motion.p>
+				<div className="wrap relative flex flex-col items-center justify-between gap-2 py-5 text-center text-xs text-white/50 sm:absolute sm:inset-x-0 sm:bottom-0 sm:flex-row sm:text-left">
+					<p>Made in Hyderabad · open to the world</p>
+					<p>© 2026 AIYatra · Research. Build. Transform.</p>
+					<a href="#top" className="font-semibold text-white/70 hover:text-white">Back to top ↑</a>
 				</div>
 			</div>
 		</footer>

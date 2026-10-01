@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import { Header, Footer } from '@/components/SiteChrome';
+import { photoProps } from '@/data/site';
 import { getAllPosts } from '@/lib/posts';
 
 const cardTones = ['bg-tone-green', 'bg-tone-violet', 'bg-tone-blue', 'bg-tone-yellow', 'bg-tone-coral'];
@@ -14,7 +15,7 @@ function PostCard({ post, tone }) {
 	return (
 		<article className="hover-lift flex h-full flex-col overflow-hidden rounded-2xl border-2 border-ink bg-paper-soft shadow-paper-sm">
 			<Link to={`/blog/${post.slug}`} className="relative block aspect-[16/9] overflow-hidden border-b-2 border-ink bg-tone-blue/30">
-				<img src={post.cover} alt={post.title} loading="lazy" className="h-full w-full object-cover" />
+				<img {...photoProps(post.cover)} alt={post.title} loading="lazy" decoding="async" width="676" height="380" className="h-full w-full object-cover" />
 				<span className={`absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full border-2 border-ink ${tone} px-3 py-1 text-[11px] font-bold uppercase tracking-wide`}>
 					<BookOpen className="h-3.5 w-3.5" /> Story
 				</span>
@@ -50,7 +51,7 @@ export default function BlogIndexPage() {
 				/>
 			</Helmet>
 			<Header />
-			<main>
+			<main id="main">
 				<section id="top" className="relative overflow-hidden">
 					<div className="wrap pb-10 pt-14 lg:pb-12 lg:pt-[74px]">
 						<Reveal>

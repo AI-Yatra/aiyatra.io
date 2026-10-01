@@ -164,7 +164,7 @@ export default function LabsPage() {
 				/>
 			</Helmet>
 			<Header />
-			<main>
+			<main id="main">
 				{/* Hero */}
 				<section id="top" className="relative overflow-hidden">
 					<div className="wrap grid gap-12 pb-14 pt-14 lg:grid-cols-[1fr_0.85fr] lg:items-center lg:gap-[clamp(50px,6vw,110px)] lg:pb-16 lg:pt-[74px]">
@@ -198,7 +198,7 @@ export default function LabsPage() {
 										Browse the four tracks <ArrowRight className="h-5 w-5" />
 									</a>
 									<Link
-										to="/#events"
+										to="/#meetups"
 										className="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-paper-soft px-6 text-base font-semibold text-ink shadow-paper transition-transform hover:-translate-y-0.5"
 									>
 										See it live on Saturdays
@@ -332,7 +332,7 @@ export default function LabsPage() {
 							</p>
 							<div className="mt-10 flex flex-wrap items-center justify-center gap-4">
 								<Link
-									to="/#events"
+									to="/#meetups"
 									className="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-paper bg-tone-yellow px-7 text-base font-bold text-ink transition-transform hover:-translate-y-0.5"
 								>
 									Find the next build session <ArrowRight className="h-5 w-5" />

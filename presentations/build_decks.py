@@ -144,7 +144,7 @@ def build_deck1():
     add_textbox(s, Inches(8.8), Inches(1.2), Inches(3.3), Inches(0.4), "AT A GLANCE", 10, True, DEEP, PP_ALIGN.LEFT)
     add_textbox(s, Inches(8.8), Inches(1.6), Inches(3.3), Inches(0.6), "2,957  Members", 24, True, INK, PP_ALIGN.LEFT)
     add_textbox(s, Inches(8.8), Inches(2.25), Inches(3.3), Inches(0.4), "11 Sessions  •  4.6 ★ (90 ratings)", 13, True, SLATE, PP_ALIGN.LEFT)
-    add_textbox(s, Inches(8.8), Inches(2.85), Inches(3.3), Inches(0.5), "Saturdays @ LSEG, Madhapur, Hyderabad", 12, False, SLATE, PP_ALIGN.LEFT)
+    add_textbox(s, Inches(8.8), Inches(2.85), Inches(3.3), Inches(0.5), "Saturdays · Hyderabad", 12, False, SLATE, PP_ALIGN.LEFT)
     stats = [("1,336", "Total RSVPs"), ("319", "Biggest room"), ("100%", "Free forever")]
     for i, (v, l) in enumerate(stats):
         add_textbox(s, Inches(8.8 + i*1.35), Inches(3.6), Inches(1.3), Inches(0.5), v, 20, True, NAVY, PP_ALIGN.LEFT)
@@ -307,7 +307,7 @@ def build_deck1():
         add_textbox(s, x+Inches(0.3), Inches(2.75), Inches(3.15), Inches(0.35), r.upper(), 9, True, DEEP, PP_ALIGN.LEFT)
         add_textbox(s, x+Inches(0.3), Inches(3.15), Inches(3.15), Inches(1.4), b, 11, False, SLATE, PP_ALIGN.LEFT)
     add_textbox(s, Inches(0.6), Inches(5.05), Inches(12.13), Inches(1.0),
-                "VENUE  •  LSEG, International Tech Park, Madhapur, Hyderabad  —  Saturdays, mornings IST  •  RSVP on Meetup + Google form at the gate  •  A Saturday: 9:00 doors & check-in → build, not slides → demos, Q&A & hallway track",
+                "VENUE  •  Hyderabad · venue shared with RSVPs  —  Saturdays, mornings IST  •  RSVP on Meetup + Google form at the gate  •  A Saturday: 9:00 doors & check-in → build, not slides → demos, Q&A & hallway track",
                 11, False, SLATE, PP_ALIGN.LEFT)
     add_footer(s)
 
@@ -397,7 +397,7 @@ def build_deck1():
         p = hdr.text_frame.paragraphs[0]; p.text = k; p.font.size = Pt(10); p.font.bold=True; p.font.color.rgb=YELLOW; p.font.name="Calibri"; p.alignment=PP_ALIGN.CENTER
         add_textbox(s, x+Inches(0.2), Inches(2.95), Inches(2.45), Inches(0.7), v, 11, True, INK, PP_ALIGN.CENTER)
         add_textbox(s, x+Inches(0.2), Inches(3.65), Inches(2.45), Inches(0.6), d, 10, False, SLATE, PP_ALIGN.CENTER)
-    add_textbox(s, Inches(0.6), Inches(5.3), Inches(12.13), Inches(0.6), "Free forever · No prerequisites  •  Saturdays, mornings IST  •  LSEG, International Tech Park, Madhapur, Hyderabad  •  © 2026 AIYatra · Research. Build. Transform.", 10, True, MUTED, PP_ALIGN.CENTER)
+    add_textbox(s, Inches(0.6), Inches(5.3), Inches(12.13), Inches(0.6), "Free forever · No prerequisites  •  Saturdays, mornings IST  •  Hyderabad · venue shared with RSVPs  •  © 2026 AIYatra · Research. Build. Transform.", 10, True, MUTED, PP_ALIGN.CENTER)
     add_footer(s)
 
     path = os.path.join(OUT_DIR, "AIYatra-Journey-From-Start-Till-Now.pptx")
@@ -449,7 +449,7 @@ def build_deck2():
         stripe.fill.solid(); stripe.fill.fore_color.rgb = accent; stripe.line.fill.background()
         add_textbox(s, x+Inches(0.3), Inches(2.5), Inches(3.15), Inches(0.4), t, 11, True, INK, PP_ALIGN.LEFT)
         add_textbox(s, x+Inches(0.3), Inches(2.95), Inches(3.15), Inches(1.5), b, 12, False, SLATE, PP_ALIGN.LEFT)
-    add_textbox(s, Inches(0.6), Inches(5.1), Inches(12.13), Inches(0.9), "Context: 2,957 members · 11 Saturday sessions at LSEG Madhapur · 4.6★ (90 ratings) — and students consistently say AIYatra is the first AI room that felt welcoming and deep.", 11.5, False, SLATE, PP_ALIGN.LEFT)
+    add_textbox(s, Inches(0.6), Inches(5.1), Inches(12.13), Inches(0.9), "Context: 2,957 members · 11 Saturday sessions in Hyderabad · 4.6★ (90 ratings) — and students consistently say AIYatra is the first AI room that felt welcoming and deep.", 11.5, False, SLATE, PP_ALIGN.LEFT)
     add_footer(s)
 
     # 3 Six duties

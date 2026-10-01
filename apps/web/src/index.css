@@ -1,18 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: "DM Sans", sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   overflow-x: clip;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
 }
 
-.font-hand {
-  font-family: "Caveat", cursive;
+/* Display face. Kept under the old `.font-hand` name so every page picks it
+   up. font-size-adjust shrinks the wider grotesk to the optical size the
+   original handwritten face was laid out for. */
+.font-hand,
+.font-display {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  letter-spacing: -0.035em;
+  font-size-adjust: 0.42;
 }
 
 /*
@@ -21,137 +26,207 @@ body {
 
 @layer base {
   :root {
-    --background: 43 46% 93%;
-    --foreground: 45 10% 14%;
-    --card: 45 40% 96%;
-    --card-foreground: 45 10% 14%;
-    --popover: 45 40% 96%;
-    --popover-foreground: 45 10% 14%;
-    --primary: 45 10% 14%;
-    --primary-foreground: 43 46% 95%;
-    --secondary: 42 30% 88%;
-    --secondary-foreground: 45 10% 14%;
-    --muted: 42 26% 88%;
-    --muted-foreground: 40 7% 38%;
-    --accent: 204 45% 88%;
-    --accent-foreground: 45 10% 14%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 45 10% 14%;
-    --input: 40 12% 80%;
-    --ring: 45 10% 14%;
-    --radius: 0.9rem;
+    /* White + blue only. Every legacy token maps onto a blue shade. */
+    --background: 0 0% 100%;
+    --foreground: 224 64% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 64% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 64% 14%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 214 100% 96%;
+    --secondary-foreground: 224 64% 14%;
+    --muted: 214 100% 97%;
+    --muted-foreground: 220 30% 42%;
+    --accent: 214 100% 94%;
+    --accent-foreground: 224 64% 14%;
+    --destructive: 221 83% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 60% 88%;
+    --input: 214 60% 88%;
+    --ring: 221 83% 53%;
+    --radius: 1.1rem;
 
-    /* AI Yatra paper-and-ink palette */
-    --paper: 43 46% 93%;
-    --paper-soft: 45 40% 96%;
-    --ink: 45 10% 14%;
-    --ink-soft: 40 7% 38%;
-    --tone-blue: 204 48% 87%;
-    --tone-blue-deep: 205 38% 45%;
-    --tone-green: 110 32% 86%;
-    --tone-yellow: 46 78% 82%;
-    --tone-coral: 18 60% 87%;
-    --tone-violet: 262 38% 89%;
+    --paper: 0 0% 100%;
+    --paper-soft: 214 100% 98%;
+    --ink: 224 64% 14%;
+    --ink-soft: 220 30% 40%;
+    --tone-blue: 213 100% 93%;
+    --tone-blue-deep: 221 83% 53%;
+    --tone-green: 204 100% 94%;
+    --tone-yellow: 199 95% 86%;
+    --tone-coral: 226 100% 93%;
+    --tone-violet: 232 100% 95%;
+    --sky: 199 89% 60%;
   }
 }
 
 @layer utilities {
-  /* ——— OpenShut-style uniform shell ———
-     One container for the whole site: 1480px max, fluid 6vw gutters.
-     Every section uses .wrap so nothing feels centered-narrow vs full-bleed. */
   .wrap {
     width: 100%;
-    max-width: 1480px;
+    max-width: 1440px;
     margin-inline: auto;
-    padding-inline: clamp(22px, 6vw, 92px);
+    padding-inline: clamp(16px, 5vw, 80px);
   }
   .wrap-narrow {
     width: 100%;
     max-width: 1100px;
     margin-inline: auto;
-    padding-inline: clamp(22px, 6vw, 92px);
+    padding-inline: clamp(16px, 5vw, 80px);
   }
 
-  /* NOTE: paper, ink and tone colors live in tailwind.config.js so every
-     color variant (text, bg, border, fill, decoration, with opacity) is
-     generated. Do not re-declare them here. */
+  /* Soft blue elevation (replaces the old hard offset "paper" shadow). */
+  .shadow-paper { box-shadow: 0 24px 60px -24px hsl(var(--tone-blue-deep) / 0.35), 0 2px 6px hsl(var(--ink) / 0.04); }
+  .shadow-paper-sm { box-shadow: 0 12px 32px -16px hsl(var(--tone-blue-deep) / 0.3), 0 1px 3px hsl(var(--ink) / 0.04); }
+  .shadow-paper-soft { box-shadow: 0 24px 60px -30px hsl(var(--tone-blue-deep) / 0.4); }
+  .hover-lift { transition: transform 300ms cubic-bezier(.2,.8,.2,1), box-shadow 300ms ease; }
+  .hover-lift:hover { transform: translateY(-6px); box-shadow: 0 30px 60px -24px hsl(var(--tone-blue-deep) / 0.45); }
+  .active-press:active { transform: scale(0.98); }
 
-  /* hard offset "paper" shadow */
-  .shadow-paper { box-shadow: 5px 5px 0 0 hsl(var(--ink) / 0.9); }
-  .shadow-paper-sm { box-shadow: 3px 3px 0 0 hsl(var(--ink) / 0.9); }
-  .shadow-paper-soft { box-shadow: 6px 6px 0 0 hsl(var(--ink) / 0.14); }
-  .hover-lift { transition: transform 180ms ease-out, box-shadow 180ms ease-out; }
-  .hover-lift:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 0 hsl(var(--ink) / 0.9); }
-  .active-press:active { transform: translate(1px, 1px) scale(0.99); }
+  .text-gradient {
+    background: linear-gradient(100deg, hsl(221 83% 45%), hsl(var(--sky)) 45%, hsl(221 83% 53%) 70%, hsl(224 76% 33%));
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: yatra-shine 7s ease-in-out infinite;
+  }
+  /* Frosted look without backdrop-filter: a backdrop blur has to be
+     recomputed every frame while anything behind it moves, which is what
+     made scrolling stutter. A near-opaque fill reads the same. */
+  .glass {
+    background: hsl(0 0% 100% / 0.9);
+  }
+  /* Soft colour glow. A radial gradient instead of filter: blur() on a big
+     element: identical look, no per-frame blur work. Set --glow. */
+  .glow {
+    background: radial-gradient(closest-side, var(--glow), transparent);
+  }
+  .bg-grid {
+    background-image:
+      linear-gradient(hsl(var(--tone-blue-deep) / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--tone-blue-deep) / 0.07) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .mask-fade-y { -webkit-mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent); }
+  .mask-fade-x { -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent); }
 }
 
-/* paper grain overlay */
-.grain::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.5;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+/* The inner pages were drawn with heavy ink outlines; soften every solid
+   ink border into a light blue hairline so the whole site reads airy. */
+.border-ink { border-color: hsl(var(--tone-blue-deep) / 0.16); }
+.border-dashed.border-ink\/30, .border-dashed.border-ink\/25 { border-color: hsl(var(--tone-blue-deep) / 0.18); }
+
+/* Visible keyboard focus everywhere (mouse clicks don't trigger it). */
+:focus-visible {
+  outline: 3px solid hsl(var(--tone-blue-deep));
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+.bg-ink :focus-visible, .text-white:focus-visible { outline-color: hsl(199 89% 70%); }
+
+/* Skip link for keyboard and screen-reader users. */
+.skip-link {
+  position: fixed; left: 16px; top: -60px; z-index: 100;
+  padding: 10px 16px; border-radius: 999px;
+  background: hsl(var(--tone-blue-deep)); color: #fff; font-weight: 600;
+  transition: top 200ms ease;
+}
+.skip-link:focus { top: 12px; }
+
+/* ——— motion ——— */
+@keyframes yatra-shine {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
-/* marquee ticker */
 @keyframes yatra-marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
 .marquee-track {
-  animation: yatra-marquee 28s linear infinite;
+  animation: yatra-marquee 36s linear infinite;
   will-change: transform;
 }
-
-/* reverse marquee (content travels left → right) */
 @keyframes yatra-marquee-reverse {
   from { transform: translateX(-50%); }
   to { transform: translateX(0); }
 }
 .marquee-track-reverse {
-  animation: yatra-marquee-reverse 40s linear infinite;
+  animation: yatra-marquee-reverse 44s linear infinite;
   will-change: transform;
 }
-.marquee-slow { animation-duration: 48s; }
-
-/* pause on hover for readable marquee cards */
+.marquee-slow { animation-duration: 60s; }
 .marquee-pause:hover .marquee-track,
-.marquee-pause:hover .marquee-track-reverse { animation-play-state: paused; }
+.marquee-pause:hover .marquee-track-reverse,
+.marquee-pause:focus-within .marquee-track,
+.marquee-pause:focus-within .marquee-track-reverse { animation-play-state: paused; }
 
-/* gentle float for hero stickers */
 @keyframes yatra-float {
   0%, 100% { transform: translateY(0) rotate(var(--float-rot, 0deg)); }
-  50% { transform: translateY(-7px) rotate(var(--float-rot, 0deg)); }
+  50% { transform: translateY(-12px) rotate(var(--float-rot, 0deg)); }
 }
-.float-soft { animation: yatra-float 5.5s ease-in-out infinite; }
+.float-soft { animation: yatra-float 6s ease-in-out infinite; }
+
+@keyframes yatra-blob {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(6%, -8%, 0) scale(1.08); }
+  66% { transform: translate3d(-7%, 6%, 0) scale(0.95); }
+}
+.blob { animation: yatra-blob 18s ease-in-out infinite; will-change: transform; }
+
+/* Looping animations pause while their element is off screen
+   (toggled by <PauseOffscreen /> in App.jsx). */
+.is-offscreen, .is-offscreen * { animation-play-state: paused !important; }
+
+@keyframes yatra-spin { to { transform: rotate(360deg); } }
+.spin-slow { animation: yatra-spin 40s linear infinite; }
+.spin-slower { animation: yatra-spin 70s linear infinite reverse; }
+
+@keyframes yatra-ping { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(2.6); opacity: 0; } }
+.ping-soft { animation: yatra-ping 2s cubic-bezier(0,0,.2,1) infinite; }
+
+@keyframes yatra-dash { to { stroke-dashoffset: -400; } }
+.flow-line { stroke-dasharray: 6 10; animation: yatra-dash 12s linear infinite; }
+
+/* Mouse-tracked spotlight on cards (vars set from JS). */
+.spotlight { position: relative; isolation: isolate; }
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), hsl(var(--sky) / 0.18), transparent 60%);
+}
+.spotlight:hover::before { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track, .marquee-track-reverse, .float-soft { animation: none; }
+  .marquee-track, .marquee-track-reverse, .float-soft, .blob, .spin-slow, .spin-slower,
+  .ping-soft, .flow-line, .text-gradient { animation: none; }
 }
 
 /* blog post body — theme-matched typography for generated markdown */
 .blog-body { color: hsl(var(--ink) / 0.85); font-size: 1.05rem; line-height: 1.75; }
 .blog-body > *:first-child { margin-top: 0; }
 .blog-body > *:last-child { margin-bottom: 0; }
-.blog-body h2 { font-family: var(--font-hand); font-size: 2rem; font-weight: 700; line-height: 1.2; color: hsl(var(--ink)); margin: 2rem 0 0.75rem; }
-.blog-body h3 { font-family: var(--font-hand); font-size: 1.5rem; font-weight: 700; line-height: 1.25; color: hsl(var(--ink)); margin: 1.75rem 0 0.5rem; }
+.blog-body h2 { font-family: "Space Grotesk", sans-serif; letter-spacing: -0.02em; font-size: 1.75rem; font-weight: 700; line-height: 1.2; color: hsl(var(--ink)); margin: 2rem 0 0.75rem; }
+.blog-body h3 { font-family: "Space Grotesk", sans-serif; letter-spacing: -0.02em; font-size: 1.3rem; font-weight: 700; line-height: 1.25; color: hsl(var(--ink)); margin: 1.75rem 0 0.5rem; }
 .blog-body p { margin: 1rem 0; }
-.blog-body a { font-weight: 700; color: hsl(var(--tone-blue-deep)); text-decoration: underline; text-underline-offset: 4px; }
+.blog-body a { font-weight: 600; color: hsl(var(--tone-blue-deep)); text-decoration: underline; text-underline-offset: 4px; }
 .blog-body a:hover { color: hsl(var(--ink)); }
 .blog-body ul, .blog-body ol { margin: 1rem 0; padding-left: 1.5rem; }
 .blog-body ul { list-style: disc; }
 .blog-body ol { list-style: decimal; }
 .blog-body li { margin: 0.4rem 0; }
-.blog-body li::marker { font-weight: 700; }
+.blog-body li::marker { font-weight: 700; color: hsl(var(--tone-blue-deep)); }
 .blog-body strong { color: hsl(var(--ink)); }
-.blog-body code { font-family: ui-monospace, monospace; font-size: 0.85em; background: hsl(var(--tone-blue) / 0.5); border: 1px solid hsl(var(--ink) / 0.25); border-radius: 6px; padding: 0.1em 0.35em; }
-.blog-body pre { background: hsl(var(--ink)); color: hsl(var(--paper)); border: 2px solid hsl(var(--ink)); border-radius: 14px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 1.25rem 0; }
+.blog-body code { font-family: ui-monospace, monospace; font-size: 0.85em; background: hsl(var(--tone-blue) / 0.6); border-radius: 6px; padding: 0.1em 0.35em; }
+.blog-body pre { background: hsl(var(--ink)); color: hsl(0 0% 100%); border-radius: 14px; padding: 1.1rem 1.25rem; overflow-x: auto; margin: 1.25rem 0; }
 .blog-body pre code { background: none; border: none; padding: 0; color: inherit; }
-.blog-body blockquote { border-left: 5px solid hsl(var(--tone-yellow)); background: hsl(var(--tone-yellow) / 0.25); border-radius: 0 12px 12px 0; padding: 0.9rem 1.1rem; margin: 1.25rem 0; font-weight: 500; }
-.blog-body img { border: 2px solid hsl(var(--ink)); border-radius: 16px; margin: 1.25rem 0; max-width: 100%; }
-.blog-body hr { border: none; border-top: 2px dashed hsl(var(--ink) / 0.3); margin: 2rem 0; }
+.blog-body blockquote { border-left: 4px solid hsl(var(--tone-blue-deep)); background: hsl(var(--tone-blue) / 0.4); border-radius: 0 12px 12px 0; padding: 0.9rem 1.1rem; margin: 1.25rem 0; font-weight: 500; }
+.blog-body img { border-radius: 16px; margin: 1.25rem 0; max-width: 100%; }
+.blog-body hr { border: none; border-top: 1px solid hsl(var(--tone-blue-deep) / 0.18); margin: 2rem 0; }
