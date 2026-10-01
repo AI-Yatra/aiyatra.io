@@ -4,8 +4,9 @@
 // Photos are the real featuredEventPhoto values served from meetupstatic.
 
 export const MEETUP_URL = 'https://www.meetup.com/aiyatra/';
-export const EVENT_URL = 'https://www.meetup.com/aiyatra/events/316525443/';
+export const EVENT_URL = 'https://www.meetup.com/aiyatra/events/316720553/';
 export const PAST_EVENTS_URL = 'https://www.meetup.com/aiyatra/events/past/';
+export const GOOGLE_FORM_URL = 'https://forms.gle/Gw5wGiLubwhE5u2W9';
 export const CONTACT_EMAIL = 'global.aiyatra@gmail.com';
 export const LINKEDIN_URL = 'https://www.linkedin.com/company/aiyatra/';
 export const GITHUB_URL = 'https://github.com/AI-Yatra';
@@ -19,17 +20,18 @@ const BASE_URL = import.meta.env.BASE_URL || '/';
 export const AI_YATRA_LOGO = `${BASE_URL}aiyatra-mark.png`;
 
 export const GROUP_STATS = {
-	members: 3843,
-	eventsHosted: 16,
+	members: 5052,
+	eventsHosted: 17,
 	rating: 4.7,
-	ratingsCount: 133,
-	venue: 'LSEG, International Tech Park, Madhapur, Hyderabad',
+	ratingsCount: 148,
+	venue: 'LSEG Hyderabad, Inorbit Mall Rd, Madhapur, Hyderabad',
 	city: 'Hyderabad, IN',
 	organizer: 'Khaja Moinuddin Mohammed',
 };
 
 export const PHOTO = {
 	// Real featured photos from the live Meetup group (highres meetupstatic)
+	jev: 'https://secure.meetupstatic.com/photos/event/b/5/9/c/highres_536326492.jpeg',
 	diffusion: 'https://secure.meetupstatic.com/photos/event/4/c/c/4/highres_536179652.jpeg',
 	sft: 'https://secure.meetupstatic.com/photos/event/4/b/d/c/highres_535999420.jpeg',
 	agenticAi: 'https://secure.meetupstatic.com/photos/event/3/c/0/a/highres_535815370.jpeg',
@@ -51,12 +53,24 @@ export const PHOTO = {
 // exported newest-first for display. `photo` = real meetupstatic cover.
 export const ALL_EVENTS = [
 	{
+		id: '316720553',
+		title: 'JEV: Building Fast, Structured System-1 AI',
+		shortTitle: 'JEV: Fast System-1 AI',
+		date: 'Sat, Oct 10 · 9:00 AM – 12:30 PM IST',
+		attendees: 225,
+		status: 'upcoming',
+		url: 'https://www.meetup.com/aiyatra/events/316720553/',
+		photo: 'https://secure.meetupstatic.com/photos/event/b/5/9/c/highres_536326492.jpeg',
+		blurb:
+			'Fast, predictable, structured decisions without long reasoning chains — System-1 vs System-2, schema-driven outputs, classification, extraction, routing, validation, confidence scores, and a live end-to-end JEV build. Input → JEV → Schema + Prediction + Confidence → Decision.',
+	},
+	{
 		id: '316525443',
 		title: 'Diffusion Models from First Principles: From Images to Video & Text',
 		shortTitle: 'Diffusion Models, First Principles',
 		date: 'Sat, Sep 26 · 9:00 AM IST',
-		attendees: 135,
-		status: 'upcoming',
+		attendees: 240,
+		status: 'past',
 		url: 'https://www.meetup.com/aiyatra/events/316525443/',
 		photo: 'https://secure.meetupstatic.com/photos/event/4/c/c/4/highres_536179652.jpeg',
 		blurb:
@@ -67,7 +81,7 @@ export const ALL_EVENTS = [
 		title: 'Supervised Fine-Tuning to Reinforcement Learning: Train Models to Think Better',
 		shortTitle: 'SFT → RL: Train to Think',
 		date: 'Sat, Sep 12 · 9:00 AM IST',
-		attendees: 286,
+		attendees: 279,
 		status: 'past',
 		url: 'https://www.meetup.com/aiyatra/events/316434319/',
 		photo: 'https://secure.meetupstatic.com/photos/event/4/b/d/c/highres_535999420.jpeg',
@@ -210,13 +224,14 @@ export const ALL_EVENTS = [
 
 // Convenience slices (back-compat with existing imports)
 export const EVENTS = {
-	diffusion: ALL_EVENTS[0],
-	sft: ALL_EVENTS[1],
-	agenticAi: ALL_EVENTS[2],
-	pytorch: ALL_EVENTS[3],
-	linearAlgebra: ALL_EVENTS[4],
-	deepseek: ALL_EVENTS[5],
-	goose: ALL_EVENTS[6],
+	jev: ALL_EVENTS[0],
+	diffusion: ALL_EVENTS[1],
+	sft: ALL_EVENTS[2],
+	agenticAi: ALL_EVENTS[3],
+	pytorch: ALL_EVENTS[4],
+	linearAlgebra: ALL_EVENTS[5],
+	deepseek: ALL_EVENTS[6],
+	goose: ALL_EVENTS[7],
 };
 
 export const UPCOMING_EVENTS = ALL_EVENTS.filter((e) => e.status === 'upcoming');

@@ -10,7 +10,7 @@ import CountUp from '@/components/CountUp';
 import { Header, Footer } from '@/components/SiteChrome';
 import { Link } from 'react-router-dom';
 import {
-	MEETUP_URL, PAST_EVENTS_URL, EVENT_URL, EVENTS,
+	MEETUP_URL, PAST_EVENTS_URL, EVENT_URL, GOOGLE_FORM_URL, EVENTS,
 	PAST_EVENTS, GROUP_STATS, COMMUNITY_FACES, HOST_PHOTO, MONIKA_PHOTO, AMBASSADOR_CREST, DECKS,
 } from '@/data/site';
 import { LABS_CATEGORIES, LABS_TOTAL_PAPERS } from '@/data/labs';
@@ -59,9 +59,9 @@ const testimonials = [
 ];
 
 const essentials = [
-	{ icon: MapPin, label: 'Where', value: 'LSEG, International Tech Park, Madhapur, Hyderabad' },
-	{ icon: CalendarDays, label: 'When', value: 'Saturdays · mornings, IST' },
-	{ icon: Ticket, label: 'Cost', value: 'Free, always — learning should be' },
+	{ icon: MapPin, label: 'Where', value: 'LSEG Hyderabad, Inorbit Mall Rd, Madhapur, Hyderabad' },
+	{ icon: CalendarDays, label: 'When', value: 'Saturdays · mornings, IST — Next: Oct 10, 9:00 AM' },
+	{ icon: Ticket, label: 'Cost', value: 'Free, always — RSVP + Form mandatory' },
 	{ icon: Building2, label: 'Bring', value: 'A laptop, Python 3.10+, and curiosity' },
 ];
 
@@ -77,29 +77,33 @@ function HeroCard() {
 				</span>
 			</div>
 
-			<h3 className="mt-5 font-hand text-4xl font-bold leading-[1.05] sm:text-5xl">{EVENTS.diffusion.shortTitle}</h3>
-			<p className="mt-2 text-base font-medium text-ink-soft">{EVENTS.diffusion.blurb}</p>
+			<h3 className="mt-5 font-hand text-4xl font-bold leading-[1.05] sm:text-5xl">{EVENTS.jev.shortTitle}</h3>
+			<p className="mt-2 text-base font-medium text-ink-soft">{EVENTS.jev.blurb}</p>
 
 			<div className="mt-5 grid grid-cols-2 gap-3">
 				<div className="rounded-xl border-2 border-ink bg-tone-blue p-3.5">
 					<p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide text-ink/60">
 						<CalendarDays className="h-3.5 w-3.5" /> When
 					</p>
-					<p className="mt-1.5 text-sm font-bold leading-snug">Sat, Sep 26<br />9:00 AM IST</p>
+					<p className="mt-1.5 text-sm font-bold leading-snug">Sat, Oct 10<br />9:00 AM – 12:30 PM IST</p>
 				</div>
 				<div className="rounded-xl border-2 border-ink bg-tone-green p-3.5">
 					<p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide text-ink/60">
 						<Users className="h-3.5 w-3.5" /> Attending
 					</p>
-					<p className="mt-1.5 text-sm font-bold leading-snug">{EVENTS.diffusion.attendees} learners<br />& counting</p>
+					<p className="mt-1.5 text-sm font-bold leading-snug">{EVENTS.jev.attendees} learners<br />& counting</p>
 				</div>
+			</div>
+
+			<div className="mt-4 rounded-xl border-2 border-ink bg-tone-yellow p-3.5 text-sm font-semibold leading-snug">
+				RSVP + Google Form mandatory — both close Tue, Oct 6, EOD. No exceptions, security won&apos;t allow entry without both.
 			</div>
 
 			<ul className="mt-4 space-y-2">
 				{[
-					'Forward diffusion → reverse denoising, from first principles',
-					'DDPM, DDIM, latent diffusion, DiT & flow matching',
-					'Live from-scratch build — runs on 6 GB VRAM',
+					'System-1 AI vs System-2 reasoning — where JEV fits',
+					'Schema-driven outputs: classification, extraction, routing, validation',
+					'Confidence scores + live end-to-end JEV build: resume-JD, ticket routing',
 				].map((t, i) => (
 					<li key={i} className="flex items-start gap-2.5 text-sm font-medium text-ink/80">
 						<span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-tone-yellow text-[11px] font-bold">
@@ -110,14 +114,27 @@ function HeroCard() {
 				))}
 			</ul>
 
-			<a
-				href={EVENT_URL}
-				target="_blank"
-				rel="noreferrer"
-				className="active-press mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-5 text-sm font-semibold text-paper transition-transform hover:-translate-y-0.5"
-			>
-				RSVP now <ArrowRight className="h-4 w-4" />
-			</a>
+			<div className="mt-5 grid gap-2.5 sm:grid-cols-2">
+				<a
+					href={EVENT_URL}
+					target="_blank"
+					rel="noreferrer"
+					className="active-press inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-5 text-sm font-semibold text-paper transition-transform hover:-translate-y-0.5"
+				>
+					RSVP now <ArrowRight className="h-4 w-4" />
+				</a>
+				<a
+					href={GOOGLE_FORM_URL}
+					target="_blank"
+					rel="noreferrer"
+					className="active-press inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border-2 border-ink bg-paper px-5 text-sm font-semibold text-ink transition-transform hover:-translate-y-0.5"
+				>
+					Google Form <ArrowUpRight className="h-4 w-4" />
+				</a>
+			</div>
+			<p className="mt-3 text-xs font-semibold text-ink/60">
+				LSEG Hyderabad, Inorbit Mall Rd, Madhapur · Sat, Oct 10, 9:00 AM IST
+			</p>
 		</div>
 	);
 }
@@ -834,9 +851,20 @@ function FinalCta() {
 							rel="noreferrer"
 							className="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-paper/50 px-7 text-base font-semibold text-paper transition-colors hover:border-paper"
 						>
-							RSVP: Diffusion Models, Sep 26
+							RSVP: JEV System-1 AI, Oct 10
+						</a>
+						<a
+							href={GOOGLE_FORM_URL}
+							target="_blank"
+							rel="noreferrer"
+							className="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-paper/50 px-7 text-base font-semibold text-paper transition-colors hover:border-paper"
+						>
+							Mandatory Google Form
 						</a>
 					</div>
+					<p className="mt-5 max-w-xl text-sm font-semibold text-paper/60">
+						Both RSVP + Form close Tue, Oct 6, EOD — no exceptions.
+					</p>
 				</Reveal>
 			</div>
 		</section>
@@ -850,7 +878,7 @@ export default function HomePage() {
 				<title>AIYatra — Democratizing AI Learning | Hyderabad AI Community</title>
 				<meta
 					name="description"
-					content="AIYatra is Hyderabad's open AI community. Through research, build and transform — join 3,843 members at hands-on meetups on diffusion models, agentic AI, PyTorch, and machine learning. Free, forever."
+					content="AIYatra is Hyderabad's open AI community. Through research, build and transform — join 5,052 members at hands-on meetups on JEV System-1 AI, diffusion models, agentic AI, PyTorch, and machine learning. Free, forever."
 				/>
 			</Helmet>
 			<Header />

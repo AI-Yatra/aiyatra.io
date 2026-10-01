@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
 	ArrowUpRight, CalendarDays, MapPin, Users, Github, Linkedin, Mail,
-	MessageCircle, Heart, Ticket,
+	MessageCircle, Heart, Ticket, Megaphone,
 } from 'lucide-react';
 import {
-	MEETUP_URL, EVENT_URL, AI_YATRA_LOGO, GROUP_STATS,
+	MEETUP_URL, EVENT_URL, GOOGLE_FORM_URL, AI_YATRA_LOGO, GROUP_STATS,
 	CONTACT_EMAIL, LINKEDIN_URL, GITHUB_URL,
 } from '@/data/site';
 
@@ -41,30 +41,72 @@ function Logo() {
 	);
 }
 
+export function AnnouncementBar() {
+	const message = 'Oct 10 JEV Workshop — RSVP + Google Form close Tue, Oct 6, EOD · No exceptions — both are mandatory for venue entry';
+	const repeats = Array.from({ length: 6 });
+	return (
+		<div className="border-b-2 border-ink bg-ink text-tone-yellow" role="note" aria-label="RSVP deadline announcement">
+			<div className="marquee-pause overflow-hidden py-2.5">
+				<div className="marquee-track flex w-max items-center gap-8 pr-8">
+					{[...repeats, ...repeats].map((_, i) => (
+						<span key={i} className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[13px] font-bold uppercase tracking-[0.12em]">
+							<Megaphone className="h-4 w-4 shrink-0" aria-hidden="true" />
+							<span>{message}</span>
+							<a
+								href={EVENT_URL}
+								target="_blank"
+								rel="noreferrer"
+								className="ml-2 underline underline-offset-4 hover:text-paper"
+								tabIndex={i === 0 ? 0 : -1}
+							>
+								RSVP
+							</a>
+							<span aria-hidden="true">·</span>
+							<a
+								href={GOOGLE_FORM_URL}
+								target="_blank"
+								rel="noreferrer"
+								className="underline underline-offset-4 hover:text-paper"
+								tabIndex={i === 0 ? 0 : -1}
+							>
+								Google Form
+							</a>
+							<span aria-hidden="true" className="ml-6 text-paper/40">///</span>
+						</span>
+					))}
+				</div>
+			</div>
+		</div>
+	);
+}
+
 export function Header() {
 	return (
-		<header className="sticky top-0 z-50 border-b-2 border-ink bg-paper/95 backdrop-blur-sm">
-			<div className="wrap flex h-[76px] items-center justify-between gap-5">
-				<Link to="/#top" className="flex shrink-0 items-center" aria-label="AI Yatra home">
-					<Logo />
-				</Link>
-				<nav className="hidden items-center gap-6 text-sm font-medium text-ink md:flex lg:gap-7">
-					{NAV_LINKS.map((l) => (
-						<Link key={l.label} to={l.to} className="whitespace-nowrap transition-colors hover:text-tone-blue-deep">
-							{l.label}
-						</Link>
-					))}
-				</nav>
-				<a
-					href={MEETUP_URL}
-					target="_blank"
-					rel="noreferrer"
-					className="active-press inline-flex h-10 shrink-0 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-4 text-sm font-semibold text-paper shadow-paper-sm transition-transform hover:-translate-y-0.5"
-				>
-					Join on Meetup <ArrowUpRight className="h-4 w-4" />
-				</a>
-			</div>
-		</header>
+		<>
+			<header className="sticky top-0 z-50 border-b-2 border-ink bg-paper/95 backdrop-blur-sm">
+				<div className="wrap flex h-[76px] items-center justify-between gap-5">
+					<Link to="/#top" className="flex shrink-0 items-center" aria-label="AI Yatra home">
+						<Logo />
+					</Link>
+					<nav className="hidden items-center gap-6 text-sm font-medium text-ink md:flex lg:gap-7">
+						{NAV_LINKS.map((l) => (
+							<Link key={l.label} to={l.to} className="whitespace-nowrap transition-colors hover:text-tone-blue-deep">
+								{l.label}
+							</Link>
+						))}
+					</nav>
+					<a
+						href={MEETUP_URL}
+						target="_blank"
+						rel="noreferrer"
+						className="active-press inline-flex h-10 shrink-0 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-4 text-sm font-semibold text-paper shadow-paper-sm transition-transform hover:-translate-y-0.5"
+					>
+						Join on Meetup <ArrowUpRight className="h-4 w-4" />
+					</a>
+				</div>
+			</header>
+			<AnnouncementBar />
+		</>
 	);
 }
 
@@ -113,7 +155,7 @@ export function Footer() {
 							rel="noreferrer"
 							className="active-press inline-flex h-10 items-center gap-2 rounded-xl border-2 border-paper/40 px-4 text-sm font-semibold text-paper transition-colors hover:border-paper"
 						>
-							Next: Sep 26
+							Next: Oct 10
 						</a>
 					</div>
 				</div>
