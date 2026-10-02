@@ -23,9 +23,9 @@ export const NAV_LINKS = [
 
 function Logo({ dark = false }) {
 	return (
-		<span className="flex items-center gap-2.5">
-			<span className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl ${dark ? 'bg-white' : 'bg-white ring-1 ring-tone-blue-deep/15'}`}>
-				<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" className="h-full w-full object-contain" />
+		<span className="flex items-center gap-3">
+			<span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white p-1.5 sm:h-14 sm:w-14 sm:p-2 ${dark ? '' : 'shadow-sm ring-1 ring-tone-blue-deep/15'}`}>
+				<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" width="224" height="224" className="h-full w-full object-contain" />
 			</span>
 			<span className="flex flex-col leading-none">
 				<span className={`font-display text-[22px] font-bold ${dark ? 'text-white' : 'text-ink'}`}>

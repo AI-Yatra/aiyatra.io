@@ -773,7 +773,7 @@ function FinalCta() {
 				<Reveal from="zoom">
 					<div className="relative overflow-hidden rounded-[36px] bg-gradient-to-br from-tone-blue-deep via-[hsl(224_76%_40%)] to-ink px-6 py-16 text-center text-white shadow-paper sm:px-12 sm:py-20">
 						<div aria-hidden="true" className="absolute inset-0 opacity-50"><NeuralField density={0.00012} /></div>
-						<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" className="relative mx-auto h-16 w-16 rounded-2xl bg-white object-contain p-1" />
+						<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" className="relative mx-auto h-20 w-20 rounded-3xl bg-white object-contain p-3" />
 						<h2 className="relative mx-auto mt-8 max-w-3xl font-display text-4xl font-bold leading-[1.05] sm:text-6xl">
 							Your AI journey starts with a single RSVP.
 						</h2>

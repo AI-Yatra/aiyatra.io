@@ -21,8 +21,8 @@ export const ADMIN_EMAILS = ['global.aiyatra@gmail.com'];
 // A plain "/aiyatra-mark.png" string would 404 under a subpath.
 const BASE_URL = import.meta.env.BASE_URL || '/';
 
-// Small copy for on-page use; the full-size mark stays for favicons and link previews.
-export const AI_YATRA_LOGO = `${BASE_URL}aiyatra-mark-160.png`;
+// Square, tightly cropped copy for on-page use; favicons live alongside it in public/.
+export const AI_YATRA_LOGO = `${BASE_URL}aiyatra-logo-224.png`;
 
 /* ——— events ——— */
 
