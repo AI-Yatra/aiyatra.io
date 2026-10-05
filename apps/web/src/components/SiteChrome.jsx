@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
 	ArrowUpRight, CalendarDays, MapPin, Users, Github, Linkedin, Mail,
-	Ticket, Megaphone, Menu, X, GraduationCap, FlaskConical,
+	Ticket, Megaphone, Menu, X, GraduationCap, FlaskConical, Heart,
 } from 'lucide-react';
 import {
 	MEETUP_URL, AI_YATRA_LOGO, GROUP_STATS, CONTACT_EMAIL, LINKEDIN_URL, GITHUB_URL,
@@ -24,8 +24,9 @@ export const NAV_LINKS = [
 function Logo({ dark = false }) {
 	return (
 		<span className="flex items-center gap-3">
-			<span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white p-1.5 sm:h-14 sm:w-14 sm:p-2 ${dark ? '' : 'shadow-sm ring-1 ring-tone-blue-deep/15'}`}>
-				<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" width="224" height="224" className="h-full w-full object-contain" />
+			<span className="flex h-12 w-12 shrink-0 items-center justify-center sm:h-14 sm:w-14">
+				{/* Transparent mark, no tile: blue on light backgrounds, white on the dark footer. */}
+				<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" width="224" height="224" className={`h-full w-full object-contain ${dark ? 'brightness-0 invert' : ''}`} />
 			</span>
 			<span className="flex flex-col leading-none">
 				<span className={`font-display text-[22px] font-bold ${dark ? 'text-white' : 'text-ink'}`}>
@@ -161,20 +162,18 @@ function FooterHeading({ children }) {
 
 const footerLink = 'text-white/70 transition-colors hover:text-white';
 
-// At least one full screen tall, so at the very bottom of the page the footer
-// and the wordmark below it fill the whole viewport.
 export function Footer() {
 	return (
-		<footer className="relative flex min-h-[100svh] flex-col overflow-hidden bg-ink text-white">
+		<footer className="relative overflow-hidden bg-ink text-white">
 			<div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 h-80 w-[80%] -translate-x-1/2 glow [--glow:hsl(221_83%_53%/0.45)]" />
-			<div className="wrap relative grid w-full gap-12 py-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+			<div className="wrap relative grid w-full gap-10 pb-8 pt-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
 				<div>
 					<Link to="/#top" aria-label="AI Yatra home"><Logo dark /></Link>
-					<p className="mt-5 max-w-sm text-sm leading-relaxed text-white/65">
+					<p className="mt-4 max-w-sm text-sm leading-relaxed text-white/65">
 						An open-source AI community from Hyderabad. Saturday meetups, a student ambassador
 						network and an open research lab — free, forever, open to everyone.
 					</p>
-					<div className="mt-6 flex items-center gap-2.5">
+					<div className="mt-5 flex items-center gap-2.5">
 						{[
 							{ href: MEETUP_URL, label: 'Meetup', Icon: Users },
 							{ href: GITHUB_URL, label: 'GitHub', Icon: Github },
@@ -219,27 +218,10 @@ export function Footer() {
 				</div>
 			</div>
 
-			<div className="relative flex flex-1 flex-col overflow-hidden border-t border-white/10">
-				{/* Giant wordmark that rises into view. It takes all the height left
-				    under the links and runs edge to edge (sized in cqw of this box); on
-				    short desktop screens it shrinks so links + wordmark fit one screen. */}
-				<div className="relative flex flex-1 items-center justify-center py-6 [container-type:inline-size]">
-					<motion.p
-						aria-hidden="true"
-						initial={{ y: '35%', opacity: 0 }}
-						whileInView={{ y: '0%', opacity: 1 }}
-						viewport={{ once: true }}
-						transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-						className="pointer-events-none select-none whitespace-nowrap bg-gradient-to-b from-white/[0.22] via-white/[0.09] to-white/[0.02] bg-clip-text text-center font-display text-[29cqw] lg:text-[max(14cqw,min(29cqw,calc((100svh-29.5rem)*1.2)))] font-bold leading-[0.8] tracking-[-0.05em] text-transparent [font-size-adjust:none]"
-					>
-						AI YATRA
-					</motion.p>
-				</div>
-				<div className="wrap relative flex w-full flex-col items-center justify-between gap-2 border-t border-white/10 py-5 text-center text-xs text-white/50 sm:flex-row sm:text-left">
-					<p>Made in Hyderabad · open to the world</p>
-					<p>© 2026 AIYatra · Research. Build. Transform.</p>
-					<a href="#top" className="font-semibold text-white/70 hover:text-white">Back to top ↑</a>
-				</div>
+			<div className="wrap relative flex w-full flex-col items-center justify-between gap-2 border-t border-white/10 py-4 text-center text-xs text-white/50 sm:flex-row sm:text-left">
+				<p className="inline-flex items-center gap-1.5">Made with <Heart className="h-3.5 w-3.5 fill-red-500 text-red-500" aria-label="love" /> in Hyderabad · open to the world</p>
+				<p>© 2026 AIYatra · Research. Build. Transform.</p>
+				<a href="#top" className="font-semibold text-white/70 hover:text-white">Back to top ↑</a>
 			</div>
 		</footer>
 	);

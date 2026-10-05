@@ -9,9 +9,10 @@ import {
 	Wrench, Layers, Network, Globe, Github, Mail, Zap,
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
-import Intro, { IntroSheet } from '@/components/Intro';
+import MeetupHero from '@/components/MeetupHero';
 import { SectionLabel, PrimaryButton, GhostButton } from '@/components/Kit';
 import CountUp from '@/components/CountUp';
+import EventPhoto from '@/components/EventPhoto';
 import { Header, Footer } from '@/components/SiteChrome';
 import { NeuralField, Aurora, Tilt, useSpotlight, useCountdown } from '@/components/Fx';
 import {
@@ -230,63 +231,46 @@ function VerticalPortal({ v, i }) {
 	);
 }
 
-function Hero() {
+/* Right under the opening screen: one line on how to get involved, the live
+   countdown to the next Saturday, and the three ways in. Laid out mirror-image
+   to the hero (card left, words right) so the two don't read as a repeat. */
+function StartHere() {
 	return (
-		<section id="start" className="relative overflow-hidden">
-			<Aurora />
-			<div aria-hidden="true" className="bg-grid mask-fade-y absolute inset-0" />
+		<section id="start" className="relative scroll-mt-20 overflow-hidden pb-20 pt-16 sm:pb-24 sm:pt-20">
+			<div aria-hidden="true" className="absolute left-[-18%] top-0 h-[560px] w-[560px] glow [--glow:hsl(213_100%_86%/0.8)]" />
+			<div aria-hidden="true" className="absolute bottom-0 right-[-15%] h-[520px] w-[520px] glow [--glow:hsl(199_89%_60%/0.14)]" />
 
-			<div className="wrap relative pb-20 pt-10 lg:pt-16">
-				<div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
-					<div>
-						<Reveal from="down">
-							<span className="inline-flex items-center gap-2 rounded-full border border-tone-blue-deep/15 bg-white/80 py-1.5 pl-1.5 pr-4 text-sm font-medium text-ink/75">
-								<span className="whitespace-nowrap rounded-full bg-tone-blue-deep px-2.5 py-0.5 text-xs font-semibold text-white">Open source</span>
-								<span className="whitespace-nowrap">Free AI community<span className="hidden sm:inline"> · Hyderabad → the world</span></span>
-							</span>
-						</Reveal>
-						<Reveal from="left" delay={0.08}>
-							<h1 className="mt-7 font-display text-[3.4rem] font-bold leading-[0.98] text-ink sm:text-7xl xl:text-[5.4rem]">
-								Learn AI <span className="text-gradient">in the open.</span>
-								<br />Build it <span className="relative inline-block">together.
-									<svg aria-hidden="true" viewBox="0 0 300 20" className="absolute -bottom-2 left-0 h-3 w-full text-[hsl(199_89%_60%)]" preserveAspectRatio="none">
-										<motion.path d="M2 14 C 80 2, 200 2, 298 12" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.2, delay: 0.8, ease: 'easeInOut' }} />
-									</svg>
-								</span>
-							</h1>
-						</Reveal>
-						<Reveal from="left" delay={0.16}>
-							<p className="mt-7 max-w-xl text-lg leading-relaxed text-ink/65 sm:text-xl">
-								AIYatra is an open AI community built on three pillars: <strong className="font-semibold text-ink">Saturday meetups</strong>,
-								a <strong className="font-semibold text-ink">student ambassador</strong> network, and an open <strong className="font-semibold text-ink">research lab</strong>.
-								No paywalls, no prerequisites. Bring a laptop and curiosity.
-							</p>
-						</Reveal>
-						<Reveal from="up" delay={0.24}>
-							<div className="mt-9 flex flex-wrap items-center gap-3">
-								<PrimaryButton href={MEETUP_URL} target="_blank" rel="noreferrer">Join the community <ArrowRight className="h-4 w-4" /></PrimaryButton>
-								<GhostButton to="/#verticals">Explore the 3 pillars</GhostButton>
-							</div>
-						</Reveal>
-						<Reveal from="up" delay={0.3}>
-							<dl className="mt-11 grid max-w-xl grid-cols-3 gap-4">
-								{[
-									{ value: GROUP_STATS.members, label: 'Members' },
-									{ value: GROUP_STATS.eventsHosted, label: 'Sessions hosted' },
-									{ value: GROUP_STATS.rating, label: `★ · ${GROUP_STATS.ratingsCount} ratings`, decimals: 1 },
-								].map((s) => (
-									<div key={s.label} className="border-l-2 border-tone-blue-deep/20 pl-4">
-										<dd className="font-display text-3xl font-bold text-ink sm:text-4xl"><CountUp value={s.value} decimals={s.decimals || 0} /></dd>
-										<dt className="mt-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink/50">{s.label}</dt>
-									</div>
-								))}
-							</dl>
-						</Reveal>
-					</div>
-					<Reveal from="right" delay={0.2}>
+			<div className="wrap relative">
+				<div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+					<Reveal from="right" delay={0.1} className="order-2 lg:order-1">
 						<div className="float-soft" style={{ '--float-rot': '0deg' }}>
 							<NextMeetupCard />
 						</div>
+					</Reveal>
+
+					<Reveal from="left" className="order-1 lg:order-2">
+						<SectionLabel>Start here</SectionLabel>
+						<h2 className="mt-5 font-display text-5xl font-bold leading-[1.02] text-ink sm:text-6xl lg:text-[min(5.3vw,4.9rem)]">
+							One open community.<br /><span className="text-gradient">Three ways to grow.</span>
+						</h2>
+						<p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink/60">
+							Whether you&apos;re a student, a working engineer or simply curious, there&apos;s a seat for you.
+							Build alongside others at a <strong className="font-semibold text-ink">Saturday meetup</strong>, lead a <strong className="font-semibold text-ink">chapter</strong> on
+							your campus, or rebuild landmark papers in the open <strong className="font-semibold text-ink">research lab</strong>.
+							No paywalls, no prerequisites. Just a laptop and curiosity.
+						</p>
+						<dl className="mt-9 grid max-w-2xl grid-cols-3 gap-4">
+							{[
+								{ value: GROUP_STATS.members, label: 'Members' },
+								{ value: GROUP_STATS.eventsHosted, label: 'Sessions hosted' },
+								{ value: GROUP_STATS.rating, label: `★ · ${GROUP_STATS.ratingsCount} ratings`, decimals: 1 },
+							].map((s) => (
+								<div key={s.label} className="border-l-2 border-tone-blue-deep/20 pl-4">
+									<dd className="font-display text-3xl font-bold text-ink sm:text-4xl"><CountUp value={s.value} decimals={s.decimals || 0} /></dd>
+									<dt className="mt-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink/50">{s.label}</dt>
+								</div>
+							))}
+						</dl>
 					</Reveal>
 				</div>
 
@@ -327,7 +311,7 @@ function PastEventsRail({ events }) {
 		if (el) el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' });
 	};
 	return (
-		<div className="mt-16">
+		<div id="archive" className="mt-16 scroll-mt-28">
 			<div className="flex flex-wrap items-end justify-between gap-4">
 				<div>
 					<p className="text-xs font-semibold uppercase tracking-[0.24em] text-tone-blue-deep">The archive</p>
@@ -342,15 +326,14 @@ function PastEventsRail({ events }) {
 				{events.map((e, i) => (
 					<div key={e.id} className="w-[82%] shrink-0 snap-start sm:w-[360px]">
 						<a href={e.url} target="_blank" rel="noreferrer" className="hover-lift group block h-full overflow-hidden rounded-[22px] border border-tone-blue-deep/10 bg-white shadow-paper-sm">
-							<div className="relative aspect-[16/10] overflow-hidden">
-								<img {...photoProps(e.photo)} alt={e.title} loading={i < 3 ? 'eager' : 'lazy'} decoding="async" width="676" height="380" className="h-full w-full bg-tone-blue/50 object-cover transition-transform duration-700 group-hover:scale-110" />
-								<div className="absolute inset-0 bg-gradient-to-t from-[hsl(224_64%_14%/0.75)] via-transparent to-transparent" />
-								<span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-tone-blue-deep">
-									<Users className="h-3.5 w-3.5" /> {e.attendees} attended
-								</span>
-							</div>
+							<EventPhoto url={e.photo} alt={e.title} eager={i < 3} className="border-b border-tone-blue-deep/10" />
 							<div className="p-5">
-								<p className="text-xs font-semibold text-tone-blue-deep">{formatDay(e.start)}</p>
+								<div className="flex items-center justify-between gap-3">
+									<p className="text-xs font-semibold text-tone-blue-deep">{formatDay(e.start)}</p>
+									<span className="inline-flex items-center gap-1.5 rounded-full bg-tone-blue/70 px-2.5 py-1 text-xs font-semibold text-tone-blue-deep">
+										<Users className="h-3.5 w-3.5" /> {e.attendees} attended
+									</span>
+								</div>
 								<h4 className="mt-1 font-display text-xl font-bold leading-snug text-ink">{e.shortTitle}</h4>
 								<p className="mt-2 line-clamp-2 text-sm leading-relaxed text-ink/60">{e.blurb}</p>
 							</div>
@@ -372,17 +355,17 @@ function PastEventsRail({ events }) {
 function EventSpotlight({ ev, live, recent }) {
 	if (!ev) {
 		return (
-			<article className="relative flex flex-1 flex-col justify-center overflow-hidden rounded-[28px] bg-ink p-8 text-white shadow-paper sm:p-10">
-				<div aria-hidden="true" className="absolute inset-0 opacity-50"><NeuralField density={0.00008} /></div>
-				<span className="relative inline-flex w-fit items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-tone-blue-deep"><Ticket className="h-3.5 w-3.5" /> Next session</span>
+			<article className="relative flex flex-1 flex-col justify-center overflow-hidden rounded-[28px] border border-tone-blue-deep/10 bg-gradient-to-br from-white to-paper-soft p-8 text-ink shadow-paper sm:p-10">
+				<div aria-hidden="true" className="absolute inset-0 opacity-60"><NeuralField density={0.00008} /></div>
+				<span className="relative inline-flex w-fit items-center gap-2 rounded-full bg-tone-blue-deep px-3 py-1 text-xs font-semibold text-white"><Ticket className="h-3.5 w-3.5" /> Next session</span>
 				<h3 className="relative mt-6 font-display text-4xl font-bold leading-tight">The next Saturday is being planned.</h3>
-				<p className="relative mt-3 max-w-xl text-white/70">
+				<p className="relative mt-3 max-w-xl text-ink/65">
 					New sessions are announced on Meetup first and appear here automatically the same night.
-					{recent && <> Last up: <strong className="text-white">{recent.shortTitle}</strong> with {recent.attendees} builders.</>}
+					{recent && <> Last up: <strong className="text-ink">{recent.shortTitle}</strong> with {recent.attendees} builders.</>}
 				</p>
 				<div className="relative mt-8 flex flex-wrap gap-3">
-					<a href={MEETUP_URL} target="_blank" rel="noreferrer" className="active-press inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold text-tone-blue-deep transition-transform hover:-translate-y-0.5">Join on Meetup <ArrowRight className="h-4 w-4" /></a>
-					<GhostButton light href={CALENDAR_FEED_URL}><CalendarDays className="h-4 w-4" /> Subscribe to calendar</GhostButton>
+					<PrimaryButton href={MEETUP_URL} target="_blank" rel="noreferrer">Join on Meetup <ArrowRight className="h-4 w-4" /></PrimaryButton>
+					<GhostButton href={CALENDAR_FEED_URL}><CalendarDays className="h-4 w-4" /> Subscribe to calendar</GhostButton>
 				</div>
 			</article>
 		);
@@ -393,32 +376,27 @@ function EventSpotlight({ ev, live, recent }) {
 		[Users, ev.attendees > 0 ? `${ev.attendees}+ going` : 'RSVP open', ev.rsvpDeadline ? `RSVP closes ${formatDay(ev.rsvpDeadline)}` : 'Free, always'],
 	];
 	return (
-		<article className="group relative flex flex-1 flex-col overflow-hidden rounded-[28px] bg-ink text-white shadow-paper">
-			{ev.photo && (
-				<div className="relative aspect-[16/8] overflow-hidden">
-					<img {...photoProps(ev.photo, '(min-width: 1024px) 60vw, 100vw')} alt={ev.title} decoding="async" width="1024" height="576" className="h-full w-full bg-white/10 object-cover transition-transform [transition-duration:1200ms] group-hover:scale-105" />
-					<div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
-					<span className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-tone-blue-deep">
-						<Ticket className="h-3.5 w-3.5" /> {live ? 'Happening now' : `Upcoming · ${formatDay(ev.start)}`}
-					</span>
-				</div>
-			)}
-			<div className="relative flex flex-1 flex-col p-6 sm:p-8">
-				<h3 className="font-display text-3xl font-bold leading-tight sm:text-4xl">{ev.title}</h3>
-				{ev.blurb && <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base">{ev.blurb}</p>}
+		<article className="relative flex flex-1 flex-col overflow-hidden rounded-[28px] border border-tone-blue-deep/10 bg-white text-ink shadow-paper">
+			{ev.photo && <EventPhoto url={ev.photo} alt={ev.title} sizes="(min-width: 1024px) 60vw, 100vw" eager className="border-b border-tone-blue-deep/10" />}
+			<div className="relative flex flex-1 flex-col bg-gradient-to-b from-white to-paper-soft p-6 sm:p-8">
+				<span className="inline-flex w-fit items-center gap-2 rounded-full bg-tone-blue-deep px-3 py-1 text-xs font-semibold text-white">
+					<Ticket className="h-3.5 w-3.5" /> {live ? 'Happening now' : `Upcoming · ${formatDay(ev.start)}`}
+				</span>
+				<h3 className="mt-4 font-display text-3xl font-bold leading-tight sm:text-4xl">{ev.title}</h3>
+				{ev.blurb && <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink/65 sm:text-base">{ev.blurb}</p>}
 				<div className="mt-6 grid gap-3 sm:grid-cols-3">
 					{facts.map(([Icon, a, b]) => (
-						<div key={a} className="rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/10">
-							<Icon className="h-5 w-5 text-[hsl(199_89%_70%)]" />
+						<div key={a} className="rounded-2xl bg-tone-blue/45 p-4 ring-1 ring-tone-blue-deep/10">
+							<Icon className="h-5 w-5 text-tone-blue-deep" />
 							<p className="mt-2 text-sm font-semibold">{a}</p>
-							<p className="text-xs text-white/55">{b}</p>
+							<p className="text-xs text-ink/55">{b}</p>
 						</div>
 					))}
 				</div>
-				<div className="mt-6 flex flex-wrap gap-3">
-					<a href={ev.url} target="_blank" rel="noreferrer" className="active-press inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold text-tone-blue-deep transition-transform hover:-translate-y-0.5">RSVP on Meetup <ArrowRight className="h-4 w-4" /></a>
-					{ev.formUrl && <GhostButton light href={ev.formUrl} target="_blank" rel="noreferrer">Mandatory Google Form <ArrowUpRight className="h-4 w-4" /></GhostButton>}
-					<GhostButton light href={googleCalendarUrl(ev)} target="_blank" rel="noreferrer"><CalendarDays className="h-4 w-4" /> Add to calendar</GhostButton>
+				<div className="mt-auto flex flex-wrap gap-3 pt-6">
+					<PrimaryButton href={ev.url} target="_blank" rel="noreferrer">RSVP on Meetup <ArrowRight className="h-4 w-4" /></PrimaryButton>
+					{ev.formUrl && <GhostButton href={ev.formUrl} target="_blank" rel="noreferrer">Mandatory Google Form <ArrowUpRight className="h-4 w-4" /></GhostButton>}
+					<GhostButton href={googleCalendarUrl(ev)} target="_blank" rel="noreferrer"><CalendarDays className="h-4 w-4" /> Add to calendar</GhostButton>
 				</div>
 			</div>
 		</article>
@@ -433,7 +411,8 @@ function Meetups() {
 		['12:30', 'Hallway track', 'Study groups, collaborators and co-founders form here.'],
 	];
 	const { next: ev, live, past } = useEvents();
-	const top = [...past].sort((a, b) => b.attendees - a.attendees).slice(0, 3);
+	const top = [...past].sort((a, b) => b.attendees - a.attendees).slice(0, 5);
+	const totalSeats = past.reduce((n, e) => n + (e.attendees || 0), 0);
 	return (
 		<section id="meetups" className="relative scroll-mt-20 overflow-hidden py-24 sm:py-32">
 			<div aria-hidden="true" className="absolute right-[-20%] top-20 h-[600px] w-[600px] glow [--glow:hsl(213_100%_86%/0.9)]" />
@@ -480,17 +459,36 @@ function Meetups() {
 								</ol>
 							</div>
 						</Reveal>
-						<Reveal from="up" delay={0.2}>
-							<div className="rounded-[28px] bg-gradient-to-br from-tone-blue-deep to-[hsl(224_76%_33%)] p-6 text-white shadow-paper sm:p-7">
-								<p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/70">Biggest rooms so far</p>
-								<ul className="mt-4 space-y-3">
-									{top.map((e) => (
-										<li key={e.id} className="flex items-center justify-between gap-4">
-											<span className="text-sm font-medium text-white/85">{e.shortTitle}</span>
-											<span className="font-display text-2xl font-bold">{e.attendees}</span>
+						{/* Stretches to the bottom of the event card on the left. */}
+						<Reveal from="up" delay={0.2} className="flex flex-1">
+							<div className="relative flex flex-1 flex-col overflow-hidden rounded-[28px] bg-gradient-to-br from-tone-blue-deep to-[hsl(224_76%_33%)] p-6 text-white shadow-paper sm:p-7">
+								<div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 glow [--glow:hsl(199_89%_60%/0.45)]" />
+								<p className="relative text-xs font-semibold uppercase tracking-[0.22em] text-white/70">Biggest rooms so far</p>
+								<ol className="relative mt-5 flex flex-1 flex-col justify-around gap-4">
+									{top.map((e, i) => (
+										<li key={e.id}>
+											<div className="flex items-baseline justify-between gap-4">
+												<span className="flex min-w-0 items-baseline gap-2.5">
+													<span className="font-display text-xs font-bold text-white/45">{String(i + 1).padStart(2, '0')}</span>
+													<span className="truncate text-sm font-medium text-white/90">{e.shortTitle}</span>
+												</span>
+												<span className="font-display text-2xl font-bold">{e.attendees}</span>
+											</div>
+											<div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/15">
+												<div className="h-full rounded-full bg-gradient-to-r from-[hsl(199_89%_70%)] to-white" style={{ width: `${Math.round((e.attendees / (top[0]?.attendees || 1)) * 100)}%` }} />
+											</div>
 										</li>
 									))}
-								</ul>
+								</ol>
+								<div className="relative mt-6 flex items-end justify-between gap-4 border-t border-white/15 pt-5">
+									<div>
+										<p className="font-display text-3xl font-bold"><CountUp value={totalSeats} /></p>
+										<p className="text-xs font-medium text-white/65">seats filled across {past.length} sessions</p>
+									</div>
+									<a href="#archive" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white/15 px-4 py-2 text-sm font-semibold transition-colors hover:bg-white hover:text-tone-blue-deep">
+										The archive <ArrowRight className="h-4 w-4" />
+									</a>
+								</div>
 							</div>
 						</Reveal>
 					</div>
@@ -600,26 +598,31 @@ function Labs() {
 	const spot = useSpotlight();
 	const featured = LABS_CATEGORIES.flatMap((c) => c.papers.slice(0, 3).map((p) => ({ ...p, track: c.short || c.title })));
 	return (
-		<section id="labs" className="relative scroll-mt-20 overflow-hidden bg-ink py-24 text-white sm:py-32">
-			<div aria-hidden="true" className="absolute inset-0 opacity-60"><NeuralField density={0.00006} /></div>
-			<div aria-hidden="true" className="pointer-events-none absolute -left-40 top-1/3 h-[500px] w-[500px] glow [--glow:hsl(221_83%_53%/0.45)]" />
-			<div aria-hidden="true" className="pointer-events-none absolute -right-40 bottom-0 h-[420px] w-[420px] glow [--glow:hsl(199_89%_60%/0.32)]" />
+		<section id="labs" className="relative scroll-mt-20 overflow-hidden bg-gradient-to-b from-white via-paper-soft to-white pb-14 pt-24 text-ink sm:pb-16 sm:pt-32">
+			{/* Research-lab texture in the logo blues: a live neural net, a faint grid, and the attention formula. */}
+			<div aria-hidden="true" className="absolute inset-0 opacity-70"><NeuralField density={0.00006} /></div>
+			<div aria-hidden="true" className="bg-grid mask-fade-y absolute inset-0 opacity-60" />
+			<div aria-hidden="true" className="pointer-events-none absolute -left-40 top-1/3 h-[500px] w-[500px] glow [--glow:hsl(213_100%_86%/0.9)]" />
+			<div aria-hidden="true" className="pointer-events-none absolute -right-40 bottom-0 h-[420px] w-[420px] glow [--glow:hsl(199_89%_60%/0.18)]" />
+			<p aria-hidden="true" className="pointer-events-none absolute right-[4%] top-16 hidden select-none font-display text-[clamp(1.5rem,2.6vw,2.4rem)] font-bold italic tracking-normal text-tone-blue-deep/[0.09] lg:block">
+				Attention(Q, K, V) = softmax(QKᵀ / √d) V
+			</p>
 			<div className="wrap relative">
 				<div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
 					<Reveal from="down">
-						<SectionLabel n="03" light>Pillar three · AIYatra Research Labs</SectionLabel>
+						<SectionLabel n="03">Pillar three · AIYatra Research Labs</SectionLabel>
 						<h2 className="mt-5 max-w-3xl font-display text-5xl font-bold leading-[1.02] sm:text-6xl">
-							Read the papers. <span className="bg-gradient-to-r from-white via-[hsl(199_89%_70%)] to-white bg-clip-text text-transparent">Build the future.</span>
+							Read the papers. <span className="text-gradient">Build the future.</span>
 						</h2>
-						<p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/60">
+						<p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink/60">
 							Four open research tracks, each with a curated shelf of {LABS_TOTAL_PAPERS} arXiv papers. We study them,
 							reimplement them on Saturdays, and publish the code in the open.
 						</p>
 					</Reveal>
 					<Reveal from="right" delay={0.1}>
 						<div className="flex flex-wrap gap-3">
-							<Link to="/labs" className="active-press inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold text-tone-blue-deep transition-transform hover:-translate-y-0.5">Enter the lab <ArrowRight className="h-4 w-4" /></Link>
-							<GhostButton light href={GITHUB_URL} target="_blank" rel="noreferrer"><Github className="h-4 w-4" /> GitHub</GhostButton>
+							<PrimaryButton to="/labs">Enter the lab <ArrowRight className="h-4 w-4" /></PrimaryButton>
+							<GhostButton href={GITHUB_URL} target="_blank" rel="noreferrer"><Github className="h-4 w-4" /> GitHub</GhostButton>
 						</div>
 					</Reveal>
 				</div>
@@ -632,17 +635,17 @@ function Labs() {
 								<Link
 									to={`/labs#${c.id}`}
 									onMouseMove={spot}
-									className="spotlight group flex flex-1 flex-col rounded-[24px] bg-white/[0.05] p-6 ring-1 ring-white/10 transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/[0.09] hover:ring-white/25"
+									className="spotlight hover-lift group flex flex-1 flex-col rounded-[24px] border border-tone-blue-deep/10 bg-white/90 p-6 shadow-paper-sm"
 								>
 									<div className="flex items-center justify-between">
-										<span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-[hsl(199_89%_70%)] transition-transform duration-500 group-hover:scale-110 group-hover:bg-white group-hover:text-tone-blue-deep"><Icon className="h-6 w-6" /></span>
-										<span className="font-display text-3xl font-bold text-white/15">{c.index}</span>
+										<span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-tone-blue-deep to-[hsl(199_89%_60%)] text-white shadow-[0_10px_24px_-8px_hsl(221_83%_53%/0.7)] transition-transform duration-500 group-hover:rotate-[-8deg] group-hover:scale-110"><Icon className="h-6 w-6" /></span>
+										<span className="font-display text-3xl font-bold text-tone-blue-deep/15">{c.index}</span>
 									</div>
-									<h3 className="mt-5 font-display text-2xl font-bold leading-tight">{c.title}</h3>
-									<p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-white/55">{c.blurb}</p>
-									<span className="mt-5 flex items-center justify-between border-t border-white/10 pt-4 text-sm font-semibold">
-										<span className="text-white/70">{c.papers.length} papers</span>
-										<span className="inline-flex items-center gap-1 text-[hsl(199_89%_70%)]">Open <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></span>
+									<h3 className="mt-5 font-display text-2xl font-bold leading-tight text-ink">{c.title}</h3>
+									<p className="mb-5 mt-2 line-clamp-3 text-sm leading-relaxed text-ink/60">{c.blurb}</p>
+									<span className="mt-auto flex items-center justify-between border-t border-tone-blue-deep/10 pt-4 text-sm font-semibold">
+										<span className="text-ink/65">{c.papers.length} papers</span>
+										<span className="inline-flex items-center gap-1 text-tone-blue-deep">Open <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></span>
 									</span>
 								</Link>
 							</Reveal>
@@ -651,16 +654,16 @@ function Labs() {
 				</div>
 
 				<Reveal from="up" delay={0.1}>
-					<p className="mt-16 text-xs font-semibold uppercase tracking-[0.24em] text-white/45">On the shelf right now</p>
+					<p className="mt-16 text-xs font-semibold uppercase tracking-[0.24em] text-tone-blue-deep">On the shelf right now</p>
 				</Reveal>
 			</div>
 			<div className="marquee-pause mask-fade-x relative mt-5 overflow-hidden">
 				<div className="marquee-track marquee-slow flex w-max gap-4 px-2">
 					{[...featured, ...featured].map((p, i) => (
-						<a key={i} href={`https://arxiv.org/abs/${p.arxivId}`} target="_blank" rel="noreferrer" tabIndex={i < featured.length ? 0 : -1} className="w-[320px] shrink-0 rounded-2xl bg-white/[0.05] p-5 ring-1 ring-white/10 transition-colors hover:bg-white/10">
-							<span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[hsl(199_89%_70%)]">{p.track} · {p.year}</span>
-							<span className="mt-2 line-clamp-2 block font-semibold leading-snug">{p.title}</span>
-							<span className="mt-2 block text-xs text-white/45">arXiv:{p.arxivId}</span>
+						<a key={i} href={`https://arxiv.org/abs/${p.arxivId}`} target="_blank" rel="noreferrer" tabIndex={i < featured.length ? 0 : -1} className="w-[320px] shrink-0 rounded-2xl border border-tone-blue-deep/10 bg-white p-5 shadow-paper-sm transition-colors hover:border-tone-blue-deep/30 hover:bg-tone-blue/30">
+							<span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-tone-blue-deep">{p.track} · {p.year}</span>
+							<span className="mt-2 line-clamp-2 block font-semibold leading-snug text-ink">{p.title}</span>
+							<span className="mt-2 block text-xs text-ink/45">arXiv:{p.arxivId}</span>
 						</a>
 					))}
 				</div>
@@ -675,7 +678,7 @@ function Community() {
 	const half = Math.ceil(testimonials.length / 2);
 	const rows = [testimonials.slice(0, half), testimonials.slice(half)];
 	return (
-		<section id="community" className="relative scroll-mt-20 overflow-hidden py-24 sm:py-32">
+		<section id="community" className="relative scroll-mt-20 overflow-hidden pb-24 pt-14 sm:pb-32 sm:pt-16">
 			<div className="wrap">
 				<div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
 					<Reveal from="left">
@@ -773,7 +776,7 @@ function FinalCta() {
 				<Reveal from="zoom">
 					<div className="relative overflow-hidden rounded-[36px] bg-gradient-to-br from-tone-blue-deep via-[hsl(224_76%_40%)] to-ink px-6 py-16 text-center text-white shadow-paper sm:px-12 sm:py-20">
 						<div aria-hidden="true" className="absolute inset-0 opacity-50"><NeuralField density={0.00012} /></div>
-						<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" className="relative mx-auto h-20 w-20 rounded-3xl bg-white object-contain p-3" />
+						<img src={AI_YATRA_LOGO} alt="" aria-hidden="true" className="relative mx-auto h-20 w-20 object-contain brightness-0 invert" />
 						<h2 className="relative mx-auto mt-8 max-w-3xl font-display text-4xl font-bold leading-[1.05] sm:text-6xl">
 							Your AI journey starts with a single RSVP.
 						</h2>
@@ -830,9 +833,8 @@ export default function HomePage() {
 			</Helmet>
 			<Header />
 			<main id="main">
-				<Intro />
-				<IntroSheet>
-				<Hero />
+				<MeetupHero />
+				<StartHere />
 				<TopicStream />
 				<Meetups />
 				<Ambassadors />
@@ -840,7 +842,6 @@ export default function HomePage() {
 				<Community />
 				<QuickAnswers />
 				<FinalCta />
-				</IntroSheet>
 			</main>
 			<Footer />
 		</div>
