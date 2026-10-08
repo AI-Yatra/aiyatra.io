@@ -4,6 +4,7 @@
 - [AI Yatra Labs — AIYatra](/labs): Curated arXiv and AlphaXiv reading lists across small language models, agent harnesses, transformer layers, and new architectures.
 - [Blog — AIYatra](/blog): Session recaps, tutorials and guest posts from the AIYatra community.
 - [Write for AIYatra — Blog](/blog/write): How to submit a guest post: write in the visual editor, get it reviewed, see it published.
+- [How to write a guest post — AIYatra Blog](/blog/guide): The full writing guide: review process, every editor field, formatting, and a pre-submission checklist.
 - [Contact Us — AIYatra](/contact): Send the AIYatra team a message, or write to global.aiyatra@gmail.com.
 - [EmbeddingGemma 2: A Compact Multimodal Embedding Model](/blog/embeddinggemma-2-a-compact-multimodal-embedding-model): EmbeddingGemma 2 is Google’s latest open embedding model for semantic search and retrieval-augmented generation (RAG). Built on Gemma 4, it maps text, source code, images, video, and audio into a shared 768-dimensional vector space. It is released under the Apache 2.0 license and scales from 270 million to 740 million parameters depending on the modalities you enable.
 - [Supervised Fine-Tuning to Reinforcement Learning — Train Models to Think Better](/blog/sft-to-rl): SFT with LoRA, DPO and GRPO on a pretrained model — rewards, preferences and the hard question — better at the task, or just better at the reward?

@@ -31,6 +31,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://aiyatra.io/blog/guide</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://aiyatra.io/contact</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>monthly</changefreq>
