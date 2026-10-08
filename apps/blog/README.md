@@ -45,18 +45,30 @@ no sign-in. Locally there's no review queue: "Publish" saves the Markdown file s
 
 Maintainers with write access skip the fork; their drafts are branches in the repo.
 
-## One-time setup for production sign-in
+## Production sign-in (already set up)
 
 Decap needs a small server to finish GitHub's OAuth handshake (GitHub Pages
-can't run one). `cms-auth/` is a ready-made Cloudflare Worker (free tier):
+can't run one). `cms-auth/` is that server, a Cloudflare Worker deployed at
+**https://aiyatra-cms-auth.aiyatra.workers.dev** (`backend.base_url` in
+`public/cms/config.yml`). It holds the client ID and secret of the
+**AIYatra Blog CMS** OAuth App in the AI-Yatra GitHub org, whose callback URL is
+`https://aiyatra-cms-auth.aiyatra.workers.dev/callback`.
 
-1. **Deploy the worker**: `cd apps/blog/cms-auth && npx wrangler deploy`. Note its
-   URL, e.g. `https://aiyatra-cms-auth.<you>.workers.dev`.
-2. **Create a GitHub OAuth App** (GitHub → Settings → Developer settings → OAuth Apps,
-   ideally under the AI-Yatra org):
-   - Homepage URL: `https://aiyatra.io/blog`
-   - Authorization callback URL: `https://aiyatra-cms-auth.<you>.workers.dev/callback`
-3. **Give the worker the app's keys**:
-   `npx wrangler secret put GITHUB_CLIENT_ID` and `npx wrangler secret put GITHUB_CLIENT_SECRET`.
-4. **Point Decap at it**: set `backend.base_url` in `public/cms/config.yml` to the worker URL.
-5. Make sure the repo is **public** and allows forking. Open authoring needs both.
+To redeploy it or rotate its keys, always pass the config or worker name
+explicitly. Run from `apps/blog/cms-auth`, wrangler's auto-setup would otherwise
+pick up the Astro project in `apps/blog` and try to rewrite it.
+
+```sh
+npx wrangler deploy --config apps/blog/cms-auth/wrangler.toml
+npx wrangler secret put GITHUB_CLIENT_ID --name aiyatra-cms-auth
+npx wrangler secret put GITHUB_CLIENT_SECRET --name aiyatra-cms-auth
+```
+
+The repo must stay **public** and allow forking, because open authoring needs both.
+
+## Lockfile note
+
+npm on macOS drops two Linux/wasm-only entries (`@emnapi/core`, `@emnapi/runtime`)
+from `package-lock.json` when it rewrites the file, and CI's `npm ci` then fails.
+After running `npm install` on a Mac, check `git diff package-lock.json` for that
+before committing.

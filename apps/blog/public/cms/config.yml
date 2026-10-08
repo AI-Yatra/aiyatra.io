@@ -18,8 +18,8 @@ backend:
   branch: main
   open_authoring: true
   auth_scope: public_repo
-  # The deployed OAuth relay (apps/blog/cms-auth). Replace with its URL.
-  base_url: https://aiyatra-cms-auth.YOUR-SUBDOMAIN.workers.dev
+  # The deployed OAuth relay (apps/blog/cms-auth).
+  base_url: https://aiyatra-cms-auth.aiyatra.workers.dev
   auth_endpoint: auth
   squash_merges: true
   commit_messages:
