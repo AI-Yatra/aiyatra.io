@@ -17,10 +17,10 @@ body { margin: 0; font-family: "Inter", system-ui, sans-serif; color: hsl(var(--
 .pv-excerpt { margin: 12px 0 0; font-size: 1.05rem; line-height: 1.6; color: hsl(var(--ink-soft)); max-width: 46rem; }
 .pv-band { background: hsl(var(--paper-soft)); border-top: 2px solid hsl(var(--tone-blue-deep) / 0.16); padding: 32px; }
 .pv-cover { display: block; width: 100%; aspect-ratio: 21 / 9; object-fit: cover; border-radius: 1rem; border: 2px solid hsl(var(--tone-blue-deep) / 0.16); margin-bottom: 32px; }
-.pv-article { max-width: 48rem; margin: 0 auto; background: #fff; border: 2px solid hsl(var(--tone-blue-deep) / 0.16); border-radius: 1rem; padding: 40px; box-shadow: 0 12px 32px -16px hsl(var(--tone-blue-deep) / 0.3); }
-.pv-tags { max-width: 48rem; margin: 20px auto 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.pv-article { background: #fff; border: 2px solid hsl(var(--tone-blue-deep) / 0.16); border-radius: 1rem; padding: 40px; box-shadow: 0 12px 32px -16px hsl(var(--tone-blue-deep) / 0.3); }
+.pv-tags { margin: 20px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .pv-tags span { border: 1px solid hsl(var(--tone-blue-deep) / 0.2); background: hsl(var(--tone-blue) / 0.5); border-radius: 999px; padding: 4px 12px; font-size: 12px; font-weight: 600; }
-.pv-author { max-width: 48rem; margin: 20px auto 0; display: flex; align-items: center; gap: 16px; background: #fff; border: 2px solid hsl(var(--tone-blue-deep) / 0.16); border-radius: 1rem; padding: 20px; }
+.pv-author { margin: 20px 0 0; display: flex; align-items: center; gap: 16px; background: #fff; border: 2px solid hsl(var(--tone-blue-deep) / 0.16); border-radius: 1rem; padding: 20px; }
 .pv-author img, .pv-initials { width: 56px; height: 56px; border-radius: 999px; object-fit: cover; flex-shrink: 0; }
 .pv-initials { display: flex; align-items: center; justify-content: center; background: hsl(var(--tone-blue)); color: hsl(var(--tone-blue-deep)); font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 18px; }
 .pv-label { margin: 0; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; color: hsl(var(--ink) / 0.55); }

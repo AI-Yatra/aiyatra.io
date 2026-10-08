@@ -73,13 +73,13 @@ const jsonLd = {
 				</div>
 			)}
 			<div data-reveal style="--reveal-delay:0.08s">
-				<article class={`blog-body mx-auto max-w-3xl rounded-2xl border-2 border-ink bg-paper p-6 shadow-paper-sm sm:p-10 ${coverImg ? 'mt-10' : ''}`}>
+				<article class={`blog-body rounded-2xl border-2 border-ink bg-paper p-6 shadow-paper-sm sm:p-10 lg:p-14 ${coverImg ? 'mt-10' : ''}`}>
 					<Content />
 				</article>
 			</div>
 
 			{(d.tags.length > 0 || !isRecap) && (
-				<div class="mx-auto mt-6 max-w-3xl space-y-6">
+				<div class="mt-6 space-y-6">
 					{d.tags.length > 0 && (
 						<div class="flex flex-wrap items-center gap-2">
 							<Icon name="Tag" class="h-4 w-4 text-ink/55" />
@@ -103,7 +103,7 @@ const jsonLd = {
 				</div>
 			)}
 
-			<div class="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-2">
+			<div class="mt-10 grid gap-4 sm:grid-cols-2">
 				{newer ? (
 					<a href={`/blog/${newer.id}`} class="active-press group rounded-xl border-2 border-ink bg-paper-soft p-5 shadow-paper-sm transition-transform hover:-translate-y-0.5">
 						<p class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55"><Icon name="ArrowLeft" class="h-3.5 w-3.5" /> Newer</p>
@@ -118,7 +118,7 @@ const jsonLd = {
 				) : <span />}
 			</div>
 
-			<div class="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-between gap-4 rounded-2xl border-2 border-dashed border-ink bg-paper p-5">
+			<div class="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border-2 border-dashed border-ink bg-paper p-5">
 				<p class="text-sm font-medium text-ink/75"><span class="font-hand text-xl font-bold text-ink">Have a story of your own?</span> Anyone can write for the AIYatra blog.</p>
 				<a href="/blog/write" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep">Write a guest post <Icon name="ArrowRight" class="h-4 w-4" /></a>
 			</div>
