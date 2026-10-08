@@ -12,7 +12,9 @@ import path from 'node:path';
 const OUT = path.resolve(process.argv[2] || '../../dist/apps/web');
 const index = fs.readFileSync(path.join(OUT, 'index.html'));
 const sitemap = fs.readFileSync(path.join(OUT, 'sitemap.xml'), 'utf8');
-const routes = [...sitemap.matchAll(/<loc>https?:\/\/[^/]+(\/[^<]*)<\/loc>/g)].map((m) => m[1]).filter((r) => r !== '/');
+const routes = [...sitemap.matchAll(/<loc>https?:\/\/[^/]+(\/[^<]*)<\/loc>/g)].map((m) => m[1])
+	// /blog and its posts are real pages built by the Astro blog (apps/blog).
+	.filter((r) => r !== '/' && r !== '/blog' && !r.startsWith('/blog/'));
 
 for (const route of routes) {
 	const file = path.join(OUT, `${route.replace(/\/+$/, '')}.html`);

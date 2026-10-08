@@ -1,0 +1,28 @@
+---
+// Lucide icons rendered at build time — same set (and same version) the React
+// app uses through lucide-react, so every glyph matches.
+import * as icons from 'lucide';
+
+interface Props {
+	name: keyof typeof icons;
+	class?: string;
+	label?: string;
+	[key: string]: unknown;
+}
+
+const { name, class: className = '', label, ...rest } = Astro.props;
+const node = icons[name] as unknown as [string, Record<string, string | number>, [string, Record<string, string | number>][]];
+const [, svgAttrs, children] = node;
+const toAttrs = (attrs: Record<string, string | number>) =>
+	Object.entries(attrs).map(([k, v]) => `${k}="${String(v).replace(/"/g, '&quot;')}"`).join(' ');
+const inner = children.map(([tag, attrs]) => `<${tag} ${toAttrs(attrs)}></${tag}>`).join('');
+---
+<svg
+	{...svgAttrs}
+	{...rest}
+	class={`lucide ${className}`}
+	aria-hidden={label ? undefined : 'true'}
+	aria-label={label}
+	role={label ? 'img' : undefined}
+	set:html={inner}
+/>

@@ -1,0 +1,17 @@
+---
+import { LOGO } from '../lib/site';
+
+interface Props { dark?: boolean }
+const { dark = false } = Astro.props;
+---
+<span class="flex items-center gap-3">
+	<span class="flex h-12 w-12 shrink-0 items-center justify-center sm:h-14 sm:w-14">
+		<img src={LOGO} alt="" aria-hidden="true" width="224" height="224" class={`h-full w-full object-contain ${dark ? 'brightness-0 invert' : ''}`} />
+	</span>
+	<span class="flex flex-col leading-none">
+		<span class={`font-display text-[22px] font-bold ${dark ? 'text-white' : 'text-ink'}`}>AI Yatra</span>
+		<span class={`mt-1 hidden text-[10px] font-semibold uppercase tracking-[0.22em] sm:block ${dark ? 'text-white/60' : 'text-tone-blue-deep/80'}`}>
+			Open-source AI community
+		</span>
+	</span>
+</span>

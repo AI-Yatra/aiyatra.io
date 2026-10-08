@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import Icon from '../components/Icon.astro';
+import { PAST_EVENTS_URL } from '../lib/site';
+import { getPosts, CARD_TONES } from '../lib/posts';
+import { CATEGORIES } from '../content.config';
+
+const posts = await getPosts();
+const categories = CATEGORIES.filter((c) => posts.some((p) => p.data.category === c));
+---
+<BaseLayout
+	title="Blog — AIYatra"
+	description="Session recaps, tutorials and guest posts from the AIYatra community — PyTorch, transformers, DeepSeek-V3, agentic AI and more. Written from the room, free forever."
+>
+	<section id="top" class="relative overflow-hidden">
+		<div class="wrap pb-10 pt-14 lg:pb-12 lg:pt-[74px]">
+			<div data-reveal>
+				<span class="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-tone-yellow px-4 py-1.5 text-sm font-semibold shadow-paper-sm">
+					<Icon name="Sparkles" class="h-4 w-4" /> Blog · {posts.length} stories and counting
+				</span>
+			</div>
+			<div data-reveal style="--reveal-delay:0.08s">
+				<h1 class="mt-6 max-w-3xl font-hand text-6xl font-bold leading-[0.95] tracking-tight sm:text-7xl">
+					Written from<br />the <span class="text-tone-blue-deep underline decoration-tone-coral decoration-4 underline-offset-8">room.</span>
+				</h1>
+			</div>
+			<div data-reveal style="--reveal-delay:0.16s">
+				<p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
+					Every AIYatra session, recapped — plus tutorials and guest posts from the
+					community. If you missed a Saturday, start here. If you have something to share, write it here.
+				</p>
+				<div class="mt-8 flex flex-wrap items-center gap-3">
+					<a href="/blog/write" class="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-6 text-base font-semibold text-paper shadow-paper transition-transform hover:-translate-y-0.5">
+						<Icon name="PenLine" class="h-5 w-5" /> Write a guest post
+					</a>
+					<a href="/blog/rss.xml" class="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-paper px-6 text-base font-semibold shadow-paper-sm transition-transform hover:-translate-y-0.5">
+						<Icon name="Rss" class="h-5 w-5" /> RSS feed
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="border-t-2 border-ink bg-tone-blue/30">
+		<div class="wrap py-16">
+			{categories.length > 1 && (
+				<div class="mb-8 flex flex-wrap items-center gap-2" role="group" aria-label="Filter posts by category" data-reveal>
+					<button type="button" class="chip rounded-full border-2 border-ink bg-paper px-4 py-1.5 text-sm font-semibold transition-colors hover:bg-tone-blue" data-filter="all" aria-pressed="true">All</button>
+					{categories.map((c) => (
+						<button type="button" class="chip rounded-full border-2 border-ink bg-paper px-4 py-1.5 text-sm font-semibold transition-colors hover:bg-tone-blue" data-filter={c} aria-pressed="false">{c}</button>
+					))}
+				</div>
+			)}
+			<div class="grid items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3" id="post-grid">
+				{posts.map((post, i) => (
+					<div class="h-full" data-reveal data-category={post.data.category} style={`--reveal-delay:${(i % 3) * 0.08}s`}>
+						<PostCard post={post} tone={CARD_TONES[i % CARD_TONES.length]} />
+					</div>
+				))}
+			</div>
+
+			<div data-reveal style="--reveal-delay:0.1s">
+				<div class="mt-10 grid gap-6 overflow-hidden rounded-2xl border-2 border-ink bg-ink p-8 text-white shadow-paper sm:p-10 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+					<div>
+						<p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[hsl(199_89%_70%)]">Write for AIYatra</p>
+						<p class="mt-3 font-hand text-4xl font-bold leading-tight sm:text-5xl">Built something? Learned something? Share it.</p>
+						<p class="mt-3 max-w-xl text-sm leading-relaxed text-white/70">
+							Anyone can submit a guest post. Write it in our visual editor, send it for review, act on
+							feedback — and once it is approved, it goes live right here.
+						</p>
+					</div>
+					<div class="flex flex-wrap gap-3 lg:justify-end">
+						<a href="/blog/write" class="active-press inline-flex h-12 items-center gap-2 rounded-xl bg-white px-6 text-base font-semibold text-ink transition-transform hover:-translate-y-0.5">
+							How it works <Icon name="ArrowRight" class="h-5 w-5" />
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div data-reveal style="--reveal-delay:0.1s">
+				<div class="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border-2 border-dashed border-ink bg-paper-soft p-6">
+					<div>
+						<p class="font-hand text-2xl font-bold leading-tight">The full archive lives on Meetup.</p>
+						<p class="text-sm font-medium text-ink/70">Photos, discussions, ratings and RSVPs — straight from the source.</p>
+					</div>
+					<a href={PAST_EVENTS_URL} target="_blank" rel="noreferrer" class="active-press inline-flex h-11 items-center gap-2 rounded-xl border-2 border-ink bg-paper px-5 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5">
+						View all on Meetup <Icon name="ArrowUpRight" class="h-4 w-4" />
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</BaseLayout>
+
+<script>
+	const chips = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+	const cards = document.querySelectorAll<HTMLElement>('#post-grid > [data-category]');
+	chips.forEach((chip) => chip.addEventListener('click', () => {
+		const f = chip.dataset.filter;
+		chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+		cards.forEach((card) => { card.hidden = f !== 'all' && card.dataset.category !== f; });
+	}));
+</script>

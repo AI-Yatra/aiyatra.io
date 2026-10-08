@@ -1,0 +1,177 @@
+---
+// Astro port of Header + AnnouncementBar in apps/web/src/components/SiteChrome.jsx.
+// Same markup and classes, with a few lines of plain JS instead of React.
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { MEETUP_URL, NAV_LINKS, upcomingEvents, formatDay, formatTime } from '../lib/site';
+
+// Everything the bar needs to pick the next session in the visitor's browser,
+// so it rolls over on its own between nightly rebuilds.
+const events = upcomingEvents(Date.now()).map((e) => ({
+	shortTitle: e.shortTitle, url: e.url, formUrl: e.formUrl, start: e.start, end: e.end, rsvpDeadline: e.rsvpDeadline,
+}));
+
+function announce(ev: (typeof events)[number] | undefined, now: number) {
+	if (!ev) return 'The next Saturday session is being planned · follow AIYatra on Meetup to hear first';
+	if (ev.start <= now) return `Happening now: ${ev.shortTitle} · until ${formatTime(ev.end)} IST`;
+	let m = `Next meetup: ${ev.shortTitle} · ${formatDay(ev.start)}, ${formatTime(ev.start)} IST`;
+	if (ev.rsvpDeadline) m += ` · RSVP${ev.formUrl ? ' + Google Form' : ''} close ${formatDay(ev.rsvpDeadline)} EOD`;
+	if (ev.formUrl) m += ' · both mandatory for venue entry';
+	return m;
+}
+
+const now = Date.now();
+const ev = events.find((e) => e.end > now);
+const message = announce(ev, now);
+const pill = 'rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep';
+const repeats = Array.from({ length: 8 });
+---
+<a href="#main" class="skip-link">Skip to content</a>
+<div id="scroll-progress" aria-hidden="true" class="fixed inset-x-0 top-0 z-[70] h-[3px] origin-left scale-x-0 bg-gradient-to-r from-[hsl(221_83%_53%)] via-[hsl(199_89%_60%)] to-[hsl(221_83%_53%)]"></div>
+<div id="cursor-glow" aria-hidden="true" class="pointer-events-none fixed left-0 top-0 z-[1] hidden h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,hsl(199_89%_60%/0.16),transparent_65%)] [@media(pointer:fine)]:block" style="transform: translate(-400px, -400px)"></div>
+
+<div class="bg-gradient-to-r from-[hsl(224_76%_33%)] via-tone-blue-deep to-[hsl(224_76%_33%)] text-white" role="note" aria-label="Next meetup announcement">
+	<div class="marquee-pause overflow-hidden py-2">
+		<div class="marquee-track flex w-max items-center gap-10 pr-10" id="announce" data-events={JSON.stringify(events)}>
+			{repeats.map((_, i) => (
+				<span aria-hidden={i > 0 ? 'true' : undefined} class="flex shrink-0 items-center gap-2.5 whitespace-nowrap text-[12.5px] font-medium tracking-wide">
+					<Icon name="Megaphone" class="h-3.5 w-3.5 shrink-0 opacity-80" />
+					<span data-announce-text>{message}</span>
+					<a data-announce-rsvp href={ev ? ev.url : MEETUP_URL} target="_blank" rel="noreferrer" class={`ml-1 ${pill}`} tabindex={i === 0 ? 0 : -1}>
+						{ev ? 'RSVP' : 'Meetup'}
+					</a>
+					<a data-announce-form href={ev?.formUrl || '#'} target="_blank" rel="noreferrer" class={`${pill} ${ev?.formUrl ? '' : 'hidden'}`} tabindex={i === 0 ? 0 : -1}>
+						Google Form
+					</a>
+				</span>
+			))}
+		</div>
+	</div>
+</div>
+
+<header id="site-header" class="sticky top-0 z-50 bg-white/0 transition-all duration-300">
+	<div class="wrap flex h-[72px] items-center justify-between gap-5">
+		<a href="/#top" class="flex shrink-0 items-center" aria-label="AI Yatra home">
+			<Logo />
+		</a>
+		<nav class="hidden items-center gap-1 rounded-full border border-tone-blue-deep/10 bg-white/70 p-1 text-sm font-medium text-ink/80 xl:flex">
+			{NAV_LINKS.map((l) => (
+				<a href={l.href} class="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">{l.label}</a>
+			))}
+		</nav>
+		<div class="flex items-center gap-2">
+			<a
+				href={MEETUP_URL}
+				target="_blank"
+				rel="noreferrer"
+				class="active-press group relative hidden h-11 shrink-0 items-center gap-2 overflow-hidden rounded-full bg-tone-blue-deep px-5 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_hsl(221_83%_53%/0.8)] transition-transform hover:-translate-y-0.5 sm:inline-flex"
+			>
+				<span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
+				Join free <Icon name="ArrowUpRight" class="h-4 w-4" />
+			</a>
+			<button
+				type="button"
+				id="menu-toggle"
+				aria-label="Open menu"
+				aria-expanded="false"
+				aria-controls="mobile-nav"
+				class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-tone-blue-deep/15 bg-white text-ink xl:hidden"
+			>
+				<Icon name="Menu" class="h-5 w-5" data-icon-open />
+				<Icon name="X" class="hidden h-5 w-5" data-icon-close />
+			</button>
+		</div>
+	</div>
+	<nav id="mobile-nav" class="mobile-nav glass overflow-hidden border-t border-tone-blue-deep/10 xl:hidden" hidden>
+		<div class="wrap flex flex-col gap-1 py-4">
+			{NAV_LINKS.map((l, i) => (
+				<a href={l.href} style={`--i:${i}`} class="mobile-nav-item block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">{l.label}</a>
+			))}
+			<a href={MEETUP_URL} target="_blank" rel="noreferrer" class="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-tone-blue-deep font-semibold text-white">
+				Join free on Meetup <Icon name="ArrowUpRight" class="h-4 w-4" />
+			</a>
+		</div>
+	</nav>
+</header>
+
+<script>
+	import { formatDay, formatTime } from '../../../web/src/data/site.js';
+
+	// Announcement bar: recompute the next session from the visitor's clock.
+	const track = document.getElementById('announce');
+	if (track) {
+		type Ev = { shortTitle: string; url: string; formUrl: string | null; start: number; end: number; rsvpDeadline: number | null };
+		const events: Ev[] = JSON.parse(track.dataset.events || '[]');
+		const refresh = () => {
+			const now = Date.now();
+			const ev = events.find((e) => e.end > now);
+			let msg = 'The next Saturday session is being planned · follow AIYatra on Meetup to hear first';
+			if (ev && ev.start <= now) msg = `Happening now: ${ev.shortTitle} · until ${formatTime(ev.end)} IST`;
+			else if (ev) {
+				msg = `Next meetup: ${ev.shortTitle} · ${formatDay(ev.start)}, ${formatTime(ev.start)} IST`;
+				if (ev.rsvpDeadline) msg += ` · RSVP${ev.formUrl ? ' + Google Form' : ''} close ${formatDay(ev.rsvpDeadline)} EOD`;
+				if (ev.formUrl) msg += ' · both mandatory for venue entry';
+			}
+			track.querySelectorAll<HTMLElement>('[data-announce-text]').forEach((el) => { el.textContent = msg; });
+			track.querySelectorAll<HTMLAnchorElement>('[data-announce-rsvp]').forEach((el) => {
+				el.href = ev ? ev.url : 'https://www.meetup.com/aiyatra/';
+				el.textContent = ev ? 'RSVP' : 'Meetup';
+			});
+			track.querySelectorAll<HTMLAnchorElement>('[data-announce-form]').forEach((el) => {
+				el.classList.toggle('hidden', !ev?.formUrl);
+				if (ev?.formUrl) el.href = ev.formUrl;
+			});
+		};
+		refresh();
+		setInterval(refresh, 60_000);
+	}
+
+	// Sticky header turns frosted once the page scrolls; scroll progress bar.
+	const header = document.getElementById('site-header');
+	const progress = document.getElementById('scroll-progress');
+	let ticking = false;
+	const onScroll = () => {
+		if (ticking) return;
+		ticking = true;
+		requestAnimationFrame(() => {
+			ticking = false;
+			const scrolled = window.scrollY > 12;
+			header?.classList.toggle('glass', scrolled);
+			header?.classList.toggle('shadow-[0_10px_40px_-20px_hsl(221_83%_53%/0.35)]', scrolled);
+			header?.classList.toggle('bg-white/0', !scrolled);
+			const max = document.documentElement.scrollHeight - window.innerHeight;
+			if (progress) progress.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+		});
+	};
+	onScroll();
+	window.addEventListener('scroll', onScroll, { passive: true });
+
+	// Mobile menu.
+	const toggle = document.getElementById('menu-toggle');
+	const mobileNav = document.getElementById('mobile-nav');
+	toggle?.addEventListener('click', () => {
+		const open = toggle.getAttribute('aria-expanded') !== 'true';
+		toggle.setAttribute('aria-expanded', String(open));
+		toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+		toggle.querySelector('[data-icon-open]')?.classList.toggle('hidden', open);
+		toggle.querySelector('[data-icon-close]')?.classList.toggle('hidden', !open);
+		if (mobileNav) mobileNav.hidden = !open;
+	});
+
+	// Soft light that trails the pointer (fine pointers, motion allowed).
+	const glow = document.getElementById('cursor-glow');
+	if (glow && matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		let tx = -400, ty = -400, x = -400, y = -400, raf = 0;
+		const step = () => {
+			x += (tx - x) * 0.18;
+			y += (ty - y) * 0.18;
+			glow.style.transform = `translate(${x}px, ${y}px)`;
+			raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.5 ? requestAnimationFrame(step) : 0;
+		};
+		window.addEventListener('pointermove', (e) => {
+			tx = e.clientX - 200;
+			ty = e.clientY - 200;
+			if (!raf) raf = requestAnimationFrame(step);
+		}, { passive: true });
+	}
+</script>

@@ -1,0 +1,71 @@
+---
+// Astro port of Footer in apps/web/src/components/SiteChrome.jsx.
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { MEETUP_URL, GITHUB_URL, LINKEDIN_URL, CONTACT_EMAIL, GROUP_STATS } from '../lib/site';
+
+const footerLink = 'text-white/70 transition-colors hover:text-white';
+const heading = 'text-[11px] font-semibold uppercase tracking-[0.25em] text-[hsl(199_89%_70%)]';
+const socials = [
+	{ href: MEETUP_URL, label: 'Meetup', icon: 'Users' },
+	{ href: GITHUB_URL, label: 'GitHub', icon: 'Github' },
+	{ href: LINKEDIN_URL, label: 'LinkedIn', icon: 'Linkedin' },
+	{ href: `mailto:${CONTACT_EMAIL}`, label: 'Email', icon: 'Mail' },
+] as const;
+---
+<footer class="relative overflow-hidden bg-ink text-white">
+	<div aria-hidden="true" class="pointer-events-none absolute -top-40 left-1/2 h-80 w-[80%] -translate-x-1/2 glow [--glow:hsl(221_83%_53%/0.45)]"></div>
+	<div class="wrap relative grid w-full gap-10 pb-8 pt-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+		<div>
+			<a href="/#top" aria-label="AI Yatra home"><Logo dark /></a>
+			<p class="mt-4 max-w-sm text-sm leading-relaxed text-white/65">
+				An open-source AI community from Hyderabad. Saturday meetups, a student ambassador
+				network and an open research lab — free, forever, open to everyone.
+			</p>
+			<div class="mt-5 flex items-center gap-2.5">
+				{socials.map(({ href, label, icon }) => (
+					<a href={href} target={href.startsWith('mailto') ? undefined : '_blank'} rel="noreferrer" aria-label={label} class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/75 transition-all hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-ink">
+						<Icon name={icon} class="h-[18px] w-[18px]" />
+					</a>
+				))}
+			</div>
+		</div>
+
+		<div>
+			<p class={heading}>Three verticals</p>
+			<ul class="mt-4 space-y-3 text-sm font-medium">
+				<li><a href="/#meetups" class={`inline-flex items-center gap-2 ${footerLink}`}><Icon name="CalendarDays" class="h-4 w-4" /> Saturday Meetups</a></li>
+				<li><a href="/ambassadors" class={`inline-flex items-center gap-2 ${footerLink}`}><Icon name="GraduationCap" class="h-4 w-4" /> Student Ambassadors</a></li>
+				<li><a href="/labs" class={`inline-flex items-center gap-2 ${footerLink}`}><Icon name="FlaskConical" class="h-4 w-4" /> Research Labs</a></li>
+			</ul>
+		</div>
+
+		<div>
+			<p class={heading}>Explore</p>
+			<ul class="mt-4 space-y-3 text-sm font-medium">
+				<li><a href="/blog" class={footerLink}>Blog & recaps</a></li>
+				<li><a href="/blog/write" class={footerLink}>Write for AIYatra</a></li>
+				<li><a href="/#community" class={footerLink}>People & voices</a></li>
+				<li><a href="/#faq" class={footerLink}>Quick answers</a></li>
+				<li><a href="/contact" class={footerLink}>Contact us</a></li>
+				<li><a href={MEETUP_URL} target="_blank" rel="noreferrer" class={`inline-flex items-center gap-1 ${footerLink}`}>Meetup group <Icon name="ArrowUpRight" class="h-3.5 w-3.5" /></a></li>
+			</ul>
+		</div>
+
+		<div>
+			<p class={heading}>Show up</p>
+			<ul class="mt-4 space-y-3 text-sm text-white/70">
+				<li class="flex items-start gap-2.5"><Icon name="MapPin" class="mt-0.5 h-4 w-4 shrink-0 text-[hsl(199_89%_70%)]" /> {GROUP_STATS.venue}</li>
+				<li class="flex items-center gap-2.5"><Icon name="CalendarDays" class="h-4 w-4 shrink-0 text-[hsl(199_89%_70%)]" /> Every Saturday · mornings IST</li>
+				<li class="flex items-center gap-2.5"><Icon name="Ticket" class="h-4 w-4 shrink-0 text-[hsl(199_89%_70%)]" /> Free, always</li>
+				<li class="flex items-center gap-2.5"><Icon name="Mail" class="h-4 w-4 shrink-0 text-[hsl(199_89%_70%)]" /> <a href={`mailto:${CONTACT_EMAIL}`} class="hover:text-white">{CONTACT_EMAIL}</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="wrap relative flex w-full flex-col items-center justify-between gap-2 border-t border-white/10 py-4 text-center text-xs text-white/50 sm:flex-row sm:text-left">
+		<p class="inline-flex items-center gap-1.5">Made with <Icon name="Heart" class="h-3.5 w-3.5 fill-red-500 text-red-500" label="love" /> in Hyderabad · open to the world</p>
+		<p>© 2026 AIYatra · Research. Build. Transform.</p>
+		<a href="#top" class="font-semibold text-white/70 hover:text-white">Back to top ↑</a>
+	</div>
+</footer>

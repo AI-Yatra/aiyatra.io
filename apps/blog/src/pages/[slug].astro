@@ -1,0 +1,155 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { photoProps, SITE_URL } from '../lib/site';
+import { getPosts, formatDate, isoDate, readingTime, related, initials, type Post } from '../lib/posts';
+
+export async function getStaticPaths() {
+	const posts = await getPosts();
+	return posts.map((post, i) => ({
+		params: { slug: post.id },
+		props: { post, newer: posts[i - 1] ?? null, older: posts[i + 1] ?? null, all: posts },
+	}));
+}
+
+interface Props { post: Post; newer: Post | null; older: Post | null; all: Post[] }
+const { post, newer, older, all } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const more = related(post, all);
+const isRecap = d.category === 'Session recap';
+const coverImg = d.cover ? photoProps(d.cover, '(min-width: 1100px) 1000px, 100vw') : null;
+const ogImage = d.cover ? new URL(coverImg?.src || d.cover, SITE_URL).href : undefined;
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'BlogPosting',
+	headline: d.title,
+	description: d.excerpt,
+	datePublished: isoDate(d.date),
+	image: ogImage,
+	author: { '@type': d.author === 'AIYatra Team' ? 'Organization' : 'Person', name: d.author, url: d.authorUrl },
+	publisher: { '@type': 'Organization', name: 'AIYatra', logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon-512.png` } },
+	mainEntityOfPage: `${SITE_URL}/blog/${post.id}`,
+};
+---
+<BaseLayout title={`${d.title} — AIYatra Blog`} description={d.excerpt} image={ogImage} type="article" publishedTime={isoDate(d.date)} jsonLd={jsonLd}>
+	<section id="top" class="relative overflow-hidden">
+		<div class="wrap pb-10 pt-14 lg:pt-[74px]">
+			<div data-reveal class="flex flex-wrap items-center gap-3">
+				<a href="/blog" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep">
+					<Icon name="ArrowLeft" class="h-4 w-4" /> All posts
+				</a>
+				<span class="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-tone-yellow px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide">{d.category}</span>
+			</div>
+			<div data-reveal style="--reveal-delay:0.08s">
+				<h1 class="mt-5 max-w-4xl font-hand text-5xl font-bold leading-[1.02] tracking-tight sm:text-6xl">{d.title}</h1>
+			</div>
+			<div data-reveal style="--reveal-delay:0.14s">
+				<div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold text-ink/70">
+					<span class="inline-flex items-center gap-1.5"><Icon name="UserRound" class="h-4 w-4" />
+						{d.authorUrl ? <a href={d.authorUrl} target="_blank" rel="noreferrer" class="underline underline-offset-4 hover:text-tone-blue-deep">{d.author}</a> : d.author}
+					</span>
+					<span class="inline-flex items-center gap-1.5"><Icon name="CalendarDays" class="h-4 w-4" /> <time datetime={isoDate(d.date)}>{formatDate(d.date)}</time></span>
+					<span class="inline-flex items-center gap-1.5"><Icon name="Clock" class="h-4 w-4" /> {readingTime(post.body)} min read</span>
+					{d.attendees ? <span class="inline-flex items-center gap-1.5"><Icon name="Users" class="h-4 w-4" /> {d.attendees} attended</span> : null}
+					{d.eventUrl && (
+						<a href={d.eventUrl} target="_blank" rel="noreferrer" class="inline-flex items-center gap-1 font-bold underline underline-offset-4 hover:text-tone-blue-deep">
+							The Meetup event <Icon name="ArrowUpRight" class="h-4 w-4" />
+						</a>
+					)}
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="border-t-2 border-ink bg-paper-soft">
+		<div class="wrap py-14">
+			{coverImg && (
+				<div data-reveal>
+					<div class="overflow-hidden rounded-2xl border-2 border-ink shadow-paper">
+						<img {...coverImg} alt={d.coverAlt || d.title} decoding="async" width="1024" height="576" class="aspect-[21/9] w-full object-cover" />
+					</div>
+				</div>
+			)}
+			<div data-reveal style="--reveal-delay:0.08s">
+				<article class={`blog-body mx-auto max-w-3xl rounded-2xl border-2 border-ink bg-paper p-6 shadow-paper-sm sm:p-10 ${coverImg ? 'mt-10' : ''}`}>
+					<Content />
+				</article>
+			</div>
+
+			{(d.tags.length > 0 || !isRecap) && (
+				<div class="mx-auto mt-6 max-w-3xl space-y-6">
+					{d.tags.length > 0 && (
+						<div class="flex flex-wrap items-center gap-2">
+							<Icon name="Tag" class="h-4 w-4 text-ink/55" />
+							{d.tags.map((t) => <span class="rounded-full border border-tone-blue-deep/20 bg-tone-blue/50 px-3 py-1 text-xs font-semibold text-ink/80">#{t}</span>)}
+						</div>
+					)}
+					{!isRecap && (
+						<div class="flex items-center gap-4 rounded-2xl border-2 border-ink bg-paper p-5 shadow-paper-sm">
+							{d.authorAvatar ? (
+								<img src={d.authorAvatar} alt="" width="56" height="56" class="h-14 w-14 shrink-0 rounded-full border-2 border-ink object-cover" />
+							) : (
+								<span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-tone-blue font-display text-lg font-bold text-tone-blue-deep">{initials(d.author)}</span>
+							)}
+							<div class="min-w-0">
+								<p class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">Written by</p>
+								<p class="font-hand text-2xl font-bold leading-tight">{d.authorUrl ? <a href={d.authorUrl} target="_blank" rel="noreferrer" class="hover:text-tone-blue-deep">{d.author}</a> : d.author}</p>
+								{d.authorRole && <p class="text-sm font-medium text-ink/70">{d.authorRole}</p>}
+							</div>
+						</div>
+					)}
+				</div>
+			)}
+
+			<div class="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-2">
+				{newer ? (
+					<a href={`/blog/${newer.id}`} class="active-press group rounded-xl border-2 border-ink bg-paper-soft p-5 shadow-paper-sm transition-transform hover:-translate-y-0.5">
+						<p class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55"><Icon name="ArrowLeft" class="h-3.5 w-3.5" /> Newer</p>
+						<p class="mt-2 font-hand text-2xl font-bold leading-tight group-hover:text-tone-blue-deep">{newer.data.title}</p>
+					</a>
+				) : <span />}
+				{older ? (
+					<a href={`/blog/${older.id}`} class="active-press group rounded-xl border-2 border-ink bg-paper-soft p-5 text-right shadow-paper-sm transition-transform hover:-translate-y-0.5">
+						<p class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">Older <Icon name="ArrowRight" class="h-3.5 w-3.5" /></p>
+						<p class="mt-2 font-hand text-2xl font-bold leading-tight group-hover:text-tone-blue-deep">{older.data.title}</p>
+					</a>
+				) : <span />}
+			</div>
+
+			<div class="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-between gap-4 rounded-2xl border-2 border-dashed border-ink bg-paper p-5">
+				<p class="text-sm font-medium text-ink/75"><span class="font-hand text-xl font-bold text-ink">Have a story of your own?</span> Anyone can write for the AIYatra blog.</p>
+				<a href="/blog/write" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep">Write a guest post <Icon name="ArrowRight" class="h-4 w-4" /></a>
+			</div>
+		</div>
+	</section>
+
+	{more.length > 0 && (
+		<section class="border-t-2 border-ink bg-tone-blue/30">
+			<div class="wrap py-16">
+				<div data-reveal>
+					<p class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep"><Icon name="BookOpen" class="h-4 w-4" /> Keep reading</p>
+					<h2 class="mt-3 font-hand text-4xl font-bold leading-tight sm:text-5xl">More stories.</h2>
+				</div>
+				<div class="mt-8 grid items-stretch gap-6 md:grid-cols-3">
+					{more.map((r) => (
+						<div class="h-full" data-reveal>
+							<a href={`/blog/${r.id}`} class="hover-lift flex h-full flex-col overflow-hidden rounded-2xl border-2 border-ink bg-paper-soft shadow-paper-sm">
+								<div class="aspect-[16/9] overflow-hidden border-b-2 border-ink bg-tone-blue/30">
+									{r.data.cover && <img {...photoProps(r.data.cover)} alt="" loading="lazy" decoding="async" width="676" height="380" class="h-full w-full object-cover" />}
+								</div>
+								<div class="flex flex-1 flex-col p-5">
+									<p class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">
+										{formatDate(r.data.date)} · {r.data.attendees ? `${r.data.attendees} attended` : r.data.author}
+									</p>
+									<p class="mt-1.5 font-hand text-2xl font-bold leading-tight">{r.data.title}</p>
+								</div>
+							</a>
+						</div>
+					))}
+				</div>
+			</div>
+		</section>
+	)}
+</BaseLayout>

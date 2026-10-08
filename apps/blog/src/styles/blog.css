@@ -1,0 +1,31 @@
+/* Blog-only additions on top of apps/web/src/index.css (imported first in
+   BaseLayout), which carries the brand tokens, utilities and .blog-body. */
+
+/* Scroll reveal — plain-CSS twin of components/Reveal.jsx. Content is only
+   hidden once JS has marked the page, so nothing is lost without it. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { transform: none; transition: opacity 0.2s ease; }
+}
+
+/* Mobile menu: same slide-in as the React header. */
+.mobile-nav:not([hidden]) { animation: blog-menu-in 0.25s ease-out; }
+.mobile-nav:not([hidden]) .mobile-nav-item { animation: blog-menu-item 0.3s ease-out both; animation-delay: calc(var(--i, 0) * 50ms); }
+@keyframes blog-menu-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes blog-menu-item { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: none; } }
+
+/* Code blocks highlighted by Shiki keep the site's rounded ink panel. */
+.blog-body pre.astro-code { background: hsl(var(--ink)) !important; }
+.blog-body table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.95rem; }
+.blog-body th, .blog-body td { border: 1px solid hsl(var(--tone-blue-deep) / 0.16); padding: 0.55rem 0.8rem; text-align: left; }
+.blog-body th { background: hsl(var(--tone-blue) / 0.5); font-weight: 700; color: hsl(var(--ink)); }
+.blog-body h2, .blog-body h3 { scroll-margin-top: 96px; }
+
+/* Category filter chips on the index. */
+.chip[aria-pressed="true"] { background: hsl(var(--tone-blue-deep)); color: #fff; border-color: hsl(var(--tone-blue-deep)); }

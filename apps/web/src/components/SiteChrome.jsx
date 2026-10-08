@@ -21,6 +21,12 @@ export const NAV_LINKS = [
 	{ to: '/contact', label: 'Contact Us' },
 ];
 
+// /blog is served by the Astro blog app, not this router — link to it with a
+// plain <a> so the browser loads the page instead of a client-side route.
+function NavLink({ to, ...props }) {
+	return to.startsWith('/blog') ? <a href={to} {...props} /> : <Link to={to} {...props} />;
+}
+
 function Logo({ dark = false }) {
 	return (
 		<span className="flex items-center gap-3">
@@ -102,9 +108,9 @@ export function Header() {
 					</Link>
 					<nav className="hidden items-center gap-1 rounded-full border border-tone-blue-deep/10 bg-white/70 p-1 text-sm font-medium text-ink/80 xl:flex">
 						{NAV_LINKS.map((l) => (
-							<Link key={l.label} to={l.to} className="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">
+							<NavLink key={l.label} to={l.to} className="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">
 								{l.label}
-							</Link>
+							</NavLink>
 						))}
 					</nav>
 					<div className="flex items-center gap-2">
@@ -139,9 +145,9 @@ export function Header() {
 							<div className="wrap flex flex-col gap-1 py-4">
 								{NAV_LINKS.map((l, i) => (
 									<motion.div key={l.label} initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.05 }}>
-										<Link to={l.to} className="block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">
+										<NavLink to={l.to} className="block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">
 											{l.label}
-										</Link>
+										</NavLink>
 									</motion.div>
 								))}
 								<a href={MEETUP_URL} target="_blank" rel="noreferrer" className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-tone-blue-deep font-semibold text-white">
@@ -199,7 +205,8 @@ export function Footer() {
 				<div>
 					<FooterHeading>Explore</FooterHeading>
 					<ul className="mt-4 space-y-3 text-sm font-medium">
-						<li><Link to="/blog" className={footerLink}>Blog & recaps</Link></li>
+						<li><a href="/blog" className={footerLink}>Blog & recaps</a></li>
+						<li><a href="/blog/write" className={footerLink}>Write for AIYatra</a></li>
 						<li><Link to="/#community" className={footerLink}>People & voices</Link></li>
 						<li><Link to="/#faq" className={footerLink}>Quick answers</Link></li>
 						<li><Link to="/contact" className={footerLink}>Contact us</Link></li>
