@@ -29,3 +29,13 @@
 
 /* Category filter chips on the index. */
 .chip[aria-pressed="true"] { background: hsl(var(--tone-blue-deep)); color: #fff; border-color: hsl(var(--tone-blue-deep)); }
+
+/* Writing guide (/blog/guide). The file's own "# title" is for GitHub
+   readers; the page hero already carries it. */
+.guide-body > h1:first-child { display: none; }
+.guide-body > h1:first-child + p { margin-top: 0; }
+#guide-toc a.is-current { color: hsl(var(--tone-blue-deep)); border-color: hsl(var(--tone-blue-deep)); }
+
+/* Markdown task lists ("- [ ] item") */
+.blog-body li:has(> input[type="checkbox"]) { list-style: none; margin-left: -1.5rem; }
+.blog-body li > input[type="checkbox"] { margin-right: 0.6rem; accent-color: hsl(var(--tone-blue-deep)); transform: translateY(1px); }

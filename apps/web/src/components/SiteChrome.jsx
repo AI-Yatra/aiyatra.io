@@ -207,6 +207,7 @@ export function Footer() {
 					<ul className="mt-4 space-y-3 text-sm font-medium">
 						<li><a href="/blog" className={footerLink}>Blog & recaps</a></li>
 						<li><a href="/blog/write" className={footerLink}>Write for AIYatra</a></li>
+						<li><a href="/blog/guide" className={footerLink}>Writing guide</a></li>
 						<li><Link to="/#community" className={footerLink}>People & voices</Link></li>
 						<li><Link to="/#faq" className={footerLink}>Quick answers</Link></li>
 						<li><Link to="/contact" className={footerLink}>Contact us</Link></li>

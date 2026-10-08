@@ -28,4 +28,10 @@ const blog = defineCollection({
 	}),
 });
 
-export const collections = { blog };
+// The guest-post guide lives at the repo root (HOW-TO-WRITE-A-GUEST-POST.md)
+// so it reads well on GitHub too; /blog/guide renders that same file.
+const guide = defineCollection({
+	loader: glob({ base: '../..', pattern: 'HOW-TO-WRITE-A-GUEST-POST.md' }),
+});
+
+export const collections = { blog, guide };

@@ -11,6 +11,8 @@ export const BLOG_BASE = '/blog';
 export const EDITOR_URL = '/blog/admin';
 export const NEW_POST_URL = '/blog/admin#/collections/blog/new';
 export const REPO_URL = 'https://github.com/AI-Yatra/aiyatra.io';
+export const GUIDE_URL = '/blog/guide';
+export const GUIDE_SOURCE_URL = `${REPO_URL}/blob/main/HOW-TO-WRITE-A-GUEST-POST.md`;
 
 // Same order as the React header (apps/web/src/components/SiteChrome.jsx).
 export const NAV_LINKS = [

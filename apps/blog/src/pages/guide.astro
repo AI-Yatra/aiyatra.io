@@ -1,0 +1,93 @@
+---
+// /blog/guide: the guest-post guide. The text is HOW-TO-WRITE-A-GUEST-POST.md
+// at the repo root (one source for this page and for GitHub readers).
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { NEW_POST_URL, GUIDE_SOURCE_URL } from '../lib/site';
+import { readingTime } from '../lib/posts';
+
+const guide = await getEntry('guide', 'how-to-write-a-guest-post');
+if (!guide) throw new Error('HOW-TO-WRITE-A-GUEST-POST.md not found at the repo root');
+const { Content, headings } = await render(guide);
+const sections = headings.filter((h) => h.depth === 2);
+---
+<BaseLayout
+	title="How to write a guest post — AIYatra Blog"
+	description="The complete guide to writing for the AIYatra blog: the review process, every field in the editor, headings, code blocks, images and tables, and the mistakes to avoid."
+>
+	<section id="top" class="relative overflow-hidden">
+		<div class="wrap pb-12 pt-14 lg:pb-14 lg:pt-[74px]">
+			<div data-reveal class="flex flex-wrap items-center gap-3">
+				<a href="/blog/write" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep">
+					<Icon name="ArrowLeft" class="h-4 w-4" /> Write for AIYatra
+				</a>
+			</div>
+			<div data-reveal style="--reveal-delay:0.04s">
+				<span class="mt-6 inline-flex items-center gap-2 rounded-full border-2 border-ink bg-tone-yellow px-4 py-1.5 text-sm font-semibold shadow-paper-sm">
+					<Icon name="BookOpen" class="h-4 w-4" /> Writing guide · {readingTime(guide.body)} min read
+				</span>
+			</div>
+			<div data-reveal style="--reveal-delay:0.08s">
+				<h1 class="mt-6 max-w-4xl font-hand text-6xl font-bold leading-[0.95] tracking-tight sm:text-7xl">
+					How to write a <span class="text-tone-blue-deep underline decoration-tone-coral decoration-4 underline-offset-8">guest post.</span>
+				</h1>
+			</div>
+			<div data-reveal style="--reveal-delay:0.16s">
+				<p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft">
+					Everything from your first draft to seeing your post live: the review process, every field
+					in the editor, and how to get headings, code, images and tables right the first time.
+				</p>
+				<div class="mt-8 flex flex-wrap items-center gap-3">
+					<a href={NEW_POST_URL} class="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-6 text-base font-semibold text-paper shadow-paper transition-transform hover:-translate-y-0.5">
+						<Icon name="PenLine" class="h-5 w-5" /> Start writing
+					</a>
+					<a href={GUIDE_SOURCE_URL} target="_blank" rel="noreferrer" class="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-paper px-6 text-base font-semibold shadow-paper-sm transition-transform hover:-translate-y-0.5">
+						<Icon name="Github" class="h-5 w-5" /> View on GitHub
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="border-t-2 border-ink bg-paper-soft">
+		<div class="wrap grid gap-8 py-14 lg:grid-cols-[260px_minmax(0,1fr)]">
+			<aside class="lg:sticky lg:top-[96px] lg:self-start">
+				<details class="group rounded-2xl border-2 border-ink bg-paper p-5 shadow-paper-sm lg:hidden [&_summary::-webkit-details-marker]:hidden">
+					<summary class="flex cursor-pointer list-none items-center justify-between font-semibold">
+						<span class="inline-flex items-center gap-2"><Icon name="ListChecks" class="h-4 w-4 text-tone-blue-deep" /> On this page</span>
+						<Icon name="Plus" class="h-4 w-4 transition-transform group-open:rotate-45" />
+					</summary>
+					<ol class="mt-4 space-y-2 text-sm font-medium">
+						{sections.map((h) => <li><a href={`#${h.slug}`} class="text-ink/75 hover:text-tone-blue-deep">{h.text}</a></li>)}
+					</ol>
+				</details>
+				<nav class="hidden rounded-2xl border-2 border-ink bg-paper p-5 shadow-paper-sm lg:block" aria-label="On this page">
+					<p class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">On this page</p>
+					<ol class="mt-4 space-y-2.5 text-sm font-medium" id="guide-toc">
+						{sections.map((h) => <li><a href={`#${h.slug}`} data-toc={h.slug} class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">{h.text}</a></li>)}
+					</ol>
+				</nav>
+			</aside>
+			<article class="guide-body blog-body min-w-0 rounded-2xl border-2 border-ink bg-paper p-6 shadow-paper-sm sm:p-10 lg:p-14">
+				<Content />
+			</article>
+		</div>
+	</section>
+</BaseLayout>
+
+<script>
+	// Let readers tick off the "Checklist before you submit" as they go.
+	document.querySelectorAll<HTMLInputElement>('.guide-body input[type="checkbox"]').forEach((box) => { box.disabled = false; });
+
+	// Highlight the section being read in the sidebar.
+	const links = new Map([...document.querySelectorAll<HTMLAnchorElement>('[data-toc]')].map((a) => [a.dataset.toc, a]));
+	const io = new IntersectionObserver((entries) => {
+		for (const e of entries) {
+			if (!e.isIntersecting) continue;
+			links.forEach((a) => a.classList.remove('is-current'));
+			links.get(e.target.id)?.classList.add('is-current');
+		}
+	}, { rootMargin: '-100px 0px -70% 0px' });
+	document.querySelectorAll('.guide-body h2[id]').forEach((h) => io.observe(h));
+</script>

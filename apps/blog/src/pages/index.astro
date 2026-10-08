@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import Icon from '../components/Icon.astro';
-import { PAST_EVENTS_URL } from '../lib/site';
+import { PAST_EVENTS_URL, GUIDE_URL } from '../lib/site';
 import { getPosts, CARD_TONES } from '../lib/posts';
 import { CATEGORIES } from '../content.config';
 
@@ -33,6 +33,9 @@ const categories = CATEGORIES.filter((c) => posts.some((p) => p.data.category ==
 				<div class="mt-8 flex flex-wrap items-center gap-3">
 					<a href="/blog/write" class="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-6 text-base font-semibold text-paper shadow-paper transition-transform hover:-translate-y-0.5">
 						<Icon name="PenLine" class="h-5 w-5" /> Write a guest post
+					</a>
+					<a href={GUIDE_URL} class="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-paper px-6 text-base font-semibold shadow-paper-sm transition-transform hover:-translate-y-0.5">
+						<Icon name="BookOpen" class="h-5 w-5" /> Writing guide
 					</a>
 					<a href="/blog/rss.xml" class="active-press inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-paper px-6 text-base font-semibold shadow-paper-sm transition-transform hover:-translate-y-0.5">
 						<Icon name="Rss" class="h-5 w-5" /> RSS feed
@@ -73,6 +76,9 @@ const categories = CATEGORIES.filter((c) => posts.some((p) => p.data.category ==
 					<div class="flex flex-wrap gap-3 lg:justify-end">
 						<a href="/blog/write" class="active-press inline-flex h-12 items-center gap-2 rounded-xl bg-white px-6 text-base font-semibold text-ink transition-transform hover:-translate-y-0.5">
 							How it works <Icon name="ArrowRight" class="h-5 w-5" />
+						</a>
+						<a href={GUIDE_URL} class="active-press inline-flex h-12 items-center gap-2 rounded-xl border border-white/30 px-6 text-base font-semibold text-white transition-colors hover:bg-white/10">
+							<Icon name="BookOpen" class="h-5 w-5" /> Writing guide
 						</a>
 					</div>
 				</div>

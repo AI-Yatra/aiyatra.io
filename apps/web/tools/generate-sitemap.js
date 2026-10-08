@@ -36,6 +36,7 @@ function main() {
 		{ loc: `${SITE_URL}/labs`, changefreq: 'weekly', priority: '0.9' },
 		{ loc: `${SITE_URL}/blog`, changefreq: 'daily', priority: '0.9' },
 		{ loc: `${SITE_URL}/blog/write`, changefreq: 'monthly', priority: '0.6' },
+		{ loc: `${SITE_URL}/blog/guide`, changefreq: 'monthly', priority: '0.6' },
 		{ loc: `${SITE_URL}/contact`, changefreq: 'monthly', priority: '0.6' },
 		...posts.map((p) => ({ loc: `${SITE_URL}/blog/${p.slug}`, changefreq: 'monthly', priority: '0.7' })),
 	];
@@ -62,6 +63,7 @@ function main() {
 		'- [AI Yatra Labs — AIYatra](/labs): Curated arXiv and AlphaXiv reading lists across small language models, agent harnesses, transformer layers, and new architectures.',
 		'- [Blog — AIYatra](/blog): Session recaps, tutorials and guest posts from the AIYatra community.',
 		'- [Write for AIYatra — Blog](/blog/write): How to submit a guest post: write in the visual editor, get it reviewed, see it published.',
+		'- [How to write a guest post — AIYatra Blog](/blog/guide): The full writing guide: review process, every editor field, formatting, and a pre-submission checklist.',
 		'- [Contact Us — AIYatra](/contact): Send the AIYatra team a message, or write to global.aiyatra@gmail.com.',
 		...posts.map((p) => `- [${p.title}](/blog/${p.slug}): ${p.excerpt}`),
 		'',

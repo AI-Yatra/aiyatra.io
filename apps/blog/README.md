@@ -6,6 +6,9 @@ the same Tailwind tokens (`apps/web/src/index.css` is imported directly), fonts,
 header and footer, so moving between the React pages and the blog looks seamless.
 **Decap CMS** at `/blog/admin` is the visual editor, with a review workflow for guest posts.
 
+Writers' guide: [`HOW-TO-WRITE-A-GUEST-POST.md`](../../HOW-TO-WRITE-A-GUEST-POST.md) at the repo root,
+published on the site at `/blog/guide` (same file, rendered by `src/pages/guide.astro`).
+
 ```
 src/content/blog/*.md     posts (one Markdown file per post; filename = URL slug)
 src/content.config.ts     post schema — keep in step with public/cms/config.yml
