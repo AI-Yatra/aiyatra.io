@@ -1,0 +1,82 @@
+# Decap CMS — the visual editor at aiyatra.io/blog/admin.
+#
+# Guest-post workflow (editorial workflow + open authoring):
+#   * Anyone signs in with GitHub. Without write access to the repo, Decap
+#     forks it for them and saves their draft there.
+#   * "In review" opens a pull request against main. Reviewers comment on the
+#     PR; the author edits in Decap and the PR updates.
+#   * A maintainer moves it to "Ready" and clicks Publish, which merges the PR.
+#     The push to main runs .github/workflows/deploy.yml and the post goes live.
+#
+# Production sign-in needs the small OAuth relay in apps/blog/cms-auth/ (see
+# its README). On localhost, `npm run dev` (repo root) also starts decap-server, so the
+# editor works against the files on disk with no sign-in.
+
+backend:
+  name: github
+  repo: AI-Yatra/aiyatra.io
+  branch: main
+  open_authoring: true
+  auth_scope: public_repo
+  # The deployed OAuth relay (apps/blog/cms-auth). Replace with its URL.
+  base_url: https://aiyatra-cms-auth.YOUR-SUBDOMAIN.workers.dev
+  auth_endpoint: auth
+  squash_merges: true
+  commit_messages:
+    create: 'Blog: add “{{slug}}”'
+    update: 'Blog: update “{{slug}}”'
+    delete: 'Blog: remove “{{slug}}”'
+    uploadMedia: 'Blog: upload “{{path}}”'
+    deleteMedia: 'Blog: delete “{{path}}”'
+    openAuthoring: '{{message}}'
+
+local_backend: true
+publish_mode: editorial_workflow
+
+site_url: https://aiyatra.io/blog
+display_url: https://aiyatra.io/blog
+logo_url: /aiyatra-logo-224.png
+
+media_folder: apps/blog/public/images/uploads
+public_folder: /blog/images/uploads
+
+# Field names must match the schema in apps/blog/src/content.config.ts.
+collections:
+  - name: blog
+    label: Blog posts
+    label_singular: Blog post
+    description: Session recaps, tutorials and guest posts. Pick “Guest post” as the category if you are writing as a guest.
+    folder: apps/blog/src/content/blog
+    create: true
+    slug: '{{slug}}'
+    preview_path: '{{slug}}'
+    summary: '{{title}} · {{author}} · {{date}}'
+    sortable_fields:
+      default: { field: date, direction: descending }
+      fields: ['date', 'title', 'author', 'category']
+    view_filters:
+      - label: Guest posts
+        field: category
+        pattern: Guest post
+      - label: Session recaps
+        field: category
+        pattern: Session recap
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Short summary, name: excerpt, widget: text, hint: 'One or two sentences. Shown on the blog cards, in search results and in link previews.' }
+      - label: Category
+        name: category
+        widget: select
+        default: Guest post
+        options: ['Guest post', 'Tutorial', 'Research notes', 'Community', 'Session recap']
+      - { label: Your name, name: author, widget: string, hint: 'As you would like it to appear on the post.' }
+      - { label: About you, name: authorRole, widget: string, required: false, hint: 'e.g. “ML engineer at Acme · AIYatra Student Ambassador”' }
+      - { label: Your link, name: authorUrl, widget: string, required: false, hint: 'LinkedIn, GitHub or personal site (full https:// URL).', pattern: ['^https?://', 'Must start with http:// or https://'] }
+      - { label: Your photo, name: authorAvatar, widget: image, required: false, choose_url: true }
+      - { label: Publish date, name: date, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true }
+      - { label: Cover image, name: cover, widget: image, required: false, choose_url: true, hint: 'Wide images (16:9) work best. Upload one or paste an image URL.' }
+      - { label: Cover image description, name: coverAlt, widget: string, required: false, hint: 'Describe the image for screen-reader users.' }
+      - { label: Tags, name: tags, widget: list, required: false, default: [], hint: 'Comma-separated, e.g. agents, pytorch, rag' }
+      - { label: Meetup event link, name: eventUrl, widget: string, required: false, hint: 'Session recaps only.', pattern: ['^https?://', 'Must start with http:// or https://'] }
+      - { label: Attendees, name: attendees, widget: number, required: false, value_type: int, min: 0, hint: 'Session recaps only.' }
+      - { label: Post, name: body, widget: markdown }

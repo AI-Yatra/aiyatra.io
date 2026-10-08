@@ -1,0 +1,10 @@
+/* Light brand touches on the Decap CMS interface itself. */
+body, button, input, select, textarea { font-family: "Inter", system-ui, sans-serif !important; }
+h1, h2, [class*="AppHeader"] a, [class*="CollectionTop"] h1 { letter-spacing: -0.01em; }
+.aiyatra-back {
+  position: fixed; right: 16px; bottom: 16px; z-index: 400;
+  padding: 10px 16px; border-radius: 999px;
+  background: hsl(221 83% 53%); color: #fff; font: 600 13px/1 "Inter", sans-serif; text-decoration: none;
+  box-shadow: 0 10px 30px -10px hsl(221 83% 53% / 0.8);
+}
+.aiyatra-back:hover { background: hsl(224 76% 33%); }
