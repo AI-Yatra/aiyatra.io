@@ -51,9 +51,7 @@ collections:
     slug: '{{slug}}'
     preview_path: '{{slug}}'
     summary: '{{title}} · {{author}} · {{date}}'
-    sortable_fields:
-      default: { field: date, direction: descending }
-      fields: ['date', 'title', 'author', 'category']
+    sortable_fields: ['date', 'title', 'author', 'category']
     view_filters:
       - label: Guest posts
         field: category
