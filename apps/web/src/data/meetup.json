@@ -1,11 +1,11 @@
 {
-	"syncedAt": "2026-10-16T21:25:28.310Z",
+	"syncedAt": "2026-10-17T20:45:31.463Z",
 	"source": "https://www.meetup.com/aiyatra/events/",
 	"group": {
-		"members": 6213,
+		"members": 6299,
 		"rating": 4.67,
 		"ratingsCount": 149,
-		"pastEvents": 16
+		"pastEvents": 17
 	},
 	"events": [
 		{
@@ -14,10 +14,10 @@
 			"url": "https://www.meetup.com/aiyatra/events/316720553/",
 			"start": "2026-10-17T09:00:00+05:30",
 			"end": "2026-10-17T12:30:00+05:30",
-			"going": 448,
+			"going": 450,
 			"photo": "https://secure.meetupstatic.com/photos/event/b/5/9/c/highres_536326492.jpeg",
 			"online": false,
-			"status": "ACTIVE",
+			"status": "PAST",
 			"formUrl": "https://forms.gle/Gw5wGiLubwhE5u2W9",
 			"summary": "Large language models are powerful, but many real-world AI tasks do not need long reasoning chains. They need fast, predictable, structured decisions."
 		},
