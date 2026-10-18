@@ -1,13 +1,26 @@
 {
-	"syncedAt": "2026-10-17T20:45:31.463Z",
+	"syncedAt": "2026-10-18T00:34:44.771Z",
 	"source": "https://www.meetup.com/aiyatra/events/",
 	"group": {
-		"members": 6299,
+		"members": 6306,
 		"rating": 4.67,
 		"ratingsCount": 149,
 		"pastEvents": 17
 	},
 	"events": [
+		{
+			"id": "317029450",
+			"title": "SelfEvaluate Agent: Build a safe Agent with LangChain, LangGraph & LangSmith",
+			"url": "https://www.meetup.com/aiyatra/events/317029450/",
+			"start": "2026-10-31T09:00:00+05:30",
+			"end": "2026-10-31T12:30:00+05:30",
+			"going": 7,
+			"photo": "https://secure.meetupstatic.com/photos/event/3/e/8/4/highres_536656004.jpeg",
+			"online": false,
+			"status": "ACTIVE",
+			"formUrl": "https://forms.gle/4XF96n8BnUhLqjWd8",
+			"summary": "What happens when an AI agent can read and modify its own source code? In this session, we build and demo a minimal self-editing coding agent in Python that can inspect files, apply changes, run code, and validate outcomes in a controlled loop."
+		},
 		{
 			"id": "316720553",
 			"title": "JEV: Building Fast, Structured System-1 AI",
