@@ -5,7 +5,7 @@ excerpt: "Inside a tiny Dino-playing network: structured state, teacher-guided
 category: Research notes
 author: Monika Kusumanchi
 date: 2026-10-26
-cover: /blog/images/uploads/tiny-dino-cover.png
+cover: https://raw.githubusercontent.com/AI-Yatra/aiyatra.io/fd6ab8569f12fbc2c4c1c50b16dee6aa6381ac46/apps/blog/public/images/uploads/tiny-dino-cover.png
 coverAlt: Tiny Dino network schematic with 28 inputs, three hidden layers of 96
   units, and run, jump, and duck outputs. Node counts are illustrative.
 tags:
@@ -33,7 +33,7 @@ Its engine advances at a fixed 60 frames per second and reimplements Chromium-re
 
 ## A small network with a clear job
 
-![Architecture diagram separating offline teacher-guided training from live play: 28 state values enter a three-layer MLP, and the selected action advances the engine.](/blog/images/uploads/tiny-dino-architecture.png)
+![Architecture diagram separating offline teacher-guided training from live play: 28 state values enter a three-layer MLP, and the selected action advances the engine.](https://raw.githubusercontent.com/AI-Yatra/aiyatra.io/fd6ab8569f12fbc2c4c1c50b16dee6aa6381ac46/apps/blog/public/images/uploads/tiny-dino-architecture.png)
 
 *Architecture at a glance. The teacher supplies supervision offline; the deployed policy chooses each action directly. Diagram based on the repository implementation.*
 
@@ -69,7 +69,7 @@ The model implements a set-valued loss: it rewards probability assigned to the a
 
 ## What the recorded results show
 
-![Evaluation visual comparing 5,400 frozen-grid states with one million simulated frames, plus the INT8 action-parity result.](/blog/images/uploads/tiny-dino-evaluation.png)
+![Evaluation visual comparing 5,400 frozen-grid states with one million simulated frames, plus the INT8 action-parity result.](https://raw.githubusercontent.com/AI-Yatra/aiyatra.io/fd6ab8569f12fbc2c4c1c50b16dee6aa6381ac46/apps/blog/public/images/uploads/tiny-dino-evaluation.png)
 
 *Different checks answer different questions. These figures summarize committed repository records, not a fresh benchmark.*
 
@@ -124,7 +124,7 @@ A passing report for yesterday’s weights should not become evidence for today�
 
 ## Try the shipped policy
 
-![Repository screenshot of the Tiny Dino web interface before starting a run, with Play, Arena, and Proof navigation and a seed selector.](/blog/images/uploads/tiny-dino-gameplay.png)
+![Repository screenshot of the Tiny Dino web interface before starting a run, with Play, Arena, and Proof navigation and a seed selector.](https://raw.githubusercontent.com/AI-Yatra/aiyatra.io/fd6ab8569f12fbc2c4c1c50b16dee6aa6381ac46/apps/blog/public/images/uploads/tiny-dino-gameplay.png)
 
 *The project’s web interface before a run starts. Source: syedazeez337/tiny-dino, web/qa/dino-play-1440.png. This screenshot is not evidence of a completed run.*
 
