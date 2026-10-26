@@ -5,6 +5,9 @@ excerpt: "Inside a tiny Dino-playing network: structured state, teacher-guided
 category: Research notes
 author: Monika Kusumanchi
 date: 2026-10-26
+cover: /blog/images/uploads/tiny-dino-cover.png
+coverAlt: Tiny Dino network schematic with 28 inputs, three hidden layers of 96
+  units, and run, jump, and duck outputs. Node counts are illustrative.
 tags:
   - small models
   - PyTorch
@@ -30,6 +33,10 @@ Its engine advances at a fixed 60 frames per second and reimplements Chromium-re
 
 ## A small network with a clear job
 
+![Architecture diagram separating offline teacher-guided training from live play: 28 state values enter a three-layer MLP, and the selected action advances the engine.](/blog/images/uploads/tiny-dino-architecture.png)
+
+*Architecture at a glance. The teacher supplies supervision offline; the deployed policy chooses each action directly. Diagram based on the repository implementation.*
+
 The deployed architecture is a feed-forward multilayer perceptron with three hidden layers, each 96 units wide, SiLU activations, and three output scores. Its dimensions are:
 
 **28 inputs → 96 → 96 → 96 → 3 action scores**
@@ -41,6 +48,10 @@ At each frame, the runtime extracts and normalizes the state, runs the network, 
 There is no teacher consulted during live play and no fallback rule that replaces a risky prediction. The runtime validates inputs, output shape, and finite values, but those checks do not choose a safer action. The model remains responsible for the gameplay decision.
 
 The probability display in the web app helps readers inspect the model’s preferences. It should not be interpreted as a calibrated probability of surviving the next obstacle.
+
+### A timing intuition
+
+Imagine the same cactus at the same distance in two runs, with the game moving faster in the second. The dinosaur has less time to react in that faster run. If it is already falling from a jump, the useful action may change again. That is why the inputs include speed and motion, as well as obstacle distance.
 
 ## An offline teacher supplies the examples
 
@@ -57,6 +68,10 @@ The repository contains a DAgger-style collector for states visited by a learned
 The model implements a set-valued loss: it rewards probability assigned to the allowed action set. That supports situations where multiple actions are valid, although the corpus and rollout collectors inspected here produce single preferred-action labels.
 
 ## What the recorded results show
+
+![Evaluation visual comparing 5,400 frozen-grid states with one million simulated frames, plus the INT8 action-parity result.](/blog/images/uploads/tiny-dino-evaluation.png)
+
+*Different checks answer different questions. These figures summarize committed repository records, not a fresh benchmark.*
 
 The following numbers come from the repository’s committed evidence and deployment records. They are reported results, not measurements independently rerun for this article.
 
@@ -109,6 +124,10 @@ A passing report for yesterday’s weights should not become evidence for today�
 
 ## Try the shipped policy
 
+![Repository screenshot of the Tiny Dino web interface before starting a run, with Play, Arena, and Proof navigation and a seed selector.](/blog/images/uploads/tiny-dino-gameplay.png)
+
+*The project’s web interface before a run starts. Source: syedazeez337/tiny-dino, web/qa/dino-play-1440.png. This screenshot is not evidence of a completed run.*
+
 The repository includes a FastAPI backend and a React interface for gameplay, action probabilities, replay, and arena results. Its README specifies Python 3.13 with uv, plus Node.js 20.19 or later for the frontend build.
 
 To clone the project and build the frontend, use the documented setup:
@@ -145,3 +164,4 @@ This article is an implementation walkthrough of [syedazeez337/tiny-dino](https:
 - [Deployment evidence](https://github.com/syedazeez337/tiny-dino/blob/37d4a59f9442192c5f3ff123d0ba3698d7e0780c/reports/dino/evidence.json)
 - [Certification and experiment artifacts](https://github.com/syedazeez337/tiny-dino/tree/37d4a59f9442192c5f3ff123d0ba3698d7e0780c/artifacts/dino/deploy)
 - [Checkpoint evidence-chain test](https://github.com/syedazeez337/tiny-dino/blob/37d4a59f9442192c5f3ff123d0ba3698d7e0780c/tests/test_dino_end_to_end.py)
+
