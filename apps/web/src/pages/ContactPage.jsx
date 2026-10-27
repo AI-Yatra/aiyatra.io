@@ -3,14 +3,15 @@ import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-	ArrowRight, ArrowUpRight, CheckCircle2, Github, Linkedin, Loader2, Mail, MapPin,
+	ArrowRight, ArrowUpRight, CheckCircle2, Github, Instagram, Linkedin, Loader2, Mail, MapPin,
 	MessageSquare, Send, Users, CalendarDays, GraduationCap, FlaskConical, AlertCircle,
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import { Header, Footer } from '@/components/SiteChrome';
 import { NeuralField, Aurora, useSpotlight } from '@/components/Fx';
 import { SectionLabel } from '@/components/Kit';
-import { CONTACT_EMAIL, MEETUP_URL, LINKEDIN_URL, GITHUB_URL, GROUP_STATS } from '@/data/site';
+import { WhatsAppIcon } from '@/components/WhatsAppIcon';
+import { CONTACT_EMAIL, MEETUP_URL, LINKEDIN_URL, GITHUB_URL, INSTAGRAM_URL, WHATSAPP_URL, GROUP_STATS } from '@/data/site';
 
 // The site is static (GitHub Pages), so messages are relayed by FormSubmit
 // (formsubmit.co, free, no account). The first submission sends a one-time
@@ -31,6 +32,8 @@ const CHANNELS = [
 	{ icon: Users, label: 'Meetup', value: 'meetup.com/aiyatra', href: MEETUP_URL },
 	{ icon: Linkedin, label: 'LinkedIn', value: 'linkedin.com/company/aiyatra', href: LINKEDIN_URL },
 	{ icon: Github, label: 'GitHub', value: 'github.com/AI-Yatra', href: GITHUB_URL },
+	{ icon: Instagram, label: 'Instagram', value: 'instagram.com/aiyatra_io', href: INSTAGRAM_URL },
+	{ icon: WhatsAppIcon, label: 'WhatsApp', value: 'chat.whatsapp.com/GWXTDtGjIs99fDtUGKJy5J', href: WHATSAPP_URL },
 ];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;

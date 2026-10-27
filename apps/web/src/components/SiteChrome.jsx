@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-	ArrowUpRight, CalendarDays, MapPin, Users, Github, Linkedin, Mail,
+	ArrowUpRight, CalendarDays, MapPin, Users, Github, Instagram, Linkedin, Mail,
 	Ticket, Megaphone, Menu, X, GraduationCap, FlaskConical, Heart,
 } from 'lucide-react';
 import {
 	MEETUP_URL, AI_YATRA_LOGO, GROUP_STATS, CONTACT_EMAIL, LINKEDIN_URL, GITHUB_URL,
-	formatDay, formatTime,
+	INSTAGRAM_URL, WHATSAPP_URL, formatDay, formatTime,
 } from '@/data/site';
+import { WhatsAppIcon } from '@/components/WhatsAppIcon';
 import { useEvents } from '@/lib/useEvents';
 import { ScrollProgress, CursorGlow } from '@/components/Fx';
 
@@ -179,11 +180,13 @@ export function Footer() {
 						An open-source AI community from Hyderabad. Saturday meetups, a student ambassador
 						network and an open research lab — free, forever, open to everyone.
 					</p>
-					<div className="mt-5 flex items-center gap-2.5">
+					<div className="mt-5 flex flex-wrap items-center gap-2.5">
 						{[
 							{ href: MEETUP_URL, label: 'Meetup', Icon: Users },
 							{ href: GITHUB_URL, label: 'GitHub', Icon: Github },
 							{ href: LINKEDIN_URL, label: 'LinkedIn', Icon: Linkedin },
+							{ href: INSTAGRAM_URL, label: 'Instagram', Icon: Instagram },
+							{ href: WHATSAPP_URL, label: 'WhatsApp', Icon: WhatsAppIcon },
 							{ href: `mailto:${CONTACT_EMAIL}`, label: 'Email', Icon: Mail },
 						].map(({ href, label, Icon }) => (
 							<a key={label} href={href} target={href.startsWith('mailto') ? undefined : '_blank'} rel="noreferrer" aria-label={label} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/75 transition-all hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-ink">
