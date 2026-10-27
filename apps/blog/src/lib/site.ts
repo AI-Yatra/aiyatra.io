@@ -1,7 +1,8 @@
 // Shared with the React app: links, Meetup data and formatters come straight
 // from apps/web/src/data/site.js so the two never drift apart.
 export {
-	MEETUP_URL, PAST_EVENTS_URL, CONTACT_EMAIL, LINKEDIN_URL, GITHUB_URL, GROUP_STATS,
+	MEETUP_URL, PAST_EVENTS_URL, CONTACT_EMAIL, LINKEDIN_URL, GITHUB_URL,
+	INSTAGRAM_URL, WHATSAPP_URL, GROUP_STATS,
 	upcomingEvents, formatDay, formatTime,
 } from '../../../web/src/data/site.js';
 
