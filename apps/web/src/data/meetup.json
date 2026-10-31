@@ -1,23 +1,36 @@
 {
-	"syncedAt": "2026-10-30T22:30:34.947Z",
+	"syncedAt": "2026-10-31T21:45:26.367Z",
 	"source": "https://www.meetup.com/aiyatra/events/",
 	"group": {
-		"members": 7342,
-		"rating": 4.68,
-		"ratingsCount": 162,
-		"pastEvents": 17
+		"members": 7392,
+		"rating": 4.66,
+		"ratingsCount": 170,
+		"pastEvents": 18
 	},
 	"events": [
+		{
+			"id": "317217848",
+			"title": "Beyond Resume: Engineering Durable Al Agents on Top of Your Favourite Harness",
+			"url": "https://www.meetup.com/aiyatra/events/317217848/",
+			"start": "2026-11-14T09:00:00+05:30",
+			"end": "2026-11-14T12:30:00+05:30",
+			"going": 76,
+			"photo": "https://secure.meetupstatic.com/photos/event/c/2/3/highres_536883107.jpeg",
+			"online": false,
+			"status": "ACTIVE",
+			"formUrl": "https://forms.gle/whpN8ZUJAuoikGcz6",
+			"summary": "Last session we built the SelfEvaluate agent: it reads code, edits it, runs the tests and checks its own work, safely. But its memory lived in InMemorySaver. Restart the kernel, and every paused approval and every step of progress is gone. This session picks up exactly there."
+		},
 		{
 			"id": "317029450",
 			"title": "SelfEvaluate Agent: Build a safe Agent with LangChain, LangGraph & LangSmith",
 			"url": "https://www.meetup.com/aiyatra/events/317029450/",
 			"start": "2026-10-31T09:00:00+05:30",
 			"end": "2026-10-31T12:30:00+05:30",
-			"going": 314,
+			"going": 300,
 			"photo": "https://secure.meetupstatic.com/photos/event/3/e/8/4/highres_536656004.jpeg",
 			"online": false,
-			"status": "ACTIVE",
+			"status": "PAST",
 			"formUrl": "https://forms.gle/Exhb1KvCd74M6mEcA",
 			"summary": "What happens when an AI agent can read and modify its own source code? In this session, we build and demo a minimal self-editing coding agent in Python that can inspect files, apply changes, run code, and validate outcomes in a controlled loop."
 		},
