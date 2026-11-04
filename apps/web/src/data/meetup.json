@@ -1,10 +1,10 @@
 {
-	"syncedAt": "2026-11-03T23:30:34.807Z",
+	"syncedAt": "2026-11-04T23:47:46.921Z",
 	"source": "https://www.meetup.com/aiyatra/events/",
 	"group": {
-		"members": 7602,
-		"rating": 4.65,
-		"ratingsCount": 178,
+		"members": 7669,
+		"rating": 4.64,
+		"ratingsCount": 180,
 		"pastEvents": 18
 	},
 	"events": [
@@ -14,12 +14,12 @@
 			"url": "https://www.meetup.com/aiyatra/events/317217848/",
 			"start": "2026-11-14T09:00:00+05:30",
 			"end": "2026-11-14T12:30:00+05:30",
-			"going": 155,
+			"going": 189,
 			"photo": "https://secure.meetupstatic.com/photos/event/c/2/3/highres_536883107.jpeg",
 			"online": false,
 			"status": "ACTIVE",
 			"formUrl": "https://forms.gle/whpN8ZUJAuoikGcz6",
-			"summary": "Last session we built the SelfEvaluate agent: it reads code, edits it, runs the tests and checks its own work, safely. But its memory lived in InMemorySaver. Restart the kernel, and every paused approval and every step of progress is gone. This session picks up exactly there."
+			"summary": "Venue Details Lseg, Capitaland Building, Block A, 11th Floor, Opposite to JP Morgan Building, Inorbit Mall Rd, Vittal Rao Nagar, Madhapur, Hyderabad, Telangana 500081, India · Hyderabad"
 		},
 		{
 			"id": "317029450",
@@ -27,7 +27,7 @@
 			"url": "https://www.meetup.com/aiyatra/events/317029450/",
 			"start": "2026-10-31T09:00:00+05:30",
 			"end": "2026-10-31T12:30:00+05:30",
-			"going": 293,
+			"going": 292,
 			"photo": "https://secure.meetupstatic.com/photos/event/3/e/8/4/highres_536656004.jpeg",
 			"online": false,
 			"status": "PAST",
