@@ -64,7 +64,7 @@ collections:
     editor:
       preview: false
     # Cover, title, subtitle and body make up the page itself (src/editor). All
-    # the other fields live in the "Post details" drawer.
+    # the other fields live in the "Post details" panel beside it.
     fields:
       - { label: Cover image, name: cover, widget: ay-cover, required: false }
       - { label: Cover image description, name: coverAlt, widget: ay-line, required: false, placeholder: 'Describe the cover for screen readers and search engines' }

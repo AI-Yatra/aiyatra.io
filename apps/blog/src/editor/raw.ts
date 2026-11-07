@@ -5,7 +5,7 @@ import { attr } from './blocks';
 import { isAllowedFrame } from './embeds';
 import { el, icon, editField } from './dom';
 
-const KNOWN_INLINE = /^<\/?(strong|em|b|i|u|s|del|code|mark|sub|sup|a|br)\b/i;
+const KNOWN_INLINE = /^<\/?(strong|em|b|i|u|s|del|code|mark|sub|sup|a|br)\b|^<input class="task-list-item-checkbox"/i;
 const OWN_CLOSES = /^<div class="post-callout"|^<details\b/;
 const OWN_WHOLE = /^<!-- -->$|^<figure class="post-figure"|^<div class="post-card"|^<div data-math-block/;
 

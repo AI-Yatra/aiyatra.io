@@ -12,6 +12,7 @@ import { alignColumn, columnAlignment } from './table';
 import { openFind, closeFind } from './find';
 import { openStockPicker } from './stock';
 import { openAi } from './ai';
+import { openPreview } from './preview';
 
 interface Tool { icon: string; title: string; run(btn: HTMLElement): void; active?(): boolean; }
 
@@ -229,10 +230,10 @@ export function mountBody(root: HTMLElement, getProps: () => any) {
 	const redo = makeBtn({ icon: 'Redo2', title: 'Redo (⇧⌘Z)', run: () => editor.chain().focus().redo().run() });
 	const editing = el('div', { class: 'ay-tool-group' },
 		undo, redo, sep(),
-		makeBtn(heading(2)), makeBtn(heading(3)), makeBtn(heading(4)), sep(),
-		makeBtn(inline.bold()), makeBtn(inline.italic()), makeBtn(inline.underline()), makeBtn(inline.strike()), makeBtn(inline.highlight()), makeBtn(inline.code()), makeBtn(inline.link()), sep(),
+		makeBtn(heading(2)), makeBtn(heading(3)), sep(),
+		makeBtn(inline.bold()), makeBtn(inline.italic()), makeBtn(inline.strike()), makeBtn(inline.highlight()), makeBtn(inline.code()), makeBtn(inline.link()), sep(),
 		makeBtn(active('ul', 'bulletList')), makeBtn(active('ol', 'orderedList')), makeBtn(active('task', 'taskList')), makeBtn(active('quote', 'blockquote')), sep(),
-		makeBtn(cmd('image')), makeBtn(cmd('stock')), makeBtn(cmd('embed')), makeBtn(active('code', 'codeBlock')), makeBtn(cmd('table')), makeBtn(cmd('note', 'Callout')), makeBtn(cmd('math')), makeBtn(cmd('mermaid')), makeBtn(cmd('hr')),
+		makeBtn(cmd('image')), makeBtn(cmd('stock')), makeBtn(cmd('embed')), makeBtn(active('code', 'codeBlock')), makeBtn(cmd('table')), makeBtn(cmd('note', 'Callout')),
 	);
 	const all = el('button', { type: 'button', class: 'ay-more', title: 'Browse every block' });
 	all.innerHTML = `${icon('Plus')}<span>More</span>`;
@@ -318,6 +319,7 @@ export function mountBody(root: HTMLElement, getProps: () => any) {
 	function setTheme(theme: string) {
 		document.documentElement.dataset.ayTheme = theme;
 		try { localStorage.setItem('ay-editor-theme', theme); } catch { /* the choice just won't persist */ }
+		window.dispatchEvent(new Event('ay-theme'));
 		refreshTools();
 	}
 
@@ -357,17 +359,19 @@ export function mountBody(root: HTMLElement, getProps: () => any) {
 	window.addEventListener('dragover', onOver);
 	window.addEventListener('drop', onDrop);
 
-	// Keyboard: ⌘K for links and ⌘F to find, wherever the caret is.
+	// Keyboard: ⌘K for links, wherever the caret is.
 	mount.addEventListener('keydown', (e) => {
 		if (!(e.metaKey || e.ctrlKey)) return;
 		const key = e.key.toLowerCase();
 		if (key === 'k') { e.preventDefault(); editLink(toolbar); }
-		if (key === 'f') { e.preventDefault(); openFind(editor, root); }
 	});
 
-	// ⌘S saves the draft, using Decap's own Save button so its checks still run.
+	// ⌘F finds in the post. ⌘S saves, using Decap's Save button so its checks still run.
 	const onSaveKey = (e: KeyboardEvent) => {
-		if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 's') return;
+		if (!(e.metaKey || e.ctrlKey)) return;
+		const key = e.key.toLowerCase();
+		if (key === 'f' && !sourceMode && !document.querySelector('dialog[open]')) { e.preventDefault(); openFind(editor, root); return; }
+		if (key !== 's') return;
 		e.preventDefault();
 		flush();
 		const save = [...document.querySelectorAll<HTMLButtonElement>('[class*="ToolbarSectionMain"] button')].find((b) => /^save$/i.test(b.textContent?.trim() || ''));
@@ -375,14 +379,6 @@ export function mountBody(root: HTMLElement, getProps: () => any) {
 	};
 	window.addEventListener('keydown', onSaveKey, true);
 
-	// Preview: the same page, read-only and without the editing tools.
-	const onPreview = (e: Event) => {
-		const on = (e as CustomEvent).detail;
-		if (on && sourceMode) setSource(false);
-		editor.setEditable(!on);
-		if (on) { bubble.hidden = true; plus.hidden = true; closeFind(); }
-	};
-	window.addEventListener('ay-preview', onPreview);
 
 	let theme = '';
 	try { theme = localStorage.getItem('ay-editor-theme') || ''; } catch { /* default theme */ }
@@ -390,6 +386,18 @@ export function mountBody(root: HTMLElement, getProps: () => any) {
 	refresh();
 
 	return {
+		/** Opens the reader's view of the current draft. */
+		preview(data: unknown) {
+			flush();
+			const markdown = sourceMode ? source.value : editor.storage.markdown.getMarkdown();
+			const text = sourceMode ? source.value : editor.getText({ blockSeparator: ' ' });
+			openPreview({
+				html: editor.storage.markdown.parser.md.render(markdown),
+				words: text.split(/\s+/).filter(Boolean).length,
+				data,
+				resolve: (path, done) => resolveAsset(getProps, path, done),
+			});
+		},
 		/** The value changed from outside, such as Decap restoring a saved draft. */
 		sync(value: string) {
 			if ((value || '') === lastEmitted) return;
@@ -404,7 +412,6 @@ export function mountBody(root: HTMLElement, getProps: () => any) {
 			bubble.remove();
 			plus.remove();
 			closeFind();
-			window.removeEventListener('ay-preview', onPreview);
 			window.removeEventListener('keydown', onSaveKey, true);
 			window.removeEventListener('dragenter', onEnter);
 			window.removeEventListener('dragleave', onLeave);
@@ -412,6 +419,7 @@ export function mountBody(root: HTMLElement, getProps: () => any) {
 			window.removeEventListener('drop', onDrop);
 			dropHint.remove();
 			document.body.classList.remove('ay-focus');
+			delete document.documentElement.dataset.ayTheme;
 			editor.destroy();
 		},
 	};

@@ -30,17 +30,19 @@ export async function renderMath(target: HTMLElement, latex: string, block: bool
 
 let mermaidPromise: Promise<any> | null = null;
 let mermaidCount = 0;
-export async function renderMermaid(target: HTMLElement, code: string) {
-	mermaidPromise ||= import('mermaid').then((m) => { m.default.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' }); return m.default; });
+export async function renderMermaid(target: HTMLElement, code: string, theme: 'neutral' | 'dark' = 'neutral') {
+	mermaidPromise ||= import('mermaid').then((m) => m.default);
 	const mermaid = await mermaidPromise;
+	const id = `ay-mermaid-${++mermaidCount}`;
 	try {
-		const { svg } = await mermaid.render(`ay-mermaid-${++mermaidCount}`, code);
+		mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme });
+		const { svg } = await mermaid.render(id, code);
 		target.innerHTML = svg;
 		target.classList.remove('is-error');
 	} catch (err: any) {
 		target.textContent = `Diagram error: ${String(err?.message || err).split('\n')[0]}`;
 		target.classList.add('is-error');
-		document.getElementById(`day-mermaid-${mermaidCount}`)?.remove();
+		document.getElementById(`d${id}`)?.remove();
 	}
 }
 
@@ -74,6 +76,7 @@ let openField: (() => void) | null = null;
 /** A small popover with one input: link URLs, alt text, equations, embed URLs. */
 export function editField(anchor: Element | { getBoundingClientRect(): DOMRect }, opts: FieldOptions) {
 	openField?.();
+	const returnTo = document.activeElement as HTMLElement | null;
 	const input = el(opts.multiline ? 'textarea' : 'input', { class: 'ay-pop-input', placeholder: opts.placeholder || '', 'aria-label': opts.label, rows: '4' }) as HTMLInputElement;
 	input.value = opts.value || '';
 	const preview = opts.mathPreview ? el('div', { class: 'ay-pop-preview' }) : null;
@@ -97,10 +100,10 @@ export function editField(anchor: Element | { getBoundingClientRect(): DOMRect }
 	openField = close;
 	const commit = () => { const v = input.value.trim(); close(); opts.onSave(v); };
 	save.addEventListener('click', commit);
-	cancel.addEventListener('click', close);
+	cancel.addEventListener('click', () => { close(); returnTo?.focus(); });
 	input.addEventListener('keydown', (e: KeyboardEvent) => {
 		e.stopPropagation();
-		if (e.key === 'Escape') { e.preventDefault(); close(); }
+		if (e.key === 'Escape') { e.preventDefault(); close(); returnTo?.focus(); }
 		if (e.key === 'Enter' && (!opts.multiline || e.metaKey || e.ctrlKey)) { e.preventDefault(); commit(); }
 	});
 	if (preview) {

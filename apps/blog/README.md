@@ -30,6 +30,7 @@ cms-auth/                 GitHub sign-in relay for the editor (Cloudflare Worker
   express (callouts, toggles, embeds, link cards, captioned images) save as small HTML blocks, defined
   in `src/editor/blocks.ts` and styled in `src/styles/post-blocks.css`. Equations are `$$…$$` and
   diagrams are ` ```mermaid ` fences.
+- **Preview** (`src/editor/preview.ts`) renders the draft's Markdown with the published layout. Reviewers use it on other people's drafts while signed in, so its HTML is sanitized: keep that in place if you change it.
 - **Opening a post never changes it.** The file is only rewritten after someone edits the body.
 - **Uploads go through Decap**, so images are committed with the post and land in the same PR.
 - **To add a block:** define the node and its Markdown in `blocks.ts`, add it to `extensions.ts`, list

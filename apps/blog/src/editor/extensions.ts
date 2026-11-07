@@ -22,7 +22,7 @@ import { PostImage, Callout, Details, DetailsSummary, Embed, LinkCard, InlineMat
 import { el, icon, place, renderMermaid, toast } from './dom';
 import { filterCommands, EMOJI, type EditorActions, type Command } from './commands';
 
-const lowlight = createLowlight(common);
+export const lowlight = createLowlight(common);
 const LANGUAGES = ['plaintext', 'python', 'javascript', 'typescript', 'bash', 'json', 'yaml', 'html', 'css', 'sql', 'java', 'go', 'rust', 'cpp', 'c', 'csharp', 'php', 'ruby', 'kotlin', 'swift', 'markdown', 'diff', 'mermaid'];
 
 // Code block with a language picker, a copy button and a live diagram preview.
@@ -44,6 +44,9 @@ const CodeBlock = CodeBlockLowlight.extend({
 			const diagram = el('div', { class: 'ay-diagram', contenteditable: 'false' });
 			const dom = el('div', { class: 'ay-code' }, bar, pre, diagram);
 			let timer = 0;
+			const drawDiagram = () => renderMermaid(diagram, current.textContent, document.documentElement.dataset.ayTheme === 'dark' ? 'dark' : 'neutral');
+			const onTheme = () => { if (current.attrs.language === 'mermaid') drawDiagram(); };
+			window.addEventListener('ay-theme', onTheme);
 			const paint = () => {
 				const lang = current.attrs.language || 'plaintext';
 				if (!LANGUAGES.includes(lang)) select.append(el('option', { value: lang }, lang));
@@ -52,7 +55,7 @@ const CodeBlock = CodeBlockLowlight.extend({
 				dom.classList.toggle('is-diagram', isDiagram);
 				diagram.hidden = !isDiagram;
 				clearTimeout(timer);
-				if (isDiagram) timer = window.setTimeout(() => renderMermaid(diagram, current.textContent), 300);
+				if (isDiagram) timer = window.setTimeout(drawDiagram, 300);
 			};
 			paint();
 			return {
@@ -60,6 +63,7 @@ const CodeBlock = CodeBlockLowlight.extend({
 				update(next) { if (next.type !== current.type) return false; const changed = next.textContent !== current.textContent || next.attrs.language !== current.attrs.language; current = next; if (changed) paint(); return true; },
 				stopEvent: (e) => bar.contains(e.target as Node),
 				ignoreMutation: (m) => !code.contains(m.target as Node),
+				destroy() { clearTimeout(timer); window.removeEventListener('ay-theme', onTheme); },
 			};
 		};
 	},
@@ -73,6 +77,10 @@ const PostHeading = Heading.extend({
 // Bulleted lists and checklists both start with "- ", so Markdown would merge two
 // neighbours into one list. An HTML comment between them keeps them apart.
 const dashList = (list: any) => list.extend({
+	// A loose list wraps each item in a paragraph, which breaks published checklists.
+	addAttributes() {
+		return { ...this.parent?.(), tight: { default: true, rendered: false } };
+	},
 	addStorage() {
 		return {
 			...this.parent?.(),

@@ -50,11 +50,12 @@ Reviews usually happen within a week. Nothing you write is public until a review
 
 ## Step 2: Fill in the post details
 
-The pill at the bottom of the page switches between three views:
+The editor has two areas side by side:
 
-- **Write** is the page itself: your cover image, title, subtitle and post. It already looks like the published post.
-- **Preview** hides the editing tools so you can read the post as readers will.
-- **Post details** slides in a panel from the right with your summary, category, tags, name and search-engine settings, so you can still see your post. If you try to save with a required detail missing, the panel opens by itself.
+- **On the left** is your cover image, title, subtitle and post. It already looks much like the published post.
+- **On the right** is the **Post details** panel with your summary, category, tags, name and search-engine settings. Click **»** at the top of the panel to collapse it for more writing space, and the **Post details** tab on the right edge of the page to bring it back. If you try to save with a required detail missing, the panel opens by itself.
+
+To see your post exactly as readers will, click **Preview** at the top right. You can switch between desktop and phone sizes. Previewing doesn't save or publish anything.
 
 Here is what goes in each field:
 
@@ -170,8 +171,9 @@ If you used an AI assistant to help you write, check every fact, number and link
 
 Click the **Edit as Markdown** icon on the right of the toolbar to work on the raw text, then click it again to go back. See the cheat sheet near the end of this guide. Any HTML of your own is kept and shows as a **Custom HTML** block in the visual view. You can also add one with `/html`. Reviewers check custom HTML closely, so only use it when no built-in block does the job.
 
-## Step 4: Save
+## Step 4: Preview and save
 
+- Click **Preview** at the top right to read the post as readers will see it, then **Back to editing** to carry on.
 - Click **Save** at the top whenever you want to keep your progress. Your draft is stored in your fork, and you can close the browser and come back later.
 - To find your drafts again, open [aiyatra.io/blog/admin](https://aiyatra.io/blog/admin) and go to the **Workflow** tab.
 - If you want to concentrate, the toolbar also has **focus mode**, an **outline** of your headings and a **dark mode**. Word count and reading time sit at the bottom right.
@@ -211,7 +213,7 @@ Need a change after it's live? Open the post in the editor, make the edit, and s
 - [ ] No stray `##`, `**` or `|` symbols in the post
 - [ ] Every image has alt text and you have the right to use it
 - [ ] All links work and use `https://`
-- [ ] You read the whole post once more from top to bottom
+- [ ] You read the whole post once more in **Preview**
 
 ## Common mistakes and how to fix them
 
@@ -278,7 +280,7 @@ You keep the credit. Your name, photo and link appear on the post.
 ## For reviewers (AIYatra team)
 
 1. New submissions appear in [aiyatra.io/blog/admin](https://aiyatra.io/blog/admin) under the **Workflow** tab in the **In review** column, and as pull requests on [GitHub](https://github.com/AI-Yatra/aiyatra.io/pulls).
-2. Open the post in the editor to read it as readers will see it. Use the checklist above.
+2. Open the post in the editor and click **Preview** to read it as readers will see it. Use the checklist above.
    **Check custom HTML closely.** It runs on the live site, so look at any `Custom HTML` block and any `<script>` or `<iframe>` in the pull request's *Files changed* tab.
 3. Leave feedback as comments on the pull request (GitHub → *Files changed* lets you comment on specific lines). The author is emailed automatically.
 4. When it's ready, move the card to **Ready** and click **Publish** (or merge the pull request). The site deploys by itself and the post is live within a few minutes.

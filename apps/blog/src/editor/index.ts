@@ -65,8 +65,8 @@ const LineControl = widget((root, self) => {
 
 const BodyControl = widget((root, self) => {
 	const pane = root.parentElement!.parentElement!;
-	setupShell(pane);
 	const body = mountBody(root, () => self.props);
+	setupShell(pane, () => body.preview(self.props.getEntry?.()?.get('data')));
 	return { sync: body.sync, destroy() { body.destroy(); teardownShell(); } };
 });
 
@@ -200,67 +200,83 @@ const SlugControl = widget((root, self) => {
 }, { canvas: false });
 
 // ---------------------------------------------------------------- the shell
-// Writing gets the whole page. Everything else lives in a drawer that slides in
-// from the right, so the post stays visible while filling in the details.
-let shell: HTMLElement | null = null;
-let observer: MutationObserver | null = null;
+// Post details sit in a panel beside the post, and collapse to give writing the
+// whole page. The choice is remembered. Preview lives in Decap's top bar.
+const PANEL_STORE = 'ay-editor-panel';
+let cleanup: (() => void) | null = null;
 
-function setupShell(pane: HTMLElement) {
+function setupShell(pane: HTMLElement, preview: () => void) {
 	document.body.classList.add('ay-editing');
 	// Decap's page has fixed colours and a minimum width. Marking the panels that
 	// wrap the form lets the stylesheet adapt them for dark mode and phones.
 	for (let n: HTMLElement | null = pane; n && n !== document.body; n = n.parentElement) n.classList.add('ay-surface');
 
 	const body = el('div', { class: 'ay-drawer-body' });
-	const close = el('button', { type: 'button', class: 'ay-drawer-close', 'aria-label': 'Close post details' });
-	close.innerHTML = icon('X', 18);
-	close.addEventListener('click', () => view('write'));
-	const drawer = el('aside', { class: 'ay-drawer', 'aria-label': 'Post details' }, el('header', {}, el('h2', {}, 'Post details'), close), body);
+	const collapse = el('button', { type: 'button', class: 'ay-drawer-close', title: 'Collapse post details', 'aria-label': 'Collapse post details' });
+	collapse.innerHTML = icon('ChevronsRight', 18);
+	const drawer = el('aside', { class: 'ay-drawer', id: 'ay-details', 'aria-label': 'Post details' }, el('header', {}, el('h2', {}, 'Post details'), collapse), body);
 	// The field list is fixed once Decap has rendered it, so these can safely move.
 	for (const child of [...pane.children] as HTMLElement[]) if (!child.dataset.ayCanvas) body.append(child);
 	pane.append(drawer);
 
-	const view = (name: 'write' | 'details' | 'preview') => {
-		pane.dataset.ayView = name;
-		document.body.dataset.ayView = name;
-		tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.view === name)));
-		window.dispatchEvent(new CustomEvent('ay-preview', { detail: name === 'preview' }));
-	};
-	const tab = (name: 'write' | 'details' | 'preview', label: string, iconName: string) => {
-		const b = el('button', { type: 'button', role: 'tab', 'data-view': name });
-		b.innerHTML = `${icon(iconName, 15)}<span>${label}</span>`;
-		b.addEventListener('click', () => view(name === 'details' && pane.dataset.ayView === 'details' ? 'write' : name));
-		return b;
-	};
-	const tabs = [tab('write', 'Write', 'PenLine'), tab('preview', 'Preview', 'Eye'), tab('details', 'Post details', 'SlidersHorizontal')];
-	shell = el('div', { id: 'ay-tabs', role: 'tablist', 'aria-label': 'Editor view' }, ...tabs);
-	document.body.append(shell);
-	view('write');
+	const rail = el('button', { type: 'button', class: 'ay-rail', title: 'Show post details', 'aria-label': 'Show post details', 'aria-controls': 'ay-details' });
+	rail.innerHTML = `${icon('ChevronsLeft', 16)}<span>Post details</span>`;
 
-	// A required field that's empty somewhere hidden would otherwise fail silently.
-	observer = new MutationObserver((records) => {
+	const setPanel = (open: boolean, remember = true) => {
+		document.body.dataset.ayPanel = open ? 'open' : 'closed';
+		pane.dataset.ayPanel = open ? 'open' : 'closed';
+		rail.hidden = open;
+		if (remember) { try { localStorage.setItem(PANEL_STORE, open ? 'open' : 'closed'); } catch { /* it just won't persist */ } }
+	};
+	collapse.addEventListener('click', () => { setPanel(false); rail.focus(); });
+	rail.addEventListener('click', () => { setPanel(true); collapse.focus(); });
+	let saved: string | null = null;
+	try { saved = localStorage.getItem(PANEL_STORE); } catch { /* use the default */ }
+	// Small screens start with it closed, because there it covers the post.
+	setPanel(innerWidth >= 1100 ? saved !== 'closed' : false, false);
+
+	const previewBtn = el('button', { type: 'button', id: 'ay-preview-btn', title: 'See how readers will see this post' });
+	previewBtn.innerHTML = `${icon('Eye', 16)}<span>Preview</span>`;
+	previewBtn.addEventListener('click', preview);
+	// Decap can re-render its top bar, so keep the button in place.
+	const dock = () => {
+		const meta = document.querySelector('[class*="ToolbarSectionMeta"]');
+		if (meta && previewBtn.parentElement !== meta) meta.prepend(previewBtn);
+	};
+	dock();
+	const docking = window.setInterval(dock, 800);
+	document.body.append(rail);
+
+	// A required field hidden in the collapsed panel would otherwise fail silently.
+	const observer = new MutationObserver((records) => {
 		for (const r of records) for (const n of r.addedNodes) {
 			if (!(n instanceof HTMLUListElement) || n.closest('.ay-canvas')) continue;
-			const owner = (n.closest('[data-ay-canvas]') || (n.closest('.ay-drawer-body') && [...body.children].find((c) => c.contains(n)))) as HTMLElement | null;
+			const inPanel = n.closest('.ay-drawer-body');
+			const owner = (n.closest('[data-ay-canvas]') || (inPanel && [...body.children].find((c) => c.contains(n)))) as HTMLElement | null;
 			if (!owner) continue;
-			const target = owner.dataset.ayCanvas ? 'write' : 'details';
-			if (pane.dataset.ayView !== target) {
-				view(target);
-				toast(target === 'details' ? 'A few post details still need filling in.' : 'Your post needs a title and some content.', 'error');
+			if (inPanel && document.body.dataset.ayPanel !== 'open') {
+				setPanel(true, false);
+				toast('A few post details still need filling in.', 'error');
 			}
 			owner.scrollIntoView({ block: 'center' });
 			return;
 		}
 	});
 	observer.observe(pane, { childList: true, subtree: true });
+
+	cleanup = () => {
+		observer.disconnect();
+		clearInterval(docking);
+		rail.remove();
+		previewBtn.remove();
+		document.body.classList.remove('ay-editing');
+		delete document.body.dataset.ayPanel;
+	};
 }
 
 function teardownShell() {
-	observer?.disconnect();
-	shell?.remove();
-	shell = null;
-	document.body.classList.remove('ay-editing');
-	delete document.body.dataset.ayView;
+	cleanup?.();
+	cleanup = null;
 }
 
 const blank = () => h('div', {});
