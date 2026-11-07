@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import katexCss from 'katex/dist/katex.min.css?url';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import { photoProps, SITE_URL } from '../lib/site';
@@ -15,9 +16,14 @@ export async function getStaticPaths() {
 
 interface Props { post: Post; newer: Post | null; older: Post | null; all: Post[] }
 const { post, newer, older, all } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const d = post.data;
+const tocHeadings = d.toc ? headings.filter((h) => h.depth === 2 || h.depth === 3) : [];
 const more = related(post, all);
+// Equation styles and fonts are only loaded by posts that have equations.
+const hasMath = !!post.body?.includes('$$');
+const seriesPosts = d.series ? all.filter((p) => p.data.series === d.series).sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf()) : [];
+const authors = [d.author, ...d.coAuthors];
 const isRecap = d.category === 'Session recap';
 const coverImg = d.cover ? photoProps(d.cover, '(min-width: 1100px) 1000px, 100vw') : null;
 const ogImage = d.cover ? new URL(coverImg?.src || d.cover, SITE_URL).href : undefined;
@@ -28,12 +34,13 @@ const jsonLd = {
 	description: d.excerpt,
 	datePublished: isoDate(d.date),
 	image: ogImage,
-	author: { '@type': d.author === 'AIYatra Team' ? 'Organization' : 'Person', name: d.author, url: d.authorUrl },
+	author: [{ '@type': d.author === 'AIYatra Team' ? 'Organization' : 'Person', name: d.author, url: d.authorUrl }, ...d.coAuthors.map((name) => ({ '@type': 'Person', name }))],
 	publisher: { '@type': 'Organization', name: 'AIYatra', logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon-512.png` } },
 	mainEntityOfPage: `${SITE_URL}/blog/${post.id}`,
 };
 ---
-<BaseLayout title={`${d.title} — AIYatra Blog`} description={d.excerpt} image={ogImage} type="article" publishedTime={isoDate(d.date)} jsonLd={jsonLd}>
+<BaseLayout title={`${d.seoTitle || d.title} — AIYatra Blog`} description={d.seoDescription || d.excerpt} image={ogImage} type="article" publishedTime={isoDate(d.date)} jsonLd={jsonLd} canonicalUrl={d.canonicalUrl}>
+	{hasMath && <link slot="head" rel="stylesheet" href={katexCss} />}
 	<section id="top" class="relative overflow-hidden">
 		<div class="wrap pb-10 pt-14 lg:pt-[74px]">
 			<div data-reveal class="flex flex-wrap items-center gap-3">
@@ -44,11 +51,13 @@ const jsonLd = {
 			</div>
 			<div data-reveal style="--reveal-delay:0.08s">
 				<h1 class="mt-5 max-w-4xl font-hand text-5xl font-bold leading-[1.02] tracking-tight sm:text-6xl">{d.title}</h1>
+				{d.subtitle && <p class="mt-4 max-w-3xl text-xl font-medium leading-snug text-ink/70">{d.subtitle}</p>}
 			</div>
 			<div data-reveal style="--reveal-delay:0.14s">
 				<div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold text-ink/70">
 					<span class="inline-flex items-center gap-1.5"><Icon name="UserRound" class="h-4 w-4" />
 						{d.authorUrl ? <a href={d.authorUrl} target="_blank" rel="noreferrer" class="underline underline-offset-4 hover:text-tone-blue-deep">{d.author}</a> : d.author}
+						{d.coAuthors.length > 0 && <span>& {d.coAuthors.join(' & ')}</span>}
 					</span>
 					<span class="inline-flex items-center gap-1.5"><Icon name="CalendarDays" class="h-4 w-4" /> <time datetime={isoDate(d.date)}>{formatDate(d.date)}</time></span>
 					<span class="inline-flex items-center gap-1.5"><Icon name="Clock" class="h-4 w-4" /> {readingTime(post.body)} min read</span>
@@ -70,10 +79,23 @@ const jsonLd = {
 					<div class="overflow-hidden rounded-2xl border-2 border-ink shadow-paper">
 						<img {...coverImg} alt={d.coverAlt || d.title} decoding="async" width="1024" height="576" class="aspect-[21/9] w-full object-cover" />
 					</div>
+					{d.coverCredit && <p class="post-cover-credit">{d.coverCredit}</p>}
 				</div>
 			)}
 			<div data-reveal style="--reveal-delay:0.08s">
 				<article class={`blog-body rounded-2xl border-2 border-ink bg-paper p-6 shadow-paper-sm sm:p-10 lg:p-14 ${coverImg ? 'mt-10' : ''}`}>
+					{seriesPosts.length > 1 && (
+						<nav class="post-series" aria-label={`Series: ${d.series}`}>
+							<p>Series: {d.series}</p>
+							<ol>{seriesPosts.map((p) => <li>{p.id === post.id ? <span aria-current="page">{p.data.title}</span> : <a href={`/blog/${p.id}`}>{p.data.title}</a>}</li>)}</ol>
+						</nav>
+					)}
+					{tocHeadings.length > 0 && (
+						<nav class="post-toc" aria-label="In this post">
+							<p>In this post</p>
+							<ul>{tocHeadings.map((h) => <li data-depth={h.depth}><a href={`#${h.slug}`}>{h.text}</a></li>)}</ul>
+						</nav>
+					)}
 					<Content />
 				</article>
 			</div>
@@ -156,3 +178,45 @@ const jsonLd = {
 		</section>
 	)}
 </BaseLayout>
+
+<script>
+	// A copy button on every code block.
+	for (const pre of document.querySelectorAll<HTMLElement>('.blog-body pre:not(:has(code.language-mermaid))')) {
+		const wrap = document.createElement('div');
+		wrap.className = 'code-wrap';
+		pre.replaceWith(wrap);
+		wrap.append(pre);
+		const button = document.createElement('button');
+		button.type = 'button';
+		button.className = 'code-copy';
+		button.textContent = 'Copy';
+		button.addEventListener('click', async () => {
+			await navigator.clipboard.writeText(pre.textContent || '');
+			button.textContent = 'Copied';
+			setTimeout(() => { button.textContent = 'Copy'; }, 1500);
+		});
+		wrap.append(button);
+	}
+
+	// Mermaid is large, so it only loads on posts that contain a diagram.
+	const blocks = document.querySelectorAll<HTMLElement>('.blog-body code.language-mermaid');
+	if (blocks.length) {
+		import('mermaid').then(async ({ default: mermaid }) => {
+			mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
+			let n = 0;
+			for (const block of blocks) {
+				const pre = block.parentElement!;
+				const code = block.textContent || '';
+				try {
+					const { svg } = await mermaid.render(`post-diagram-${++n}`, code);
+					const figure = document.createElement('div');
+					figure.className = 'mermaid-diagram';
+					figure.innerHTML = svg;
+					pre.replaceWith(figure);
+				} catch {
+					// A diagram with a syntax error stays visible as its source code.
+				}
+			}
+		});
+	}
+</script>

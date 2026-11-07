@@ -48,7 +48,8 @@ collections:
     description: 'Session recaps, tutorials and guest posts. New to writing here? Read the writing guide first at aiyatra.io/blog/guide (the “Writing guide” button, bottom right).'
     folder: apps/blog/src/content/blog
     create: true
-    slug: '{{slug}}'
+    # New posts take their address from the Post URL field, which follows the title.
+    slug: '{{fields.urlSlug}}'
     preview_path: '{{slug}}'
     summary: '{{title}} · {{author}} · {{date}}'
     sortable_fields: ['date', 'title', 'author', 'category']
@@ -59,22 +60,36 @@ collections:
       - label: Session recaps
         field: category
         pattern: Session recap
+    # The whole page is a live, editable preview, so there is no side preview.
+    editor:
+      preview: false
+    # Cover, title, subtitle and body make up the page itself (src/editor). All
+    # the other fields live in the "Post details" drawer.
     fields:
-      - { label: Title, name: title, widget: string, hint: 'Choose it before your first save: the post’s web address is made from it and does not change later.' }
+      - { label: Cover image, name: cover, widget: ay-cover, required: false }
+      - { label: Cover image description, name: coverAlt, widget: ay-line, required: false, placeholder: 'Describe the cover for screen readers and search engines' }
+      - { label: Cover credit, name: coverCredit, widget: ay-line, required: false, placeholder: 'Photo credit (optional)' }
+      - { label: Title, name: title, widget: ay-title, placeholder: 'Article title…' }
+      - { label: Subtitle, name: subtitle, widget: ay-line, required: false, placeholder: 'Add a subtitle…' }
+      - { label: Post, name: body, widget: ay-body }
+      - { label: Post URL, name: urlSlug, widget: ay-slug, required: false, hint: 'Follows your title until you edit it. It can’t change after your first save.' }
       - { label: Short summary, name: excerpt, widget: text, hint: 'One or two sentences. Shown on the blog cards, in search results and in link previews.' }
       - label: Category
         name: category
         widget: select
         default: Guest post
         options: ['Guest post', 'Tutorial', 'Research notes', 'Community', 'Session recap']
+      - { label: Tags, name: tags, widget: ay-tags, required: false, default: [], hint: '3–6 short topics. Press Enter after each one.' }
+      - { label: Series, name: series, widget: string, required: false, hint: 'Writing several parts? Use the exact same series name on each post to link them together.' }
+      - { label: Publish date, name: date, widget: datetime, default: '{{now}}', format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true, hint: 'Pick a future date to schedule the post. Once approved, it goes live at midnight IST on that date.' }
+      - { label: Show a table of contents, name: toc, widget: boolean, required: false, default: false, hint: 'Lists your headings at the top of the post. Useful for long tutorials.' }
       - { label: Your name, name: author, widget: string, hint: 'As you would like it to appear on the post.' }
+      - { label: Co-authors, name: coAuthors, widget: ay-tags, hash: false, placeholder: 'Add a name and press Enter', required: false, default: [] }
       - { label: About you, name: authorRole, widget: string, required: false, hint: 'e.g. “ML engineer at Acme · AIYatra Student Ambassador”' }
       - { label: Your link, name: authorUrl, widget: string, required: false, hint: 'LinkedIn, GitHub or personal site (full https:// URL).', pattern: ['^https?://', 'Must start with http:// or https://'] }
       - { label: Your photo, name: authorAvatar, widget: image, required: false, choose_url: true }
-      - { label: Publish date, name: date, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true }
-      - { label: Cover image, name: cover, widget: image, required: false, choose_url: true, hint: 'Wide images (16:9) work best. Upload one or paste an image URL.' }
-      - { label: Cover image description, name: coverAlt, widget: string, required: false, hint: 'Required if you add a cover. Describe what the image shows, e.g. “Five students pair-programming around a table”.' }
-      - { label: Tags, name: tags, widget: list, required: false, default: [], hint: '3–6 short topics, comma-separated, e.g. agents, pytorch, rag' }
+      - { label: SEO title, name: seoTitle, widget: string, required: false, hint: 'Replaces the title in search results and link previews. Aim for under 60 characters.' }
+      - { label: SEO description, name: seoDescription, widget: text, required: false, hint: 'Replaces the short summary in search results. Aim for under 155 characters.' }
+      - { label: Originally published at, name: canonicalUrl, widget: string, required: false, hint: 'Already published elsewhere? Paste that URL so search engines credit the original.', pattern: ['^https?://', 'Must start with http:// or https://'] }
       - { label: Meetup event link, name: eventUrl, widget: string, required: false, hint: 'Leave empty for guest posts (AIYatra session recaps only).', pattern: ['^https?://', 'Must start with http:// or https://'] }
       - { label: Attendees, name: attendees, widget: number, required: false, value_type: int, min: 0, hint: 'Leave empty for guest posts (AIYatra session recaps only).' }
-      - { label: Post, name: body, widget: markdown, hint: 'Sections: Heading 2, sub-sections: Heading 3 (never Heading 1 or bold text). Code: + → Code Block. Tables: switch to Markdown mode with the toggle at the top right of this box. Full guide: aiyatra.io/blog/guide' }
