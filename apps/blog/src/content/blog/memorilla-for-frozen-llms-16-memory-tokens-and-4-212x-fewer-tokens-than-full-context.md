@@ -16,7 +16,12 @@ excerpt: "Memorilla, an open-source memory module that compresses an entire
   documents is newer without explicit dates, and it requires self-hosted
   open-weight models rather than text-only APIs."
 category: Guest post
-tags: []
+tags:
+  - Agent Memory
+  - LLMs
+  - RAG
+  - Embeddings
+  - Paper Review
 date: 2026-11-07
 toc: false
 author: Khaja Moinuddin Mohammed

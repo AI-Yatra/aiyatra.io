@@ -7,6 +7,13 @@ author: AIYatra Team
 cover: https://secure.meetupstatic.com/photos/event/5/f/e/highres_535561534.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/316031457/
 attendees: 207
+tags:
+  - Linear Algebra
+  - AI Fundamentals
+  - Transformers
+  - Attention
+  - Embeddings
+  - LoRA
 ---
 
 Vectors to attention: embeddings, Q/K/V projections, LoRA and SVD — the math beneath the models, by hand.

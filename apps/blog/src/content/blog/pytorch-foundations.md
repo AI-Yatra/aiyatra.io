@@ -7,6 +7,11 @@ author: AIYatra Team
 cover: https://secure.meetupstatic.com/photos/event/1/0/a/b/highres_535684267.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/316136710/
 attendees: 145
+tags:
+  - PyTorch
+  - AI Fundamentals
+  - Autograd
+  - Deep Learning
 ---
 
 Tensors, autograd and the training loop — the foundations every AI engineer stands on. We rebuilt nn.Linear from scratch.

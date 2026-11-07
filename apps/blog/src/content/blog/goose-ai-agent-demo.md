@@ -7,6 +7,13 @@ author: AIYatra Team
 cover: https://secure.meetupstatic.com/photos/event/6/6/2/6/highres_535226150.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/315704127/
 attendees: 142
+tags:
+  - Agentic AI
+  - Goose
+  - MCP
+  - Context Engineering
+  - Coding Agents
+  - Open Source
 ---
 
 Providers, context engineering, MCP extensions and recipes — a full end-to-end run of the open-source Goose agent.

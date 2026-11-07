@@ -20,7 +20,7 @@ tags:
   - EmbeddingGemma
   - Gemma
   - Multimodal AI
-  - AI Embeddings
+  - Embeddings
   - RAG
   - Semantic Search
 ---

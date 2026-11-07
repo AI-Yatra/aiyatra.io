@@ -7,6 +7,10 @@ author: AIYatra Team
 cover: https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/315451083/
 attendees: 25
+tags:
+  - Agentic AI
+  - Reading Group
+  - AI Fundamentals
 ---
 
 Where the reading journey began — session one of the Hitchhiker’s Guide to Agentic AI, online and free.

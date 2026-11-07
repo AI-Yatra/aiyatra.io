@@ -7,6 +7,11 @@ author: AIYatra Team
 cover: https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/315492739/
 attendees: 35
+tags:
+  - Agentic AI
+  - Reading Group
+  - Tool Calling
+  - Planning
 ---
 
 Session two of the reading series — continuing the guided tour through agentic AI, online in the evening.

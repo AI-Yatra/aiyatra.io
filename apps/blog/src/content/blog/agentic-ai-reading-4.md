@@ -7,6 +7,11 @@ author: AIYatra Team
 cover: https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/315595570/
 attendees: 40
+tags:
+  - Agentic AI
+  - Reading Group
+  - Design Patterns
+  - Agent Memory
 ---
 
 Book-reading series finale: agentic patterns, discussion and reading together — online, open to everyone.

@@ -7,6 +7,12 @@ author: AIYatra Team
 cover: https://secure.meetupstatic.com/photos/event/4/b/d/c/highres_535999420.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/316434319/
 attendees: 286
+tags:
+  - Reinforcement Learning
+  - Fine-Tuning
+  - LoRA
+  - DPO
+  - GRPO
 ---
 
 SFT with LoRA, DPO and GRPO on a pretrained model — rewards, preferences and the hard question: better at the task, or just better at the reward?

@@ -7,6 +7,12 @@ author: AIYatra Team
 cover: https://secure.meetupstatic.com/photos/event/3/5/0/c/highres_535213580.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/315688657/
 attendees: 64
+tags:
+  - Speculative Decoding
+  - Inference Optimization
+  - PyTorch
+  - Hugging Face
+  - llama.cpp
 ---
 
 Draft-verify-accept in ~60 lines of PyTorch, then HF assisted generation + llama.cpp — 2–3× faster inference, proven lossless.

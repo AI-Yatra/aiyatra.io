@@ -7,6 +7,12 @@ author: AIYatra Team
 cover: https://secure.meetupstatic.com/photos/event/3/c/0/a/highres_535815370.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/316241516/
 attendees: 282
+tags:
+  - Agentic AI
+  - Coding Agents
+  - Python
+  - Guardrails
+  - Local AI
 ---
 
 Build the loop, the tools and the guardrails — and make your own coding agent that reads, plans, edits, tests and repairs its way to a verified pull request. 100% offline, zero API keys.
