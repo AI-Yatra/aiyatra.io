@@ -4,7 +4,8 @@ import '../styles/blog.css';
 import '../styles/post-blocks.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_URL } from '../lib/site';
+import SearchDialog from '../components/SearchDialog.astro';
+import { SITE_URL, ANALYTICS_TOKEN } from '../lib/site';
 
 interface Props {
 	title: string;
@@ -63,6 +64,8 @@ const canonical = canonicalUrl || new URL(Astro.url.pathname.replace(/\.html$/, 
 			</main>
 			<Footer />
 		</div>
+		<SearchDialog />
+		{ANALYTICS_TOKEN && <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: ANALYTICS_TOKEN })}></script>}
 		<script is:inline>
 			// Scroll reveal (see styles/blog.css). Inline so content can never
 			// stay hidden behind a script that failed to load.

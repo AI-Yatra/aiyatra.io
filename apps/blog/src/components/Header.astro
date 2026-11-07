@@ -60,6 +60,9 @@ const repeats = Array.from({ length: 8 });
 			))}
 		</nav>
 		<div class="flex items-center gap-2">
+			<button type="button" data-open-search aria-label="Search the blog" title="Search (Ctrl or ⌘ + K)" class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-tone-blue-deep/15 bg-white/70 text-ink/80 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">
+				<Icon name="Search" class="h-5 w-5" />
+			</button>
 			<a
 				href={MEETUP_URL}
 				target="_blank"

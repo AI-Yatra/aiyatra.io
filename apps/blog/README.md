@@ -12,7 +12,9 @@ published on the site at `/blog/guide` (same file, rendered by `src/pages/guide.
 ```
 src/content/blog/*.md     posts (one Markdown file per post; filename = URL slug)
 src/content.config.ts     post schema — keep in step with public/cms/config.yml
-src/pages/                /blog, /blog/<slug>, /blog/write, /blog/admin, /blog/rss.xml
+src/pages/                /blog, /blog/<slug>, /blog/tags, /blog/map, /blog/paths, /blog/authors, /blog/write, /blog/admin, /blog/rss.xml
+src/data/paths.ts         curated learning paths
+src/scripts/              search, read-aloud, counters and runnable Python
 src/components/           Header/Footer (ports of apps/web/src/components/SiteChrome.jsx)
 src/editor/               the writing experience: a TipTap editor plugged into Decap as custom widgets
 src/styles/post-blocks.css  styles for callouts, embeds, cards etc., shared by the editor and the blog
@@ -41,6 +43,23 @@ cms-auth/                 GitHub sign-in relay for the editor (Cloudflare Worker
 - **AI help** runs in the writer's browser with their own Anthropic API key (`src/editor/ai.ts`). The site holds no key and pays nothing.
 - **Link cards** get their title and image from the `/unfurl` route on the sign-in relay. Without it they still
   work, showing the site's name and an editable title.
+
+## Features to switch on
+
+These need an account only the site's owner can set up. Each stays hidden until its value is set in `src/lib/site.ts`.
+
+- **Analytics:** in Cloudflare, go to *Analytics & Logs → Web Analytics*, add `aiyatra.io`, and copy the site token into `ANALYTICS_TOKEN`.
+- **Newsletter:** create a list with an email provider and copy its form URL into `NEWSLETTER_FORM_ACTION`. Check `NEWSLETTER_EMAIL_FIELD` matches the name it expects. Until then, readers see Meetup, WhatsApp and RSS links.
+- **Comments:** enable Discussions on the repo, add a **Blog comments** category, install the [giscus app](https://github.com/apps/giscus) on the repo, then copy the IDs that [giscus.app](https://giscus.app) gives you into `GISCUS`.
+
+## Discovery and reader features
+
+- **Tags** drive `/blog/tags`, the moving cloud on `/blog` and the knowledge map at `/blog/map`, which leaves out tags used only once. The editor suggests tags already in use, so reuse the same names.
+- **Search** is two modes. *Search words* uses a [Pagefind](https://pagefind.app) index built after `astro build`, so it only works on a build, not in `astro dev`. *Ask by meaning* runs a sentence-embedding model in the reader's browser after they opt in. It links to sections of posts and never generates an answer.
+- **View counts and reactions** live in a D1 database behind the Worker in `cms-auth/`. Only counts are stored. To set it up again: `npx wrangler d1 execute aiyatra-blog-stats --remote --file apps/blog/cms-auth/schema.sql --config apps/blog/cms-auth/wrangler.toml`.
+- **Runnable Python** uses Pyodide from a pinned CDN URL, in a worker. The Run button only appears when every import is on the list in `src/scripts/run-python.ts`.
+- **Preview cards** in `src/pages/og/` are drawn at build time. A post uses its cover when no other post shares it, otherwise its generated card.
+- **Learning paths** are curated by hand in `src/data/paths.ts`. A new post joins a path only when you add it there.
 
 ## Running it
 

@@ -37,6 +37,10 @@ function main() {
 		{ loc: `${SITE_URL}/blog`, changefreq: 'daily', priority: '0.9' },
 		{ loc: `${SITE_URL}/blog/write`, changefreq: 'monthly', priority: '0.6' },
 		{ loc: `${SITE_URL}/blog/guide`, changefreq: 'monthly', priority: '0.6' },
+		{ loc: `${SITE_URL}/blog/tags`, changefreq: 'weekly', priority: '0.6' },
+		{ loc: `${SITE_URL}/blog/map`, changefreq: 'weekly', priority: '0.5' },
+		{ loc: `${SITE_URL}/blog/paths`, changefreq: 'weekly', priority: '0.6' },
+		{ loc: `${SITE_URL}/blog/authors`, changefreq: 'weekly', priority: '0.5' },
 		{ loc: `${SITE_URL}/contact`, changefreq: 'monthly', priority: '0.6' },
 		...posts.map((p) => ({ loc: `${SITE_URL}/blog/${p.slug}`, changefreq: 'monthly', priority: '0.7' })),
 	];

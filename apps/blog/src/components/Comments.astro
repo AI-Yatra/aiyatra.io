@@ -1,0 +1,44 @@
+---
+// Comments through giscus, stored as GitHub Discussions. Stays hidden until the
+// IDs are set in lib/site.ts. See apps/blog/README.md for the setup.
+import { GISCUS } from '../lib/site';
+interface Props { slug: string }
+const { slug } = Astro.props;
+const enabled = !!GISCUS.repoId && !!GISCUS.categoryId;
+---
+{enabled && (
+	<section class="mt-6 rounded-2xl border-2 border-ink bg-paper p-6 shadow-paper-sm" aria-labelledby="comments-title" data-pagefind-ignore>
+		<h2 id="comments-title" class="font-hand text-3xl font-bold leading-tight">Comments</h2>
+		<div
+			id="giscus-slot"
+			class="mt-4"
+			data-repo={GISCUS.repo}
+			data-repo-id={GISCUS.repoId}
+			data-category={GISCUS.category}
+			data-category-id={GISCUS.categoryId}
+			data-term={`blog/${slug}`}
+		></div>
+	</section>
+)}
+<script>
+	// Only fetched when a reader scrolls near the comments.
+	const slot = document.getElementById('giscus-slot');
+	if (slot) {
+		const io = new IntersectionObserver(([entry]) => {
+			if (!entry.isIntersecting) return;
+			io.disconnect();
+			const s = document.createElement('script');
+			s.src = 'https://giscus.app/client.js';
+			s.async = true;
+			s.crossOrigin = 'anonymous';
+			const attrs: Record<string, string> = {
+				'data-repo': slot.dataset.repo!, 'data-repo-id': slot.dataset.repoId!, 'data-category': slot.dataset.category!,
+				'data-category-id': slot.dataset.categoryId!, 'data-mapping': 'specific', 'data-term': slot.dataset.term!, 'data-strict': '1',
+				'data-reactions-enabled': '0', 'data-emit-metadata': '0', 'data-input-position': 'top', 'data-theme': 'light', 'data-lang': 'en', 'data-loading': 'lazy',
+			};
+			for (const [k, v] of Object.entries(attrs)) s.setAttribute(k, v);
+			slot.append(s);
+		}, { rootMargin: '400px' });
+		io.observe(slot);
+	}
+</script>

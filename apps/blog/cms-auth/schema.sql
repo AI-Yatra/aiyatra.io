@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS counters (
+	slug TEXT NOT NULL,
+	kind TEXT NOT NULL,
+	n INTEGER NOT NULL DEFAULT 0,
+	PRIMARY KEY (slug, kind)
+);

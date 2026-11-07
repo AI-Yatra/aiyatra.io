@@ -75,9 +75,8 @@ Here is what goes in each field:
 | **Your link** | No | One full URL to your LinkedIn, GitHub or website, starting with `https://` | A link without `https://` (the editor will refuse it) |
 | **Your photo** | No | A square photo of you, at least 200 × 200 px. Upload it or click **Insert from URL** | Logos, group photos, or very large files |
 | **Publish date** | Yes | Already set to today. Pick a future date to schedule the post: once approved, it goes live at midnight IST on that date | Dates in the past |
-| **Tags** | Recommended | 3–6 short topics. Press Enter after each one, e.g. `RAG`, `embeddings`, `PyTorch` | Long phrases, or more than 6 tags |
+| **Tags** | Recommended | 3–6 short topics. Pick from the suggestions when one fits, so readers find all posts on a topic in one place. Press Enter after each one, e.g. `RAG`, `Embeddings`, `PyTorch` | Long phrases, near-duplicates of an existing tag, or more than 6 tags |
 | **Series** | No | For multi-part posts, use the exact same name on each part. Readers get a list linking every part | |
-| **Show a table of contents** | No | Turn it on for long tutorials. It lists your headings at the top of the post | |
 | **SEO title** and **SEO description** | No | Replace the title and summary in search results and link previews | Keyword stuffing |
 | **Originally published at** | Only if it ran elsewhere first | The original URL, so search engines credit it | |
 | **Meetup event link** | **Leave empty** | Only for AIYatra session recaps | Pasting the AIYatra Meetup page here. It adds a "The Meetup event" link to your post |
@@ -140,6 +139,8 @@ Link descriptive words ("the EmbeddingGemma model card"), not "click here".
 ### Code blocks
 
 Type `/code` or ` ``` `, then pick the language from the menu on the block to switch on syntax colouring.
+
+Readers get a **Run** button on Python samples that only use the standard library, NumPy, pandas, SciPy, SymPy or scikit-learn. Keep samples short and self-contained, and use `print()` so there's something to see. Samples that import anything else still display normally, without the button.
 
 **Only code goes in code blocks.** Don't use screenshots of code either. Readers can't copy them, and search engines can't read them.
 

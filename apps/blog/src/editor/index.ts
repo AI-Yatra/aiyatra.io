@@ -163,6 +163,13 @@ const TagsControl = widget((root, self) => {
 	input.addEventListener('blur', add);
 	root.append(box);
 	paint();
+	// Suggest tags already in use, so one topic doesn't end up under several names.
+	if (self.props.field.get('name') === 'tags') {
+		const options = el('datalist', { id: 'ay-tag-options' });
+		root.append(options);
+		input.setAttribute('list', options.id);
+		fetch('/blog/tags.json').then((r) => r.json()).then((names: string[]) => options.append(...names.map((n) => el('option', { value: n })))).catch(() => { /* suggestions are optional */ });
+	}
 	return { sync(v: any) { const next = toArray(v); if (next.join('\u0000') !== tags.join('\u0000')) { tags = next; paint(); } } };
 }, { canvas: false });
 

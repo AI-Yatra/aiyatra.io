@@ -8,6 +8,7 @@
 //   GET /callback  → swaps the code for a token and hands it to Decap
 //   GET /unfurl    → reads a page's title, description and image for the
 //                    editor's link cards (browsers can't read other sites)
+//   GET /stats, POST /stats/view, POST /stats/react → view counts and reactions
 //
 // Secrets (wrangler secret put …): GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET.
 // Set ALLOWED_ORIGIN in wrangler.toml to the site that hosts the editor.
@@ -57,6 +58,7 @@ export default {
 		}
 
 		if (url.pathname === '/unfurl') return unfurl(request, env, url);
+		if (url.pathname === '/stats' || url.pathname.startsWith('/stats/')) return stats(request, env, url);
 
 		return new Response('AIYatra CMS sign-in relay', { status: 404 });
 	},
@@ -149,4 +151,65 @@ function safeUrl(value, base) {
 function isPrivateHost(host) {
 	return host === 'localhost' || host.endsWith('.local') || host.endsWith('.internal')
 		|| /^\[?[0-9a-f:]+\]?$/i.test(host) || /^\d+\.\d+\.\d+\.\d+$/.test(host);
+}
+
+// View counts and reactions. Only counts are stored: no IP addresses, cookies or
+// reader identifiers. Counts are for interest and can't be fully protected from
+// someone determined to inflate them, so nothing should depend on them.
+const REACTIONS = ['like', 'insight', 'love'];
+const SLUG = /^[a-z0-9][a-z0-9-]{0,150}$/;
+
+async function stats(request, env, url) {
+	const origin = request.headers.get('Origin') || '';
+	const allowed = origin === (env.ALLOWED_ORIGIN || 'https://aiyatra.io') || LOCAL_ORIGIN.test(origin);
+	const headers = { 'Content-Type': 'application/json', Vary: 'Origin' };
+	if (allowed) {
+		headers['Access-Control-Allow-Origin'] = origin;
+		headers['Access-Control-Allow-Headers'] = 'Content-Type';
+		headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS';
+	}
+	const json = (body, status = 200) => new Response(JSON.stringify(body), { status, headers });
+	if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers });
+	if (!env.DB) return json({ error: 'Not configured' }, 503);
+
+	const read = async (slug) => {
+		const { results } = await env.DB.prepare('SELECT kind, n FROM counters WHERE slug = ?').bind(slug).all();
+		const out = { views: 0, reactions: {} };
+		for (const { kind, n } of results) {
+			if (kind === 'view') out.views = n; else out.reactions[kind] = n;
+		}
+		return json(out);
+	};
+
+	if (request.method === 'GET') {
+		const slug = url.searchParams.get('slug') || '';
+		return SLUG.test(slug) ? read(slug) : json({ error: 'Bad post' }, 400);
+	}
+	if (request.method !== 'POST' || !allowed) return json({ error: 'Not allowed' }, 403);
+
+	if (env.STATS_LIMIT) {
+		const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+		const { success } = await env.STATS_LIMIT.limit({ key: ip });
+		if (!success) return json({ error: 'Slow down' }, 429);
+	}
+	let body;
+	try {
+		body = await request.json();
+	} catch {
+		return json({ error: 'Bad request' }, 400);
+	}
+	const slug = String(body?.slug || '');
+	if (!SLUG.test(slug)) return json({ error: 'Bad post' }, 400);
+	const kind = url.pathname === '/stats/view' ? 'view' : url.pathname === '/stats/react' ? String(body?.kind || '') : '';
+	if (kind !== 'view' && !REACTIONS.includes(kind)) return json({ error: 'Bad request' }, 400);
+
+	// The first count for a post checks that it exists, so made-up names can't fill the table.
+	const known = await env.DB.prepare('SELECT 1 FROM counters WHERE slug = ? LIMIT 1').bind(slug).first();
+	if (!known) {
+		const site = env.ALLOWED_ORIGIN || 'https://aiyatra.io';
+		const page = await fetch(`${site}/blog/${slug}`, { method: 'HEAD', signal: AbortSignal.timeout(5000) }).catch(() => null);
+		if (!page?.ok) return json({ error: 'Unknown post' }, 404);
+	}
+	await env.DB.prepare('INSERT INTO counters (slug, kind, n) VALUES (?, ?, 1) ON CONFLICT (slug, kind) DO UPDATE SET n = n + 1').bind(slug, kind).run();
+	return read(slug);
 }

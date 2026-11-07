@@ -2,11 +2,15 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import Icon from '../components/Icon.astro';
+import TagCloud from '../components/TagCloud.astro';
+import BlogNav from '../components/BlogNav.astro';
+import FollowBox from '../components/FollowBox.astro';
 import { PAST_EVENTS_URL, GUIDE_URL } from '../lib/site';
-import { getPosts, CARD_TONES } from '../lib/posts';
+import { getPosts, collectTags, CARD_TONES } from '../lib/posts';
 import { CATEGORIES } from '../content.config';
 
 const posts = await getPosts();
+const tags = collectTags(posts);
 const categories = CATEGORIES.filter((c) => posts.some((p) => p.data.category === c));
 ---
 <BaseLayout
@@ -45,6 +49,21 @@ const categories = CATEGORIES.filter((c) => posts.some((p) => p.data.category ==
 		</div>
 	</section>
 
+	<section class="border-t-2 border-ink bg-paper-soft" aria-labelledby="topics-title">
+		<div class="wrap py-12">
+			<div data-reveal class="flex flex-wrap items-end justify-between gap-4">
+				<div>
+					<p class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep"><Icon name="Tag" class="h-4 w-4" /> Topics</p>
+					<h2 id="topics-title" class="mt-2 font-hand text-4xl font-bold leading-tight">What are you curious about?</h2>
+				</div>
+				<BlogNav />
+			</div>
+			<div data-reveal style="--reveal-delay:0.08s" class="mt-6">
+				<TagCloud tags={tags} />
+			</div>
+		</div>
+	</section>
+
 	<section class="border-t-2 border-ink bg-tone-blue/30">
 		<div class="wrap py-16">
 			{categories.length > 1 && (
@@ -63,8 +82,12 @@ const categories = CATEGORIES.filter((c) => posts.some((p) => p.data.category ==
 				))}
 			</div>
 
+			<div data-reveal style="--reveal-delay:0.1s" class="mt-10">
+				<FollowBox />
+			</div>
+
 			<div data-reveal style="--reveal-delay:0.1s">
-				<div class="mt-10 grid gap-6 overflow-hidden rounded-2xl border-2 border-ink bg-ink p-8 text-white shadow-paper sm:p-10 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+				<div class="mt-6 grid gap-6 overflow-hidden rounded-2xl border-2 border-ink bg-ink p-8 text-white shadow-paper sm:p-10 lg:grid-cols-[1.4fr_1fr] lg:items-center">
 					<div>
 						<p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[hsl(199_89%_70%)]">Write for AIYatra</p>
 						<p class="mt-3 font-hand text-4xl font-bold leading-tight sm:text-5xl">Built something? Learned something? Share it.</p>

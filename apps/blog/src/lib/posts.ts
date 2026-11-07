@@ -35,3 +35,51 @@ export function initials(name: string) {
 }
 
 export const CARD_TONES = ['bg-tone-green', 'bg-tone-violet', 'bg-tone-blue', 'bg-tone-yellow', 'bg-tone-coral'];
+
+/** A readable URL part for a tag or an author's name. */
+export function toSlug(text: string) {
+	return text.toLowerCase().normalize('NFKD').replace(/\+/g, ' plus').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'x';
+}
+
+export interface TagInfo { name: string; slug: string; count: number; posts: Post[] }
+
+/** Every tag in use, most-used first. */
+export function collectTags(posts: Post[]): TagInfo[] {
+	const tags = new Map<string, TagInfo>();
+	for (const post of posts) {
+		for (const name of post.data.tags) {
+			const slug = toSlug(name);
+			const tag = tags.get(slug) ?? { name, slug, count: 0, posts: [] };
+			tag.count += 1;
+			tag.posts.push(post);
+			tags.set(slug, tag);
+		}
+	}
+	return [...tags.values()].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+}
+
+export interface AuthorInfo { name: string; slug: string; role?: string; url?: string; avatar?: string; posts: Post[]; topics: string[] }
+
+/** Everyone who has written here, including co-authors, most posts first. */
+export function collectAuthors(posts: Post[]): AuthorInfo[] {
+	const authors = new Map<string, AuthorInfo>();
+	const add = (name: string, post: Post, lead: boolean) => {
+		const slug = toSlug(name);
+		const a = authors.get(slug) ?? { name, slug, posts: [], topics: [] };
+		a.posts.push(post);
+		if (lead) {
+			a.role ||= post.data.authorRole;
+			a.url ||= post.data.authorUrl;
+			a.avatar ||= post.data.authorAvatar;
+		}
+		authors.set(slug, a);
+	};
+	for (const post of posts) {
+		add(post.data.author, post, true);
+		post.data.coAuthors.forEach((name) => add(name, post, false));
+	}
+	for (const a of authors.values()) {
+		a.topics = collectTags(a.posts).slice(0, 4).map((t) => t.name);
+	}
+	return [...authors.values()].sort((a, b) => b.posts.length - a.posts.length || a.name.localeCompare(b.name));
+}
