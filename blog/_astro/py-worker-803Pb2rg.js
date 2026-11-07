@@ -1,0 +1,3 @@
+const e=`https://cdn.jsdelivr.net/pyodide/v0.29.5/full/`;self.onmessage=async({data:t})=>{try{let{loadPyodide:n}=await import(
+/* @vite-ignore */
+`${e}pyodide.mjs`),r=await n({indexURL:e});await r.loadPackagesFromImports(t.code);let i=e=>postMessage({type:`out`,text:e});r.setStdout({batched:i}),r.setStderr({batched:i}),postMessage({type:`started`}),await r.runPythonAsync(t.code),postMessage({type:`done`})}catch(e){postMessage({type:`error`,text:String(e?.message||e)})}};
