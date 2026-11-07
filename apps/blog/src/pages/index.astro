@@ -46,6 +46,7 @@ const paths = PATHS.map((path) => ({ path, steps: stepsOf(path, posts) })).filte
 				<h1>Written from <span>the room.</span></h1>
 				<p class="blog-hero-lead">Every session recapped, plus tutorials, research notes and guest posts from our open-source AI community.</p>
 				<JoinLinks />
+				<a href="/blog/tags" class="blog-hero-topics-link"><Icon name="Tag" class="h-4 w-4" /> Browse all {tags.length} topics <Icon name="ArrowRight" class="h-4 w-4" /></a>
 			</div>
 			<div class="blog-hero-topics">
 				<div class="blog-hero-topics-head">
