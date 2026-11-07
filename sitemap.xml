@@ -43,6 +43,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://aiyatra.io/blog/memorilla-for-frozen-llms-16-memory-tokens-and-4-212x-fewer-tokens-than-full-context</loc>
+    <lastmod>2026-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://aiyatra.io/blog/tiny-dino-a-21-699-parameter-policy-that-plays-without-a-safety-net</loc>
     <lastmod>2026-11-07</lastmod>
     <changefreq>monthly</changefreq>
