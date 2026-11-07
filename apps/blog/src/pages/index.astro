@@ -2,60 +2,94 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostRow from '../components/PostRow.astro';
 import TagCloud from '../components/TagCloud.astro';
+import JoinLinks from '../components/JoinLinks.astro';
 import Icon from '../components/Icon.astro';
-import { PAST_EVENTS_URL, MEETUP_URL, WHATSAPP_URL } from '../lib/site';
-import { getPosts, collectTags, type Post } from '../lib/posts';
+import { PAST_EVENTS_URL } from '../lib/site';
+import { getPosts, collectTags, collectAuthors, formatDate, readingTime, initials, toSlug, type Post } from '../lib/posts';
+import { PATHS, stepsOf } from '../data/paths';
 import { CATEGORIES } from '../content.config';
 
 const posts = await getPosts();
 const tags = collectTags(posts);
+const authors = collectAuthors(posts);
 const categories = CATEGORIES.filter((c) => posts.some((p) => p.data.category === c));
+const attended = posts.reduce((sum, p) => sum + (p.data.attendees ?? 0), 0);
+const [featured, ...rest] = posts;
 
 // Newest first, in one group per month.
 const monthName = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 const months: { label: string; posts: Post[] }[] = [];
-for (const post of posts) {
+for (const post of rest) {
 	const label = monthName.format(post.data.date);
 	const last = months[months.length - 1];
 	if (last?.label === label) last.posts.push(post);
 	else months.push({ label, posts: [post] });
 }
 
-const explore = [
-	{ href: '/blog/paths', label: 'Learning paths', note: 'Guided reading orders', icon: 'Route' },
-	{ href: '/blog/map', label: 'Knowledge map', note: 'How topics connect', icon: 'Share2' },
-	{ href: '/blog/authors', label: 'Contributors', note: 'The people who write here', icon: 'Users' },
-	{ href: PAST_EVENTS_URL, label: 'Session archive', note: 'Photos and RSVPs on Meetup', icon: 'CalendarDays', external: true },
-] as const;
-const follow = [
-	{ href: MEETUP_URL, label: 'Meetup', icon: 'CalendarDays', external: true },
-	{ href: WHATSAPP_URL, label: 'WhatsApp', icon: 'WhatsApp', external: true },
-	{ href: '/blog/rss.xml', label: 'RSS', icon: 'Rss' },
-] as const;
+const stats = [
+	{ value: posts.length, label: 'stories' },
+	{ value: tags.length, label: 'topics' },
+	{ value: authors.length, label: 'contributors' },
+	...(attended ? [{ value: attended, label: 'seats filled at sessions' }] : []),
+];
+const paths = PATHS.map((path) => ({ path, steps: stepsOf(path, posts) })).filter((p) => p.steps.length > 1);
 ---
 <BaseLayout
 	title="Blog — AIYatra"
 	description="Session recaps, tutorials and guest posts from the AIYatra community — PyTorch, transformers, DeepSeek-V3, agentic AI and more. Written from the room, free forever."
 >
-	<div class="wrap blog-home">
-		<header class="blog-masthead">
-			<h1 class="font-hand text-5xl font-bold leading-none tracking-tight sm:text-6xl">The AIYatra Blog</h1>
-			<p class="mt-3 max-w-2xl text-lg leading-relaxed text-ink-soft">Session recaps, tutorials and guest posts from our open-source AI community.</p>
-		</header>
+	<section class="blog-hero">
+		<div class="blog-hero-glow" aria-hidden="true"><i></i><i></i><i></i></div>
+		<div class="wrap blog-hero-inner">
+			<div class="blog-hero-copy">
+				<p class="blog-eyebrow"><Icon name="Sparkles" class="h-4 w-4" /> The AIYatra Blog · free, forever</p>
+				<h1>Written from <span>the room.</span></h1>
+				<p class="blog-hero-lead">Every session recapped, plus tutorials, research notes and guest posts from our open-source AI community.</p>
+				<JoinLinks />
+			</div>
+			<div class="blog-hero-topics">
+				<div class="blog-hero-topics-head">
+					<h2>Explore by topic</h2>
+					<a href="/blog/tags">All {tags.length} <Icon name="ArrowRight" class="h-4 w-4" /></a>
+				</div>
+				<TagCloud tags={tags.filter((t) => t.count > 1)} />
+			</div>
+		</div>
+		<div class="wrap">
+			<dl class="blog-stats">
+				{stats.map((s) => (
+					<div><dt>{s.label}</dt><dd data-count={s.value}>{s.value.toLocaleString()}</dd></div>
+				))}
+			</dl>
+		</div>
+	</section>
 
-		<div class="blog-columns">
+	<div class="blog-page">
+		<div class="wrap blog-columns">
 			<section aria-label="All posts" class="min-w-0">
+				{featured && (
+					<article class="post-featured" data-category={featured.data.category}>
+						<p class="post-featured-kicker"><span class="post-featured-new"><Icon name="Zap" class="h-3.5 w-3.5" /> Latest</span> <span>{featured.data.category}</span></p>
+						<h2><a href={`/blog/${featured.id}`}>{featured.data.title}</a></h2>
+						<p class="post-featured-excerpt">{featured.data.excerpt}</p>
+						<div class="post-featured-foot">
+							<span>{featured.data.author} · {formatDate(featured.data.date)} · {readingTime(featured.body)} min read</span>
+							<a href={`/blog/${featured.id}`} class="post-featured-cta" tabindex="-1" aria-hidden="true">Read the post <Icon name="ArrowRight" class="h-4 w-4" /></a>
+						</div>
+					</article>
+				)}
+
 				{categories.length > 1 && (
 					<div class="blog-filter" role="group" aria-label="Filter posts by category">
 						<button type="button" data-filter="all" aria-pressed="true">All <span>{posts.length}</span></button>
 						{categories.map((c) => (
-							<button type="button" data-filter={c} aria-pressed="false">{c} <span>{posts.filter((p) => p.data.category === c).length}</span></button>
+							<button type="button" data-filter={c} data-category={c} aria-pressed="false">{c} <span>{posts.filter((p) => p.data.category === c).length}</span></button>
 						))}
 					</div>
 				)}
 				{months.map((m) => (
 					<section class="blog-month" data-month>
-						<h2>{m.label}</h2>
+						<h2><span>{m.label}</span></h2>
 						{m.posts.map((post) => <PostRow post={post} />)}
 					</section>
 				))}
@@ -63,59 +97,64 @@ const follow = [
 
 			<aside class="blog-sidebar" aria-label="Explore the blog">
 				<button type="button" data-open-search class="blog-search">
-					<Icon name="Search" class="h-4 w-4" /> <span>Search posts…</span> <kbd>⌘K</kbd>
+					<Icon name="Search" class="h-4 w-4" /> <span>Search every post…</span> <kbd>⌘K</kbd>
 				</button>
 
-				<section>
-					<div class="blog-side-head">
-						<h2>Topics</h2>
-						<a href="/blog/tags">All {tags.length}</a>
-					</div>
-					<TagCloud tags={tags.filter((t) => t.count > 1)} compact />
+				<section class="side-panel is-paths">
+					<h2><Icon name="Route" class="h-4 w-4" /> Start here</h2>
+					<ol class="side-paths">
+						{paths.map(({ path, steps }) => (
+							<li><a href={`/blog/paths#${path.id}`}><strong>{path.title}</strong><small>{steps.length} posts in order</small></a></li>
+						))}
+					</ol>
+					<a href="/blog/paths" class="side-more">All learning paths <Icon name="ArrowRight" class="h-4 w-4" /></a>
 				</section>
 
-				<section>
-					<h2>Explore</h2>
-					<ul class="blog-side-links">
-						{explore.map((l) => (
-							<li>
-								<a href={l.href} {...('external' in l ? { target: '_blank', rel: 'noreferrer' } : {})}>
-									<Icon name={l.icon} class="h-4 w-4 shrink-0" />
-									<span><strong>{l.label}</strong><small>{l.note}</small></span>
-								</a>
-							</li>
+				<section class="side-panel">
+					<h2><Icon name="Users" class="h-4 w-4" /> Contributors</h2>
+					<ul class="side-people">
+						{authors.slice(0, 4).map((a) => (
+							<li><a href={`/blog/authors/${a.slug}`}><span class="side-initials" aria-hidden="true">{initials(a.name)}</span><span><strong>{a.name}</strong><small>{a.posts.length} {a.posts.length === 1 ? 'post' : 'posts'}</small></span></a></li>
 						))}
 					</ul>
+					<a href="/blog/authors" class="side-more">Everyone who writes here <Icon name="ArrowRight" class="h-4 w-4" /></a>
 				</section>
 
-				<section>
-					<h2>Write for us</h2>
-					<p>Built or learned something? Anyone can submit a guest post, and it goes live once reviewed.</p>
-					<a href="/blog/write" class="blog-side-cta"><Icon name="PenLine" class="h-4 w-4" /> Write a guest post</a>
-				</section>
-
-				<section>
-					<h2>Follow along</h2>
-					<ul class="blog-side-follow">
-						{follow.map((l) => (
-							<li><a href={l.href} {...('external' in l ? { target: '_blank', rel: 'noreferrer' } : {})}><Icon name={l.icon} class="h-4 w-4" /> {l.label}</a></li>
-						))}
+				<section class="side-panel">
+					<h2><Icon name="Compass" class="h-4 w-4" /> Go deeper</h2>
+					<ul class="side-links">
+						<li><a href="/blog/map"><Icon name="Share2" class="h-4 w-4" /> Knowledge map</a></li>
+						<li><a href={PAST_EVENTS_URL} target="_blank" rel="noreferrer"><Icon name="CalendarDays" class="h-4 w-4" /> Session archive on Meetup</a></li>
+						<li><a href="/blog/guide"><Icon name="BookOpen" class="h-4 w-4" /> Writing guide</a></li>
 					</ul>
 				</section>
 			</aside>
 		</div>
 	</div>
+
+	<section class="blog-closer">
+		<div class="blog-hero-glow" aria-hidden="true"><i></i><i></i></div>
+		<div class="wrap blog-closer-inner">
+			<div>
+				<h2>Built something? Learned something? Share it.</h2>
+				<p>Anyone can write for AIYatra. Draft it in our editor, get it reviewed, and see it published here.</p>
+			</div>
+			<JoinLinks />
+		</div>
+	</section>
 </BaseLayout>
 
 <script>
 	const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
 	const months = document.querySelectorAll<HTMLElement>('[data-month]');
+	const featured = document.querySelector<HTMLElement>('.post-featured');
 	buttons.forEach((button) => button.addEventListener('click', () => {
 		const filter = button.dataset.filter;
 		buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+		if (featured) featured.hidden = filter !== 'all' && featured.dataset.category !== filter;
 		months.forEach((month) => {
 			let shown = 0;
-			month.querySelectorAll<HTMLElement>('[data-category]').forEach((row) => {
+			month.querySelectorAll<HTMLElement>('.post-row').forEach((row) => {
 				const match = filter === 'all' || row.dataset.category === filter;
 				row.hidden = !match;
 				if (match) shown++;
@@ -123,4 +162,18 @@ const follow = [
 			month.hidden = shown === 0;
 		});
 	}));
+
+	// The numbers count up once. Without JavaScript, or with reduced motion, they just show.
+	if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
+			const target = Number(el.dataset.count);
+			const start = performance.now();
+			const tick = (now: number) => {
+				const t = Math.min(1, (now - start) / 1100);
+				el.textContent = Math.round(target * (1 - (1 - t) ** 3)).toLocaleString();
+				if (t < 1) requestAnimationFrame(tick);
+			};
+			requestAnimationFrame(tick);
+		});
+	}
 </script>

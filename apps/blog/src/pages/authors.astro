@@ -6,10 +6,12 @@ import { getPosts, collectAuthors, initials } from '../lib/posts';
 const authors = collectAuthors(await getPosts());
 ---
 <BaseLayout title="Contributors — AIYatra Blog" description="The people who write for the AIYatra blog: community members, guest authors and the AIYatra team.">
-	<section class="wrap pb-10 pt-14">
+	<section class="page-band">
+		<div class="wrap pb-10 pt-14">
 		<h1 class="font-hand text-6xl font-bold leading-[0.95] tracking-tight">Contributors</h1>
 		<p class="mt-4 max-w-xl text-lg text-ink-soft">The people behind every post. Anyone can join them.</p>
-		<a href="/blog/write" class="active-press mt-6 inline-flex h-12 items-center gap-2 rounded-xl border-2 border-ink bg-tone-blue-deep px-6 text-base font-semibold text-paper shadow-paper transition-transform hover:-translate-y-0.5"><Icon name="PenLine" class="h-5 w-5" /> Write a guest post</a>
+		<a href="/blog/write" class="is-primary active-press mt-6 inline-flex h-12 items-center gap-2 rounded-xl bg-tone-blue-deep px-6 text-base font-semibold transition-transform hover:-translate-y-0.5"><Icon name="PenLine" class="h-5 w-5" /> Write a guest post</a>
+	</div>
 	</section>
 	<section class="border-t-2 border-ink bg-tone-blue/30">
 		<ul class="wrap grid items-stretch gap-6 py-14 md:grid-cols-2 lg:grid-cols-3">

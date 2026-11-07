@@ -8,10 +8,12 @@ const posts = await getPosts();
 const paths = PATHS.map((path) => ({ path, steps: stepsOf(path, posts) })).filter((p) => p.steps.length > 1);
 ---
 <BaseLayout title="Learning paths — AIYatra Blog" description="Guided reading orders through the AIYatra blog, from linear algebra to transformers, AI agents, model training and retrieval.">
-	<section class="wrap pb-10 pt-14">
+	<section class="page-band">
+		<div class="wrap pb-10 pt-14">
 		<h1 class="font-hand text-6xl font-bold leading-[0.95] tracking-tight">Learning paths</h1>
 		<p class="mt-4 max-w-xl text-lg text-ink-soft">Not sure where to start? Follow a path, post by post. Your progress stays in this browser.</p>
 		<div class="mt-6"><BlogNav /></div>
+	</div>
 	</section>
 	<section class="border-t-2 border-ink bg-tone-blue/30">
 		<div class="wrap grid items-start gap-6 py-14 lg:grid-cols-2">

@@ -7,10 +7,12 @@ import { getPosts, collectTags } from '../lib/posts';
 const tags = collectTags(await getPosts());
 ---
 <BaseLayout title="Topics — AIYatra Blog" description={`Browse AIYatra blog posts by topic: ${tags.slice(0, 6).map((t) => t.name).join(', ')} and more.`}>
-	<section class="wrap pb-10 pt-14">
+	<section class="page-band">
+		<div class="wrap pb-10 pt-14">
 		<h1 class="font-hand text-6xl font-bold leading-[0.95] tracking-tight">All topics</h1>
 		<p class="mt-4 max-w-xl text-lg text-ink-soft">{tags.length} topics across the blog. Bigger means more posts.</p>
 		<div class="mt-6"><BlogNav /></div>
+	</div>
 	</section>
 	<section class="border-t-2 border-ink bg-paper-soft">
 		<div class="wrap py-12">

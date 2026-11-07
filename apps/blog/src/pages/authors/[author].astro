@@ -12,7 +12,8 @@ const { author } = Astro.props;
 const noun = author.posts.length === 1 ? 'post' : 'posts';
 ---
 <BaseLayout title={`${author.name} — AIYatra Blog`} description={`${author.posts.length} ${noun} by ${author.name} on the AIYatra blog.`}>
-	<section class="wrap pb-10 pt-14">
+	<section class="page-band">
+		<div class="wrap pb-10 pt-14">
 		<a href="/blog/authors" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep"><Icon name="ArrowLeft" class="h-4 w-4" /> All contributors</a>
 		<div class="mt-6 flex flex-wrap items-center gap-6">
 			{author.avatar ? <img src={author.avatar} alt="" width="96" height="96" class="h-24 w-24 rounded-full border-2 border-ink object-cover" /> : <span class="flex h-24 w-24 items-center justify-center rounded-full border-2 border-ink bg-tone-blue font-display text-3xl font-bold text-tone-blue-deep">{initials(author.name)}</span>}
@@ -25,8 +26,9 @@ const noun = author.posts.length === 1 ? 'post' : 'posts';
 				</p>
 			</div>
 		</div>
+	</div>
 	</section>
-	<section class="wrap pb-16">
+	<section class="wrap py-10">
 		<div class="post-list">
 			{author.posts.map((post) => <PostRow post={post} />)}
 		</div>

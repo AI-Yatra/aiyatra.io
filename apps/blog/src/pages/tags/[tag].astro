@@ -12,12 +12,14 @@ const { tag } = Astro.props;
 const noun = tag.count === 1 ? 'post' : 'posts';
 ---
 <BaseLayout title={`${tag.name} — AIYatra Blog`} description={`${tag.count} ${noun} about ${tag.name} from the AIYatra community.`}>
-	<section class="wrap pb-10 pt-14">
+	<section class="page-band">
+		<div class="wrap pb-10 pt-14">
 		<a href="/blog/tags" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep"><Icon name="ArrowLeft" class="h-4 w-4" /> All topics</a>
 		<h1 class="mt-5 font-hand text-6xl font-bold leading-[0.95] tracking-tight">{tag.name}</h1>
 		<p class="mt-4 text-lg text-ink-soft">{tag.count} {noun}</p>
+	</div>
 	</section>
-	<section class="wrap pb-16">
+	<section class="wrap py-10">
 		<div class="post-list">
 			{tag.posts.map((post) => <PostRow post={post} />)}
 		</div>

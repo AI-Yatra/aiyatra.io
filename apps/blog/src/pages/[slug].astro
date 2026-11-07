@@ -50,13 +50,13 @@ const jsonLd = {
 ---
 <BaseLayout title={`${d.seoTitle || d.title} — AIYatra Blog`} description={d.seoDescription || d.excerpt} image={ogImage} type="article" publishedTime={isoDate(d.date)} jsonLd={jsonLd} canonicalUrl={d.canonicalUrl}>
 	{hasMath && <link slot="head" rel="stylesheet" href={katexCss} />}
-	<section id="top" class="relative overflow-hidden">
+	<section id="top" class="page-band">
 		<div class="wrap pb-10 pt-14 lg:pt-[74px]">
 			<div data-reveal class="flex flex-wrap items-center gap-3">
 				<a href="/blog" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep">
 					<Icon name="ArrowLeft" class="h-4 w-4" /> All posts
 				</a>
-				<span class="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-tone-yellow px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide">{d.category}</span>
+				<span class="inline-flex items-center gap-1.5 rounded-full bg-tone-yellow px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide !text-ink">{d.category}</span>
 			</div>
 			<div data-reveal style="--reveal-delay:0.08s">
 				<h1 class="mt-5 max-w-4xl font-hand text-5xl font-bold leading-[1.02] tracking-tight sm:text-6xl">{d.title}</h1>
