@@ -1,5 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 // The blog is its own Astro app that lives inside aiyatra.io at /blog.
 // It builds straight into the main site's output folder (after the React app
@@ -28,5 +30,10 @@ export default defineConfig({
 	},
 	markdown: {
 		shikiConfig: { theme: 'github-dark' },
+		// Diagrams are drawn in the browser (see [slug].astro), not highlighted as code.
+		syntaxHighlight: { type: 'shiki', excludeLangs: ['mermaid', 'math'] },
+		// Equations are written $$…$$. A single $ stays text, so "$5 and $10" is safe.
+		remarkPlugins: [[remarkMath, { singleDollarTextMath: false }]],
+		rehypePlugins: [rehypeKatex],
 	},
 });

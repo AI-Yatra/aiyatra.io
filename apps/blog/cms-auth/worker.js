@@ -6,6 +6,8 @@
 //
 //   GET /auth      → redirects to GitHub's consent screen
 //   GET /callback  → swaps the code for a token and hands it to Decap
+//   GET /unfurl    → reads a page's title, description and image for the
+//                    editor's link cards (browsers can't read other sites)
 //
 // Secrets (wrangler secret put …): GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET.
 // Set ALLOWED_ORIGIN in wrangler.toml to the site that hosts the editor.
@@ -54,6 +56,8 @@ export default {
 			return reply(env, 'success', { token: data.access_token, provider: 'github' });
 		}
 
+		if (url.pathname === '/unfurl') return unfurl(request, env, url);
+
 		return new Response('AIYatra CMS sign-in relay', { status: 404 });
 	},
 };
@@ -77,4 +81,72 @@ function reply(env, status, content) {
 })();
 </script>`;
 	return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Set-Cookie': 'decap_oauth_state=; Path=/; Max-Age=0' } });
+}
+
+const LOCAL_ORIGIN = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
+
+// Link previews for the editor. Only the editor's own origin may ask, only
+// public http(s) pages are read, and only text from their <head> comes back.
+async function unfurl(request, env, url) {
+	const origin = request.headers.get('Origin') || '';
+	const allowed = origin === (env.ALLOWED_ORIGIN || 'https://aiyatra.io') || LOCAL_ORIGIN.test(origin);
+	if (!allowed) return new Response('Forbidden', { status: 403 });
+	const json = (body, status = 200) => new Response(JSON.stringify(body), {
+		status,
+		headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': origin, Vary: 'Origin', 'Cache-Control': 'public, max-age=86400' },
+	});
+
+	let target;
+	try {
+		target = new URL(url.searchParams.get('url'));
+	} catch {
+		return json({ error: 'Not a URL' }, 400);
+	}
+	if (!/^https?:$/.test(target.protocol) || isPrivateHost(target.hostname)) return json({ error: 'Not allowed' }, 400);
+
+	let page;
+	try {
+		page = await fetch(target, {
+			headers: { 'User-Agent': 'AIYatraLinkPreview/1.0 (+https://aiyatra.io/blog)', Accept: 'text/html' },
+			signal: AbortSignal.timeout(6000),
+		});
+	} catch {
+		return json({ error: 'Could not reach the page' }, 502);
+	}
+	if (!page.ok || !(page.headers.get('Content-Type') || '').includes('text/html')) return json({ error: 'Not a readable page' }, 422);
+
+	const meta = {};
+	let docTitle = '';
+	await new HTMLRewriter()
+		.on('head meta', {
+			element(el) {
+				const key = el.getAttribute('property') || el.getAttribute('name');
+				const content = el.getAttribute('content');
+				if (key && content && !meta[key]) meta[key] = content;
+			},
+		})
+		.on('head title', { text(t) { docTitle += t.text; } })
+		.transform(page)
+		.arrayBuffer();
+
+	const image = safeUrl(meta['og:image'] || meta['twitter:image'], target);
+	return json({
+		title: (meta['og:title'] || meta['twitter:title'] || docTitle).trim().slice(0, 200),
+		description: (meta['og:description'] || meta['twitter:description'] || meta.description || '').trim().slice(0, 300),
+		image,
+	});
+}
+
+function safeUrl(value, base) {
+	try {
+		const u = new URL(value, base);
+		return u.protocol === 'https:' ? u.href : '';
+	} catch {
+		return '';
+	}
+}
+
+function isPrivateHost(host) {
+	return host === 'localhost' || host.endsWith('.local') || host.endsWith('.internal')
+		|| /^\[?[0-9a-f:]+\]?$/i.test(host) || /^\d+\.\d+\.\d+\.\d+$/.test(host);
 }

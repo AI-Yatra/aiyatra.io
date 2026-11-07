@@ -2,9 +2,14 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type Post = CollectionEntry<'blog'>;
 
-/** Newest first. */
+// Dates are midnight UTC. The nightly deploy runs at 00:00 IST (18:30 UTC the day
+// before), so looking 6 hours ahead publishes a post at the start of its date in India.
+const SCHEDULE_LEAD_MS = 6 * 60 * 60 * 1000;
+
+/** Newest first. A post dated in the future stays hidden in production until its day. */
 export async function getPosts(): Promise<Post[]> {
-	const posts = await getCollection('blog');
+	const cutoff = Date.now() + SCHEDULE_LEAD_MS;
+	const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || data.date.valueOf() <= cutoff);
 	return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
