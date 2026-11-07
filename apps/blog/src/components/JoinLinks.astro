@@ -1,0 +1,28 @@
+---
+// The main actions and every AIYatra channel. Add a new channel to `channels` and
+// it appears wherever this is used.
+import Icon from './Icon.astro';
+import { WHATSAPP_URL, MEETUP_URL, INSTAGRAM_URL, LINKEDIN_URL, GITHUB_URL } from '../lib/site';
+
+const channels = [
+	{ href: INSTAGRAM_URL, label: 'Instagram', icon: 'Instagram', cls: 'is-instagram' },
+	{ href: MEETUP_URL, label: 'Meetup', icon: 'Users', cls: 'is-meetup' },
+	{ href: LINKEDIN_URL, label: 'LinkedIn', icon: 'Linkedin', cls: 'is-linkedin' },
+	{ href: GITHUB_URL, label: 'GitHub', icon: 'Github', cls: 'is-github' },
+] as const;
+---
+<div class="join-links">
+	<div class="join-actions">
+		<a href="/blog/write" class="join-btn is-write"><Icon name="PenLine" class="h-5 w-5" /> Write a blog post</a>
+		<a href={WHATSAPP_URL} target="_blank" rel="noreferrer" class="join-btn is-whatsapp"><Icon name="WhatsApp" class="h-5 w-5" /> Join WhatsApp</a>
+		<a href="/blog/rss.xml" class="join-btn is-rss"><Icon name="Rss" class="h-5 w-5" /> RSS feed</a>
+	</div>
+	<div class="join-channels">
+		<span>Find us on</span>
+		<ul>
+			{channels.map((c) => (
+				<li><a href={c.href} target="_blank" rel="noreferrer" class={c.cls}><Icon name={c.icon} class="h-4 w-4" /> {c.label}</a></li>
+			))}
+		</ul>
+	</div>
+</div>

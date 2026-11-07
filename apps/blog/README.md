@@ -52,6 +52,10 @@ These need an account only the site's owner can set up. Each stays hidden until 
 - **Newsletter:** create a list with an email provider and copy its form URL into `NEWSLETTER_FORM_ACTION`. Check `NEWSLETTER_EMAIL_FIELD` matches the name it expects. Until then, readers see Meetup, WhatsApp and RSS links.
 - **Comments:** enable Discussions on the repo, add a **Blog comments** category, install the [giscus app](https://github.com/apps/giscus) on the repo, then copy the IDs that [giscus.app](https://giscus.app) gives you into `GISCUS`.
 
+## Blog theme and channels
+
+The dark hero, category colours and post rows live in `src/styles/post-blocks.css`. Each category's colour is set once, under *Category colours*. To add a social channel to the hero and the closing banner, add it to `channels` in `src/components/JoinLinks.astro`.
+
 ## Discovery and reader features
 
 - **Tags** drive `/blog/tags`, the moving cloud on `/blog` and the knowledge map at `/blog/map`, which leaves out tags used only once. The editor suggests tags already in use, so reuse the same names.
