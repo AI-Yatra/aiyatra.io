@@ -34,8 +34,6 @@ export function initials(name: string) {
 	return name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]?.toUpperCase()).join('');
 }
 
-export const CARD_TONES = ['bg-tone-green', 'bg-tone-violet', 'bg-tone-blue', 'bg-tone-yellow', 'bg-tone-coral'];
-
 /** A readable URL part for a tag or an author's name. */
 export function toSlug(text: string) {
 	return text.toLowerCase().normalize('NFKD').replace(/\+/g, ' plus').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'x';

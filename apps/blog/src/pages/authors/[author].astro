@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
+import PostRow from '../../components/PostRow.astro';
 import Icon from '../../components/Icon.astro';
-import { getPosts, collectAuthors, initials, CARD_TONES, type AuthorInfo } from '../../lib/posts';
+import { getPosts, collectAuthors, initials, type AuthorInfo } from '../../lib/posts';
 
 export async function getStaticPaths() {
 	return collectAuthors(await getPosts()).map((author) => ({ params: { author: author.slug }, props: { author } }));
@@ -26,9 +26,9 @@ const noun = author.posts.length === 1 ? 'post' : 'posts';
 			</div>
 		</div>
 	</section>
-	<section class="border-t-2 border-ink bg-tone-blue/30">
-		<div class="wrap grid items-stretch gap-6 py-14 md:grid-cols-2 lg:grid-cols-3">
-			{author.posts.map((post, i) => <div class="h-full"><PostCard post={post} tone={CARD_TONES[i % CARD_TONES.length]} /></div>)}
+	<section class="wrap pb-16">
+		<div class="post-list">
+			{author.posts.map((post) => <PostRow post={post} />)}
 		</div>
 	</section>
 </BaseLayout>

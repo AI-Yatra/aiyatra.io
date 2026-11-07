@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
+import PostRow from '../../components/PostRow.astro';
 import Icon from '../../components/Icon.astro';
-import { getPosts, collectTags, CARD_TONES, type TagInfo } from '../../lib/posts';
+import { getPosts, collectTags, type TagInfo } from '../../lib/posts';
 
 export async function getStaticPaths() {
 	return collectTags(await getPosts()).map((tag) => ({ params: { tag: tag.slug }, props: { tag } }));
@@ -17,9 +17,9 @@ const noun = tag.count === 1 ? 'post' : 'posts';
 		<h1 class="mt-5 font-hand text-6xl font-bold leading-[0.95] tracking-tight">{tag.name}</h1>
 		<p class="mt-4 text-lg text-ink-soft">{tag.count} {noun}</p>
 	</section>
-	<section class="border-t-2 border-ink bg-tone-blue/30">
-		<div class="wrap grid items-stretch gap-6 py-14 md:grid-cols-2 lg:grid-cols-3">
-			{tag.posts.map((post, i) => <div class="h-full"><PostCard post={post} tone={CARD_TONES[i % CARD_TONES.length]} /></div>)}
+	<section class="wrap pb-16">
+		<div class="post-list">
+			{tag.posts.map((post) => <PostRow post={post} />)}
 		</div>
 	</section>
 </BaseLayout>
