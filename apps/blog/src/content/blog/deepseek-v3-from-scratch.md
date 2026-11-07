@@ -7,6 +7,13 @@ author: AIYatra Team
 cover: https://secure.meetupstatic.com/photos/event/b/6/a/3/highres_535486755.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/315949835/
 attendees: 286
+tags:
+  - DeepSeek
+  - Transformers
+  - PyTorch
+  - Attention
+  - Mixture of Experts
+  - Paper Implementation
 ---
 
 Multi-head latent attention, MoE load balancing and RoPE scaling — the DeepSeek-V3 paper, live-coded in PyTorch.

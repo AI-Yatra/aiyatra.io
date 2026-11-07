@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlogNav from '../components/BlogNav.astro';
+import { getPosts, readingTime } from '../lib/posts';
+import { PATHS, stepsOf } from '../data/paths';
+
+const posts = await getPosts();
+const paths = PATHS.map((path) => ({ path, steps: stepsOf(path, posts) })).filter((p) => p.steps.length > 1);
+---
+<BaseLayout title="Learning paths — AIYatra Blog" description="Guided reading orders through the AIYatra blog, from linear algebra to transformers, AI agents, model training and retrieval.">
+	<section class="wrap pb-10 pt-14">
+		<h1 class="font-hand text-6xl font-bold leading-[0.95] tracking-tight">Learning paths</h1>
+		<p class="mt-4 max-w-xl text-lg text-ink-soft">Not sure where to start? Follow a path, post by post. Your progress stays in this browser.</p>
+		<div class="mt-6"><BlogNav /></div>
+	</section>
+	<section class="border-t-2 border-ink bg-tone-blue/30">
+		<div class="wrap grid items-start gap-6 py-14 lg:grid-cols-2">
+			{paths.map(({ path, steps }) => (
+				<article id={path.id} class="scroll-mt-24 rounded-2xl border-2 border-ink bg-paper p-6 shadow-paper-sm" data-path>
+					<h2 class="font-hand text-3xl font-bold leading-tight">{path.title}</h2>
+					<p class="mt-2 text-sm font-medium text-ink/75">{path.summary}</p>
+					<p class="mt-3 text-xs font-bold uppercase tracking-[0.15em] text-ink/60"><span data-progress>0</span> of {steps.length} read · {steps.reduce((sum, p) => sum + readingTime(p.body), 0)} min</p>
+					<ol class="mt-4 space-y-3">
+						{steps.map((p, i) => (
+							<li class="path-step flex items-center gap-3" data-step={p.id}>
+								<button type="button" class="path-check" data-toggle aria-pressed="false" aria-label={`Mark “${p.data.title}” as read`}>{i + 1}</button>
+								<a href={`/blog/${p.id}`} class="min-w-0 text-sm font-bold leading-snug hover:text-tone-blue-deep">{p.data.title}</a>
+							</li>
+						))}
+					</ol>
+				</article>
+			))}
+		</div>
+	</section>
+</BaseLayout>
+<script>
+	const key = (id: string) => `ay-read:${id}`;
+	const read = (id: string) => { try { return localStorage.getItem(key(id)) === '1'; } catch { return false; } };
+	const write = (id: string, on: boolean) => { try { if (on) localStorage.setItem(key(id), '1'); else localStorage.removeItem(key(id)); } catch { /* it just won't persist */ } };
+	function paint() {
+		document.querySelectorAll<HTMLElement>('[data-path]').forEach((path) => {
+			let done = 0;
+			path.querySelectorAll<HTMLElement>('[data-step]').forEach((step, i) => {
+				const on = read(step.dataset.step!);
+				if (on) done++;
+				step.dataset.done = String(on);
+				const b = step.querySelector('button')!;
+				b.setAttribute('aria-pressed', String(on));
+				b.textContent = on ? '✓' : String(i + 1);
+			});
+			path.querySelector('[data-progress]')!.textContent = String(done);
+		});
+	}
+	document.addEventListener('click', (e) => {
+		const b = (e.target as HTMLElement).closest<HTMLElement>('[data-toggle]');
+		if (!b) return;
+		const id = b.closest<HTMLElement>('[data-step]')!.dataset.step!;
+		write(id, !read(id));
+		paint();
+	});
+	paint();
+</script>

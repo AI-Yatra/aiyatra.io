@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlogNav from '../components/BlogNav.astro';
+import { getPosts, collectTags } from '../lib/posts';
+
+const posts = await getPosts();
+const tags = collectTags(posts);
+// Tags used once add clutter without connecting anything, so the graph skips them.
+const shared = tags.filter((t) => t.count > 1);
+const graph = {
+	nodes: [
+		...shared.map((t) => ({ id: `t:${t.slug}`, kind: 'tag', label: t.name, count: t.count, href: `/blog/tags/${t.slug}` })),
+		...posts.filter((p) => p.data.tags.some((n) => shared.some((t) => t.name === n))).map((p) => ({ id: `p:${p.id}`, kind: 'post', label: p.data.title, count: 1, href: `/blog/${p.id}` })),
+	],
+	links: shared.flatMap((t) => t.posts.map((p) => ({ source: `t:${t.slug}`, target: `p:${p.id}` }))),
+};
+---
+<BaseLayout title="Knowledge map — AIYatra Blog" description="An interactive map of how the topics and posts on the AIYatra blog connect.">
+	<section class="wrap pb-8 pt-14">
+		<h1 class="font-hand text-6xl font-bold leading-[0.95] tracking-tight">Knowledge map</h1>
+		<p class="mt-4 max-w-2xl text-lg text-ink-soft">How our topics and posts connect. Hover or focus on anything to see its links, and click to read.</p>
+		<div class="mt-6"><BlogNav /></div>
+	</section>
+	<section class="border-t-2 border-ink bg-paper-soft">
+		<div class="wrap py-10">
+			<p class="kmap-legend mb-3 flex flex-wrap gap-5 text-sm font-semibold">
+				<span><i class="is-tag"></i>Topic (bigger means more posts)</span>
+				<span><i class="is-post"></i>Post</span>
+			</p>
+			<div class="relative rounded-2xl border-2 border-ink bg-paper shadow-paper-sm">
+				<svg id="kmap" class="kmap" role="group" aria-label="Map of topics and posts. The same links are listed as text below the map." data-graph={JSON.stringify(graph)}></svg>
+				<div id="kmap-tip" class="pointer-events-none absolute z-10 hidden max-w-xs rounded-lg border-2 border-ink bg-paper px-3 py-1.5 text-sm font-bold shadow-paper-sm"></div>
+			</div>
+			<details class="mt-6 rounded-2xl border-2 border-ink bg-paper p-5 shadow-paper-sm">
+				<summary class="cursor-pointer font-bold">See the map as a list</summary>
+				<ul class="mt-4 space-y-4">
+					{shared.map((t) => (
+						<li>
+							<a href={`/blog/tags/${t.slug}`} class="font-bold underline underline-offset-4 hover:text-tone-blue-deep">{t.name}</a>
+							<ul class="mt-1 list-disc pl-5 text-sm">{t.posts.map((p) => <li><a href={`/blog/${p.id}`} class="hover:text-tone-blue-deep">{p.data.title}</a></li>)}</ul>
+						</li>
+					))}
+				</ul>
+			</details>
+		</div>
+	</section>
+</BaseLayout>
+<script>
+	import { forceSimulation, forceLink, forceManyBody, forceCenter, forceCollide, forceX, forceY } from 'd3-force';
+
+	const svg = document.getElementById('kmap') as unknown as SVGSVGElement;
+	const tip = document.getElementById('kmap-tip')!;
+	const { nodes, links } = JSON.parse(svg.dataset.graph!);
+	const W = 1000;
+	const H = innerWidth < 700 ? 1100 : 640;
+	svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+	const NS = 'http://www.w3.org/2000/svg';
+	const make = (tag: string, attrs: Record<string, string | number> = {}) => {
+		const e = document.createElementNS(NS, tag);
+		for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+		return e;
+	};
+	const radius = (n: any) => (n.kind === 'tag' ? 9 + n.count * 3 : 7);
+
+	const lineLayer = make('g');
+	const nodeLayer = make('g');
+	svg.append(lineLayer, nodeLayer);
+	const lines = links.map(() => lineLayer.appendChild(make('line')));
+	const views = nodes.map((n: any) => {
+		const a = make('a', { href: n.href, class: 'node', 'aria-label': n.kind === 'tag' ? `Topic: ${n.label}, ${n.count} posts` : `Post: ${n.label}` });
+		if (n.kind === 'tag') a.append(make('circle', { r: radius(n) }));
+		else a.append(make('rect', { x: -7, y: -7, width: 14, height: 14, rx: 3 }));
+		if (n.kind === 'tag') {
+			const label = make('text', { 'text-anchor': 'middle', y: radius(n) + 15 });
+			label.textContent = n.label;
+			a.append(label);
+		}
+		nodeLayer.append(a);
+		return a;
+	});
+
+	const sim = forceSimulation(nodes)
+		.force('link', forceLink(links).id((n: any) => n.id).distance(84).strength(0.45))
+		.force('charge', forceManyBody().strength(-300))
+		.force('center', forceCenter(W / 2, H / 2))
+		.force('x', forceX(W / 2).strength(0.04))
+		.force('y', forceY(H / 2).strength(innerWidth < 700 ? 0.03 : 0.07))
+		.force('collide', forceCollide((n: any) => radius(n) + 22));
+
+	const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+	const draw = () => {
+		nodes.forEach((n: any, i: number) => {
+			n.x = clamp(n.x, 60, W - 60);
+			n.y = clamp(n.y, 30, H - 40);
+			views[i].setAttribute('transform', `translate(${n.x},${n.y})`);
+		});
+		links.forEach((l: any, i: number) => {
+			lines[i].setAttribute('x1', l.source.x); lines[i].setAttribute('y1', l.source.y);
+			lines[i].setAttribute('x2', l.target.x); lines[i].setAttribute('y2', l.target.y);
+		});
+	};
+	if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		sim.stop();
+		for (let i = 0; i < 320; i++) sim.tick();
+		draw();
+	} else {
+		sim.on('tick', draw);
+	}
+
+	const highlight = (n: any | null, el?: Element) => {
+		svg.classList.toggle('has-hot', !!n);
+		const near = new Set(n ? [n.id] : []);
+		links.forEach((l: any, i: number) => {
+			const hot = !!n && (l.source.id === n.id || l.target.id === n.id);
+			lines[i].classList.toggle('is-hot', hot);
+			if (hot) { near.add(l.source.id); near.add(l.target.id); }
+		});
+		views.forEach((v: Element, i: number) => v.classList.toggle('is-hot', near.has(nodes[i].id)));
+		tip.classList.toggle('hidden', !n);
+		if (n && el) {
+			tip.textContent = n.kind === 'tag' ? `${n.label} · ${n.count} posts` : n.label;
+			const box = el.getBoundingClientRect();
+			const host = tip.parentElement!.getBoundingClientRect();
+			tip.style.left = `${clamp(box.left - host.left + 18, 6, host.width - 240)}px`;
+			tip.style.top = `${clamp(box.top - host.top - 40, 6, host.height - 40)}px`;
+		}
+	};
+	views.forEach((v: Element, i: number) => {
+		v.addEventListener('pointerenter', () => highlight(nodes[i], v));
+		v.addEventListener('pointerleave', () => highlight(null));
+		v.addEventListener('focus', () => highlight(nodes[i], v));
+		v.addEventListener('blur', () => highlight(null));
+	});
+</script>

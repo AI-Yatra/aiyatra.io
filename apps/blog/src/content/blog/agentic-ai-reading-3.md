@@ -7,6 +7,11 @@ author: AIYatra Team
 cover: https://secure.meetupstatic.com/photos/event/d/f/6/2/highres_534957186.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/315542060/
 attendees: 16
+tags:
+  - Agentic AI
+  - Reading Group
+  - Multi-Agent Systems
+  - Workflows
 ---
 
 Session three of the Hitchhiker’s Guide series — agents, tools and workflows, read and debated together.

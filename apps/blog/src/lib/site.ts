@@ -15,6 +15,16 @@ export const REPO_URL = 'https://github.com/AI-Yatra/aiyatra.io';
 export const GUIDE_URL = '/blog/guide';
 export const GUIDE_SOURCE_URL = `${REPO_URL}/blob/main/HOW-TO-WRITE-A-GUEST-POST.md`;
 
+// Each of these switches on a feature that needs an account only the site's
+// owner can set up. Left empty, the feature stays hidden. See apps/blog/README.md.
+export const ANALYTICS_TOKEN = ''; // Cloudflare Web Analytics site token
+export const NEWSLETTER_FORM_ACTION = ''; // the signup form URL from your email provider
+export const NEWSLETTER_EMAIL_FIELD = 'email';
+export const GISCUS = { repo: 'AI-Yatra/aiyatra.io', repoId: '', category: 'Blog comments', categoryId: '' };
+
+// View counts and reactions, served by the Cloudflare Worker in cms-auth/.
+export const STATS_URL = 'https://aiyatra-cms-auth.aiyatra.workers.dev/stats';
+
 // Same order as the React header (apps/web/src/components/SiteChrome.jsx).
 export const NAV_LINKS = [
 	{ href: '/#meetups', label: 'Meetups' },

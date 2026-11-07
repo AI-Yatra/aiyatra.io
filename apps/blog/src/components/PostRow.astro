@@ -1,0 +1,26 @@
+---
+// One post in a list: a title and a short summary, with no image.
+import { formatDate, isoDate, readingTime, toSlug, type Post } from '../lib/posts';
+
+interface Props { post: Post }
+const { post } = Astro.props;
+const { title, excerpt, date, author, attendees, tags, category } = post.data;
+const href = `/blog/${post.id}`;
+---
+<article class="post-row" data-category={category}>
+	<h3 class="post-row-title"><a href={href}>{title}</a></h3>
+	<p class="post-row-excerpt">{excerpt}</p>
+	<p class="post-row-meta">
+		<time datetime={isoDate(date)}>{formatDate(date)}</time>
+		<span aria-hidden="true">·</span>
+		<span>{author}</span>
+		<span aria-hidden="true">·</span>
+		<span>{readingTime(post.body)} min read</span>
+		{attendees ? <><span aria-hidden="true">·</span><span>{attendees} attended</span></> : null}
+	</p>
+	{tags.length > 0 && (
+		<ul class="post-row-tags" aria-label="Topics">
+			{tags.slice(0, 4).map((t) => <li><a href={`/blog/tags/${toSlug(t)}`}>{t}</a></li>)}
+		</ul>
+	)}
+</article>

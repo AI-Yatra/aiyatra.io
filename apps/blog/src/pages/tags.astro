@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TagCloud from '../components/TagCloud.astro';
+import BlogNav from '../components/BlogNav.astro';
+import { getPosts, collectTags } from '../lib/posts';
+
+const tags = collectTags(await getPosts());
+---
+<BaseLayout title="Topics — AIYatra Blog" description={`Browse AIYatra blog posts by topic: ${tags.slice(0, 6).map((t) => t.name).join(', ')} and more.`}>
+	<section class="wrap pb-10 pt-14">
+		<h1 class="font-hand text-6xl font-bold leading-[0.95] tracking-tight">All topics</h1>
+		<p class="mt-4 max-w-xl text-lg text-ink-soft">{tags.length} topics across the blog. Bigger means more posts.</p>
+		<div class="mt-6"><BlogNav /></div>
+	</section>
+	<section class="border-t-2 border-ink bg-paper-soft">
+		<div class="wrap py-12">
+			<TagCloud tags={tags} />
+			<h2 class="mt-10 font-hand text-3xl font-bold">A to Z</h2>
+			<ul class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+				{[...tags].sort((a, b) => a.name.localeCompare(b.name)).map((t) => (
+					<li><a href={`/blog/tags/${t.slug}`} class="flex items-center justify-between rounded-xl border-2 border-ink bg-paper px-4 py-2.5 text-sm font-bold transition-colors hover:bg-tone-blue"><span>{t.name}</span><span class="font-semibold text-ink/65">{t.count} {t.count === 1 ? 'post' : 'posts'}</span></a></li>
+				))}
+			</ul>
+		</div>
+	</section>
+</BaseLayout>

@@ -24,6 +24,9 @@ export default defineConfig({
 		port: 4321,
 	},
 	vite: {
+		// Used at build time to draw preview cards. Native code can't be bundled.
+		ssr: { external: ['@resvg/resvg-js', 'satori'] },
+		worker: { format: 'es' },
 		// Pages are browsed through the React dev server's proxy on :3000;
 		// hot reload talks to this server directly.
 		server: { hmr: { host: '127.0.0.1', clientPort: 4321 } },

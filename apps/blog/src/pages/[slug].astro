@@ -1,10 +1,14 @@
 ---
 import { render } from 'astro:content';
 import katexCss from 'katex/dist/katex.min.css?url';
+import ShareBar from '../components/ShareBar.astro';
+import Comments from '../components/Comments.astro';
+import FollowBox from '../components/FollowBox.astro';
+import { pathsWith } from '../data/paths';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import { photoProps, SITE_URL } from '../lib/site';
-import { getPosts, formatDate, isoDate, readingTime, related, initials, type Post } from '../lib/posts';
+import { getPosts, formatDate, isoDate, readingTime, related, initials, toSlug, type Post } from '../lib/posts';
 
 export async function getStaticPaths() {
 	const posts = await getPosts();
@@ -18,7 +22,10 @@ interface Props { post: Post; newer: Post | null; older: Post | null; all: Post[
 const { post, newer, older, all } = Astro.props;
 const { Content, headings } = await render(post);
 const d = post.data;
-const tocHeadings = d.toc ? headings.filter((h) => h.depth === 2 || h.depth === 3) : [];
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const showToc = tocHeadings.length >= 3;
+const paths = pathsWith(post.id, all);
+const minutes = readingTime(post.body);
 const more = related(post, all);
 // Equation styles and fonts are only loaded by posts that have equations.
 const hasMath = !!post.body?.includes('$$');
@@ -26,7 +33,9 @@ const seriesPosts = d.series ? all.filter((p) => p.data.series === d.series).sor
 const authors = [d.author, ...d.coAuthors];
 const isRecap = d.category === 'Session recap';
 const coverImg = d.cover ? photoProps(d.cover, '(min-width: 1100px) 1000px, 100vw') : null;
-const ogImage = d.cover ? new URL(coverImg?.src || d.cover, SITE_URL).href : undefined;
+// A cover only this post uses makes a good preview. Otherwise the post gets a generated card with its title.
+const uniqueCover = d.cover && all.filter((p) => p.data.cover === d.cover).length === 1;
+const ogImage = uniqueCover ? new URL(coverImg?.src || d.cover!, SITE_URL).href : `${SITE_URL}/blog/og/${post.id}.png`;
 const jsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'BlogPosting',
@@ -56,11 +65,12 @@ const jsonLd = {
 			<div data-reveal style="--reveal-delay:0.14s">
 				<div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold text-ink/70">
 					<span class="inline-flex items-center gap-1.5"><Icon name="UserRound" class="h-4 w-4" />
-						{d.authorUrl ? <a href={d.authorUrl} target="_blank" rel="noreferrer" class="underline underline-offset-4 hover:text-tone-blue-deep">{d.author}</a> : d.author}
-						{d.coAuthors.length > 0 && <span>& {d.coAuthors.join(' & ')}</span>}
+						<a href={`/blog/authors/${toSlug(d.author)}`} class="underline underline-offset-4 hover:text-tone-blue-deep">{d.author}</a>
+						{d.coAuthors.map((name) => <span>& <a href={`/blog/authors/${toSlug(name)}`} class="underline underline-offset-4 hover:text-tone-blue-deep">{name}</a></span>)}
 					</span>
 					<span class="inline-flex items-center gap-1.5"><Icon name="CalendarDays" class="h-4 w-4" /> <time datetime={isoDate(d.date)}>{formatDate(d.date)}</time></span>
-					<span class="inline-flex items-center gap-1.5"><Icon name="Clock" class="h-4 w-4" /> {readingTime(post.body)} min read</span>
+					<span class="inline-flex items-center gap-1.5"><Icon name="Clock" class="h-4 w-4" /> {minutes} min read</span>
+					<span class="hidden items-center gap-1.5" data-view-count><Icon name="Eye" class="h-4 w-4" /> <span></span></span>
 					{d.attendees ? <span class="inline-flex items-center gap-1.5"><Icon name="Users" class="h-4 w-4" /> {d.attendees} attended</span> : null}
 					{d.eventUrl && (
 						<a href={d.eventUrl} target="_blank" rel="noreferrer" class="inline-flex items-center gap-1 font-bold underline underline-offset-4 hover:text-tone-blue-deep">
@@ -82,30 +92,68 @@ const jsonLd = {
 					{d.coverCredit && <p class="post-cover-credit">{d.coverCredit}</p>}
 				</div>
 			)}
-			<div data-reveal style="--reveal-delay:0.08s">
-				<article class={`blog-body rounded-2xl border-2 border-ink bg-paper p-6 shadow-paper-sm sm:p-10 lg:p-14 ${coverImg ? 'mt-10' : ''}`}>
+			<div data-reveal style="--reveal-delay:0.08s" class={`post-layout ${coverImg ? 'mt-10' : ''} ${showToc ? 'has-toc' : ''}`}>
+				<div class="min-w-0">
+					<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+						<button type="button" id="listen" hidden class="inline-flex h-10 items-center gap-2 rounded-xl border-2 border-ink bg-paper px-4 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5" aria-pressed="false">
+							<Icon name="Headphones" class="h-4 w-4" /> <span data-listen-label>Listen to this post</span>
+						</button>
+						<ShareBar title={d.title} slug={post.id} />
+					</div>
+					{showToc && (
+						<details class="post-toc-mobile mb-4 rounded-2xl border-2 border-ink bg-paper p-4 shadow-paper-sm">
+							<summary class="cursor-pointer text-sm font-bold">In this post</summary>
+							<ol class="mt-3 space-y-2 text-sm font-medium">{tocHeadings.map((h) => <li data-depth={h.depth}><a href={`#${h.slug}`} class="text-ink/75 hover:text-tone-blue-deep">{h.text}</a></li>)}</ol>
+						</details>
+					)}
 					{seriesPosts.length > 1 && (
-						<nav class="post-series" aria-label={`Series: ${d.series}`}>
+						<nav class="post-series mb-4 rounded-2xl border-2 border-ink bg-paper p-5 shadow-paper-sm" aria-label={`Series: ${d.series}`}>
 							<p>Series: {d.series}</p>
 							<ol>{seriesPosts.map((p) => <li>{p.id === post.id ? <span aria-current="page">{p.data.title}</span> : <a href={`/blog/${p.id}`}>{p.data.title}</a>}</li>)}</ol>
 						</nav>
 					)}
-					{tocHeadings.length > 0 && (
-						<nav class="post-toc" aria-label="In this post">
-							<p>In this post</p>
-							<ul>{tocHeadings.map((h) => <li data-depth={h.depth}><a href={`#${h.slug}`}>{h.text}</a></li>)}</ul>
+					<article class="blog-body rounded-2xl border-2 border-ink bg-paper p-6 shadow-paper-sm sm:p-10 lg:p-14" data-pagefind-body>
+						<Content />
+					</article>
+				</div>
+				{showToc && (
+					<aside class="post-toc-side" aria-label="On this page">
+						<nav class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl border-2 border-ink bg-paper p-5 shadow-paper-sm">
+							<p class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">On this page</p>
+							<ol class="mt-3 space-y-2 text-sm font-medium">
+								{tocHeadings.map((h) => <li data-depth={h.depth}><a href={`#${h.slug}`} data-toc={h.slug} class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">{h.text}</a></li>)}
+							</ol>
 						</nav>
-					)}
-					<Content />
-				</article>
+					</aside>
+				)}
 			</div>
+
+			<div class="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border-2 border-ink bg-paper p-5 shadow-paper-sm" id="reactions" hidden>
+				<p class="font-hand text-2xl font-bold leading-tight">Did this help?</p>
+				<div class="flex flex-wrap gap-2">
+					<button type="button" data-react="like" aria-pressed="false" class="react-btn"><span aria-hidden="true">👍</span> Helpful <span data-n></span></button>
+					<button type="button" data-react="insight" aria-pressed="false" class="react-btn"><span aria-hidden="true">💡</span> Learned something <span data-n></span></button>
+					<button type="button" data-react="love" aria-pressed="false" class="react-btn"><span aria-hidden="true">❤️</span> Loved it <span data-n></span></button>
+				</div>
+			</div>
+
+			{paths.map(({ path, index, steps }) => (
+				<nav class="mt-6 rounded-2xl border-2 border-ink bg-tone-blue/40 p-5 shadow-paper-sm" aria-label={`Learning path: ${path.title}`}>
+					<p class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/60">Learning path · Step {index + 1} of {steps.length}</p>
+					<p class="mt-1 font-hand text-2xl font-bold leading-tight"><a href={`/blog/paths#${path.id}`} class="hover:text-tone-blue-deep">{path.title}</a></p>
+					<div class="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-bold">
+						{index > 0 && <a href={`/blog/${steps[index - 1].id}`} class="inline-flex items-center gap-1.5 underline underline-offset-4 hover:text-tone-blue-deep"><Icon name="ArrowLeft" class="h-4 w-4" /> Previous step</a>}
+						{index < steps.length - 1 ? <a href={`/blog/${steps[index + 1].id}`} class="inline-flex items-center gap-1.5 underline underline-offset-4 hover:text-tone-blue-deep">Next: {steps[index + 1].data.title} <Icon name="ArrowRight" class="h-4 w-4" /></a> : <a href="/blog/paths" class="inline-flex items-center gap-1.5 underline underline-offset-4 hover:text-tone-blue-deep">You've reached the end. See all paths <Icon name="ArrowRight" class="h-4 w-4" /></a>}
+					</div>
+				</nav>
+			))}
 
 			{(d.tags.length > 0 || !isRecap) && (
 				<div class="mt-6 space-y-6">
 					{d.tags.length > 0 && (
 						<div class="flex flex-wrap items-center gap-2">
 							<Icon name="Tag" class="h-4 w-4 text-ink/55" />
-							{d.tags.map((t) => <span class="rounded-full border border-tone-blue-deep/20 bg-tone-blue/50 px-3 py-1 text-xs font-semibold text-ink/80">#{t}</span>)}
+							{d.tags.map((t) => <a href={`/blog/tags/${toSlug(t)}`} class="rounded-full border border-tone-blue-deep/20 bg-tone-blue/50 px-3 py-1 text-xs font-semibold text-ink/80 transition-colors hover:border-tone-blue-deep hover:text-tone-blue-deep">#{t}</a>)}
 						</div>
 					)}
 					{!isRecap && (
@@ -117,13 +165,17 @@ const jsonLd = {
 							)}
 							<div class="min-w-0">
 								<p class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">Written by</p>
-								<p class="font-hand text-2xl font-bold leading-tight">{d.authorUrl ? <a href={d.authorUrl} target="_blank" rel="noreferrer" class="hover:text-tone-blue-deep">{d.author}</a> : d.author}</p>
+								<p class="font-hand text-2xl font-bold leading-tight"><a href={`/blog/authors/${toSlug(d.author)}`} class="hover:text-tone-blue-deep">{d.author}</a></p>
 								{d.authorRole && <p class="text-sm font-medium text-ink/70">{d.authorRole}</p>}
 							</div>
 						</div>
 					)}
 				</div>
 			)}
+
+			<div class="mt-6"><ShareBar title={d.title} slug={post.id} labelled /></div>
+			<div class="mt-6"><FollowBox /></div>
+			<Comments slug={post.id} />
 
 			<div class="mt-10 grid gap-4 sm:grid-cols-2">
 				{newer ? (
@@ -180,6 +232,9 @@ const jsonLd = {
 </BaseLayout>
 
 <script>
+	import '../scripts/post-page.ts';
+	import '../scripts/run-python.ts';
+
 	// A copy button on every code block.
 	for (const pre of document.querySelectorAll<HTMLElement>('.blog-body pre:not(:has(code.language-mermaid))')) {
 		const wrap = document.createElement('div');
@@ -196,6 +251,7 @@ const jsonLd = {
 			setTimeout(() => { button.textContent = 'Copy'; }, 1500);
 		});
 		wrap.append(button);
+		document.dispatchEvent(new CustomEvent('ay-code-block', { detail: { pre, wrap } }));
 	}
 
 	// Mermaid is large, so it only loads on posts that contain a diagram.

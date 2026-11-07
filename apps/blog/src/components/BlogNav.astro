@@ -1,0 +1,16 @@
+---
+import Icon from './Icon.astro';
+const links = [
+	{ href: '/blog/tags', label: 'All topics', icon: 'Tag' },
+	{ href: '/blog/map', label: 'Knowledge map', icon: 'Share2' },
+	{ href: '/blog/paths', label: 'Learning paths', icon: 'Route' },
+	{ href: '/blog/authors', label: 'Contributors', icon: 'Users' },
+] as const;
+---
+<nav class="flex flex-wrap gap-2" aria-label="Explore the blog">
+	{links.map((l) => (
+		<a href={l.href} class="active-press inline-flex h-10 items-center gap-2 rounded-xl border-2 border-ink bg-paper px-4 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5">
+			<Icon name={l.icon} class="h-4 w-4" /> {l.label}
+		</a>
+	))}
+</nav>

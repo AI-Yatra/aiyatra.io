@@ -4,3 +4,14 @@ compatibility_date = "2026-09-01"
 
 [vars]
 ALLOWED_ORIGIN = "https://aiyatra.io"
+
+# View counts and reactions. Table definition: schema.sql
+[[d1_databases]]
+binding = "DB"
+database_name = "aiyatra-blog-stats"
+database_id = "6422807b-de0b-42be-90dc-15b086e56ee5"
+
+[[ratelimits]]
+name = "STATS_LIMIT"
+namespace_id = "1001"
+simple = { limit = 60, period = 60 }

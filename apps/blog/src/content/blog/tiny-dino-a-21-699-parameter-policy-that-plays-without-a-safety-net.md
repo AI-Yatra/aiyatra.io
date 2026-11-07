@@ -9,11 +9,11 @@ cover: https://raw.githubusercontent.com/AI-Yatra/aiyatra.io/fd6ab8569f12fbc2c4c
 coverAlt: Tiny Dino network schematic with 28 inputs, three hidden layers of 96
   units, and run, jump, and duck outputs. Node counts are illustrative.
 tags:
-  - small models
+  - Small Models
   - PyTorch
-  - imitation learning
-  - model evaluation
-  - game AI
+  - Imitation Learning
+  - Model Evaluation
+  - Game AI
 ---
 A cactus is approaching. The dinosaur has three choices: keep running, jump, or duck. Make the wrong choice at the wrong moment and the run ends.
 

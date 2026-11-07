@@ -7,6 +7,12 @@ author: AIYatra Team
 cover: https://secure.meetupstatic.com/photos/event/4/5/f/8/highres_534617912.jpeg
 eventUrl: https://www.meetup.com/aiyatra/events/315145175/
 attendees: 56
+tags:
+  - Transformers
+  - Attention
+  - PyTorch
+  - Paper Implementation
+  - AI Fundamentals
 ---
 
 From “Attention Is All You Need” to running source code — the transformer, line by line, from paper to PyTorch.

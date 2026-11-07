@@ -82,7 +82,6 @@ collections:
       - { label: Tags, name: tags, widget: ay-tags, required: false, default: [], hint: '3–6 short topics. Press Enter after each one.' }
       - { label: Series, name: series, widget: string, required: false, hint: 'Writing several parts? Use the exact same series name on each post to link them together.' }
       - { label: Publish date, name: date, widget: datetime, default: '{{now}}', format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true, hint: 'Pick a future date to schedule the post. Once approved, it goes live at midnight IST on that date.' }
-      - { label: Show a table of contents, name: toc, widget: boolean, required: false, default: false, hint: 'Lists your headings at the top of the post. Useful for long tutorials.' }
       - { label: Your name, name: author, widget: string, hint: 'As you would like it to appear on the post.' }
       - { label: Co-authors, name: coAuthors, widget: ay-tags, hash: false, placeholder: 'Add a name and press Enter', required: false, default: [] }
       - { label: About you, name: authorRole, widget: string, required: false, hint: 'e.g. “ML engineer at Acme · AIYatra Student Ambassador”' }

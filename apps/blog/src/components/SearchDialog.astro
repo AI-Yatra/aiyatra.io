@@ -1,0 +1,17 @@
+---
+import Icon from './Icon.astro';
+---
+<dialog id="search-dialog" class="search-dialog" aria-label="Search the blog">
+	<div class="search-tabs" role="tablist">
+		<button type="button" role="tab" data-mode="keyword" aria-selected="true">Search words</button>
+		<button type="button" role="tab" data-mode="ask" aria-selected="false">Ask by meaning</button>
+		<button type="button" class="search-close" data-close-search aria-label="Close search"><Icon name="X" class="h-5 w-5" /></button>
+	</div>
+	<input id="search-input" class="search-input" type="search" placeholder="Search every post…" aria-label="Search" autocomplete="off" />
+	<p id="search-note" class="search-note" aria-live="polite"></p>
+	<button type="button" id="search-enable" class="search-enable active-press h-10 rounded-xl border-2 border-ink bg-tone-blue-deep px-4 text-sm font-bold text-white" hidden>Turn on Ask by meaning</button>
+	<ul id="search-results" class="search-results"></ul>
+</dialog>
+<script>
+	import '../scripts/search.ts';
+</script>
