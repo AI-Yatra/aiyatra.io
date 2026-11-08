@@ -330,21 +330,21 @@ A useful way to understand this is to follow a task from the moment a user makes
 
 ```mermaid
 flowchart TD
-    A(["User request"]) --> B["Interpret intent"]
-    B --> C["Create task plan"]
-    C --> D["Check identity and permissions"]
-    D --> E{"Approval required?"}
-    E -- "Yes" --> F["Request human approval"]
+    A(["User request"]) --> B["Interpret<br/>the intent"]
+    B --> C["Create a<br/>task plan"]
+    C --> D["Check identity<br/>and permissions"]
+    D --> E{"Approval<br/>required?"}
+    E -- "Yes" --> F["Request human<br/>approval"]
     F --> G{"Approved?"}
-    G -- "No" --> H["Stop safely and explain"]
-    G -- "Yes" --> I["Schedule agent tasks"]
+    G -- "No" --> H["Stop safely<br/>and explain"]
+    G -- "Yes" --> I["Schedule<br/>agent tasks"]
     E -- "No" --> I
-    I --> J["Execute with tools and models"]
-    J --> K["Validate outputs"]
-    K --> L{"Task successful?"}
-    L -- "No" --> M["Retry, recover, or ask for help"]
+    I --> J["Execute with<br/>tools and models"]
+    J --> K["Validate<br/>outputs"]
+    K --> L{"Task<br/>successful?"}
+    L -- "No" --> M["Retry, recover,<br/>or ask for help"]
     M --> J
-    L -- "Yes" --> N["Save state and deliver result"]
+    L -- "Yes" --> N["Save state and<br/>deliver the result"]
 ```
 
 The important detail is that the system does not simply ask an LLM to do everything. It separates planning, authorization, execution, and verification.
