@@ -57,7 +57,9 @@ This is how traditional computing works: **the user operates the applications to
 
 An AI-powered approach changes this interaction. Instead of navigating through different applications, you describe the outcome you want, and an intelligent system coordinates the required actions.
 
-&lt;visual-placeholder&gt;Visual: Traditional computing vs AI-powered computing. Left side: a person switching between multiple application windows. Right side: one AI interface coordinating multiple applications and agents.&lt;/visual-placeholder&gt;
+![Traditional operating systems require users to switch between applications, while an AI-powered system can coordinate agents and tools around a user's goal.](/blog/images/uploads/traditional-vs-ai-os.svg)
+
+*The shift is from manually operating individual applications to describing an outcome and letting connected tools work together.*
 
 ## What Exactly Is an AI Operating System?
 
@@ -239,6 +241,80 @@ This is particularly interesting from a software engineering and AI research per
 | AIOS by AGI Research | Managing and running LLM agents | Research AI OS |
 
 These examples show that AI OS is not a single technology following one approach. Different companies and research teams are exploring different ways to make computing more intelligent.
+
+## A Small Hands-On Example: Creating an AI Agent
+
+An AI OS may coordinate many agents, but each agent starts with a focused role. The following Python example uses CrewAI to create a simple research agent. It is not a complete AI OS; it demonstrates one building block that an agent-based system could coordinate.
+
+Install CrewAI:
+
+```bash
+pip install crewai
+```
+
+Set your model provider's API key in your environment, then run:
+
+```python
+from crewai import Agent, Task, Crew, Process
+
+researcher = Agent(
+    role="AI Systems Researcher",
+    goal="Explain the core building blocks of an AI operating system",
+    backstory=(
+        "You are a software researcher who explains "
+        "complex systems in clear, beginner-friendly language."
+    ),
+    verbose=True
+)
+
+research_task = Task(
+    description=(
+        "Explain how language models, agents, memory, "
+        "orchestration, tools, and permissions can work "
+        "together in an AI operating system. Give one example."
+    ),
+    expected_output=(
+        "A concise explanation with the components, "
+        "their responsibilities, and one practical example."
+    ),
+    agent=researcher
+)
+
+crew = Crew(
+    agents=[researcher],
+    tasks=[research_task],
+    process=Process.sequential,
+    verbose=True
+)
+
+result = crew.kickoff()
+print(result)
+```
+
+**What does this demonstrate?**
+
+- **Agent:** Defines a specialist with a role and goal.
+- **Task:** Describes the work the agent must complete.
+- **Crew:** Coordinates the agent and task.
+- **Kickoff:** Starts execution and returns the result.
+
+A larger agentic system could add more agents, tools, memory, access controls, and an orchestration layer to coordinate a multi-step workflow.
+
+Documentation: [CrewAI](https://docs.crewai.com/).
+
+## Interesting Facts: What Makes AI OS Different?
+
+A few ideas from operating-systems research become especially interesting when applied to AI agents:
+
+- **Agents need scheduling too.** If several agents request access to a model or tool at the same time, a system needs a way to manage and prioritize those requests.
+- **Context is a resource.** Agents rely on context windows, memory, and relevant task history. Managing what information each agent receives can affect both cost and quality.
+- **Tool access is a security boundary.** An agent that can read a document should not automatically be allowed to delete it, send it externally, or approve a transaction.
+- **Local AI changes the architecture.** Devices with Neural Processing Units (NPUs) can accelerate supported AI workloads on-device, while larger or more demanding tasks may still use cloud models.
+- **An AI OS needs more than a powerful model.** Scheduling, memory, tool integration, observability, permissions, and recovery from errors are all part of making agent systems dependable.
+
+One research project exploring these ideas is **AIOS: LLM Agent Operating System**. It proposes an operating-system-style kernel for managing agent execution and resources, including scheduling, memory, and storage.
+
+Read the research: [AIOS paper](https://arxiv.org/abs/2403.16971) · [Project on GitHub](https://github.com/agiresearch/AIOS).
 
 ## AI OS in the Workplace: The Next Big Shift
 
