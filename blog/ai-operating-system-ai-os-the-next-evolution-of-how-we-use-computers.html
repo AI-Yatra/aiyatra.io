@@ -1,0 +1,634 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>document.documentElement.classList.add('js');</script><title>AI Operating System (AI OS): The Next Evolution of How We Use Computers — AIYatra Blog</title><meta name="description" content="An AI Operating System (AI OS) represents the next evolution of how humans interact with computers. Unlike traditional operating systems, it focuses on understanding user intent rather than simply running applications. By combining LLMs, AI agents, memory, and tool integrations, it can coordinate complex tasks with minimal human intervention. Emerging platforms are bringing this concept into personal computing and enterprise workflows. The future of computing is shifting from operating applications to orchestrating intelligence."><meta name="theme-color" content="#2563eb"><link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="canonical" href="https://aiyatra.io/blog/ai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers"><link rel="alternate" type="application/rss+xml" title="AIYatra Blog" href="/blog/rss.xml"><meta property="og:type" content="article"><meta property="og:site_name" content="AIYatra"><meta property="og:url" content="https://aiyatra.io/blog/ai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers"><meta property="og:title" content="AI Operating System (AI OS): The Next Evolution of How We Use Computers — AIYatra Blog"><meta property="og:description" content="An AI Operating System (AI OS) represents the next evolution of how humans interact with computers. Unlike traditional operating systems, it focuses on understanding user intent rather than simply running applications. By combining LLMs, AI agents, memory, and tool integrations, it can coordinate complex tasks with minimal human intervention. Emerging platforms are bringing this concept into personal computing and enterprise workflows. The future of computing is shifting from operating applications to orchestrating intelligence."><meta property="og:image" content="https://aiyatra.io/blog/og/ai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers.png"><meta property="og:locale" content="en_IN"><meta property="article:published_time" content="2026-11-07"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="AI Operating System (AI OS): The Next Evolution of How We Use Computers — AIYatra Blog"><meta name="twitter:description" content="An AI Operating System (AI OS) represents the next evolution of how humans interact with computers. Unlike traditional operating systems, it focuses on understanding user intent rather than simply running applications. By combining LLMs, AI agents, memory, and tool integrations, it can coordinate complex tasks with minimal human intervention. Emerging platforms are bringing this concept into personal computing and enterprise workflows. The future of computing is shifting from operating applications to orchestrating intelligence."><meta name="twitter:image" content="https://aiyatra.io/blog/og/ai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"AI Operating System (AI OS): The Next Evolution of How We Use Computers","description":"An AI Operating System (AI OS) represents the next evolution of how humans interact with computers. Unlike traditional operating systems, it focuses on understanding user intent rather than simply running applications. By combining LLMs, AI agents, memory, and tool integrations, it can coordinate complex tasks with minimal human intervention. Emerging platforms are bringing this concept into personal computing and enterprise workflows. The future of computing is shifting from operating applications to orchestrating intelligence.","datePublished":"2026-11-07","image":"https://aiyatra.io/blog/og/ai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers.png","author":[{"@type":"Person","name":"Akhil Tummalapalli","url":"https://www.linkedin.com/in/akhil-tummalapalli-8a4666247/"}],"publisher":{"@type":"Organization","name":"AIYatra","logo":{"@type":"ImageObject","url":"https://aiyatra.io/favicon-512.png"}},"mainEntityOfPage":"https://aiyatra.io/blog/ai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers"}</script><link rel="stylesheet" href="/blog/_astro/BaseLayout.CGH75_7p.css"></head><body><div class="grain min-h-screen bg-paper text-ink antialiased"><a href="#main" class="skip-link">Skip to content</a><div id="scroll-progress" aria-hidden="true" class="fixed inset-x-0 top-0 z-[70] h-[3px] origin-left scale-x-0 bg-gradient-to-r from-[hsl(221_83%_53%)] via-[hsl(199_89%_60%)] to-[hsl(221_83%_53%)]"></div><div id="cursor-glow" aria-hidden="true" class="pointer-events-none fixed left-0 top-0 z-[1] hidden h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,hsl(199_89%_60%/0.16),transparent_65%)] [@media(pointer:fine)]:block" style="transform: translate(-400px, -400px)"></div><div class="bg-gradient-to-r from-[hsl(224_76%_33%)] via-tone-blue-deep to-[hsl(224_76%_33%)] text-white" role="note" aria-label="Next meetup announcement"><div class="marquee-pause overflow-hidden py-2"><div class="marquee-track flex w-max items-center gap-10 pr-10" id="announce" data-events="[{&quot;shortTitle&quot;:&quot;Beyond the Harness&quot;,&quot;url&quot;:&quot;https://www.meetup.com/aiyatra/events/317217848/&quot;,&quot;formUrl&quot;:&quot;https://forms.gle/whpN8ZUJAuoikGcz6&quot;,&quot;start&quot;:1794627000000,&quot;end&quot;:1794639600000,&quot;rsvpDeadline&quot;:null}]"><span class="flex shrink-0 items-center gap-2.5 whitespace-nowrap text-[12.5px] font-medium tracking-wide"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg><span data-announce-text>Next meetup: Beyond the Harness · Sat, Nov 14, 9:00 AM IST · both mandatory for venue entry</span><a data-announce-rsvp href="https://www.meetup.com/aiyatra/events/317217848/" target="_blank" rel="noreferrer" class="ml-1 rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep" tabindex="0">RSVP</a><a data-announce-form href="https://forms.gle/whpN8ZUJAuoikGcz6" target="_blank" rel="noreferrer" class="rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep " tabindex="0">Google Form</a></span><span aria-hidden="true" class="flex shrink-0 items-center gap-2.5 whitespace-nowrap text-[12.5px] font-medium tracking-wide"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg><span data-announce-text>Next meetup: Beyond the Harness · Sat, Nov 14, 9:00 AM IST · both mandatory for venue entry</span><a data-announce-rsvp href="https://www.meetup.com/aiyatra/events/317217848/" target="_blank" rel="noreferrer" class="ml-1 rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep" tabindex="-1">RSVP</a><a data-announce-form href="https://forms.gle/whpN8ZUJAuoikGcz6" target="_blank" rel="noreferrer" class="rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep " tabindex="-1">Google Form</a></span><span aria-hidden="true" class="flex shrink-0 items-center gap-2.5 whitespace-nowrap text-[12.5px] font-medium tracking-wide"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg><span data-announce-text>Next meetup: Beyond the Harness · Sat, Nov 14, 9:00 AM IST · both mandatory for venue entry</span><a data-announce-rsvp href="https://www.meetup.com/aiyatra/events/317217848/" target="_blank" rel="noreferrer" class="ml-1 rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep" tabindex="-1">RSVP</a><a data-announce-form href="https://forms.gle/whpN8ZUJAuoikGcz6" target="_blank" rel="noreferrer" class="rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep " tabindex="-1">Google Form</a></span><span aria-hidden="true" class="flex shrink-0 items-center gap-2.5 whitespace-nowrap text-[12.5px] font-medium tracking-wide"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg><span data-announce-text>Next meetup: Beyond the Harness · Sat, Nov 14, 9:00 AM IST · both mandatory for venue entry</span><a data-announce-rsvp href="https://www.meetup.com/aiyatra/events/317217848/" target="_blank" rel="noreferrer" class="ml-1 rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep" tabindex="-1">RSVP</a><a data-announce-form href="https://forms.gle/whpN8ZUJAuoikGcz6" target="_blank" rel="noreferrer" class="rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep " tabindex="-1">Google Form</a></span><span aria-hidden="true" class="flex shrink-0 items-center gap-2.5 whitespace-nowrap text-[12.5px] font-medium tracking-wide"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg><span data-announce-text>Next meetup: Beyond the Harness · Sat, Nov 14, 9:00 AM IST · both mandatory for venue entry</span><a data-announce-rsvp href="https://www.meetup.com/aiyatra/events/317217848/" target="_blank" rel="noreferrer" class="ml-1 rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep" tabindex="-1">RSVP</a><a data-announce-form href="https://forms.gle/whpN8ZUJAuoikGcz6" target="_blank" rel="noreferrer" class="rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep " tabindex="-1">Google Form</a></span><span aria-hidden="true" class="flex shrink-0 items-center gap-2.5 whitespace-nowrap text-[12.5px] font-medium tracking-wide"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg><span data-announce-text>Next meetup: Beyond the Harness · Sat, Nov 14, 9:00 AM IST · both mandatory for venue entry</span><a data-announce-rsvp href="https://www.meetup.com/aiyatra/events/317217848/" target="_blank" rel="noreferrer" class="ml-1 rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep" tabindex="-1">RSVP</a><a data-announce-form href="https://forms.gle/whpN8ZUJAuoikGcz6" target="_blank" rel="noreferrer" class="rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep " tabindex="-1">Google Form</a></span><span aria-hidden="true" class="flex shrink-0 items-center gap-2.5 whitespace-nowrap text-[12.5px] font-medium tracking-wide"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg><span data-announce-text>Next meetup: Beyond the Harness · Sat, Nov 14, 9:00 AM IST · both mandatory for venue entry</span><a data-announce-rsvp href="https://www.meetup.com/aiyatra/events/317217848/" target="_blank" rel="noreferrer" class="ml-1 rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep" tabindex="-1">RSVP</a><a data-announce-form href="https://forms.gle/whpN8ZUJAuoikGcz6" target="_blank" rel="noreferrer" class="rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep " tabindex="-1">Google Form</a></span><span aria-hidden="true" class="flex shrink-0 items-center gap-2.5 whitespace-nowrap text-[12.5px] font-medium tracking-wide"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg><span data-announce-text>Next meetup: Beyond the Harness · Sat, Nov 14, 9:00 AM IST · both mandatory for venue entry</span><a data-announce-rsvp href="https://www.meetup.com/aiyatra/events/317217848/" target="_blank" rel="noreferrer" class="ml-1 rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep" tabindex="-1">RSVP</a><a data-announce-form href="https://forms.gle/whpN8ZUJAuoikGcz6" target="_blank" rel="noreferrer" class="rounded-full bg-white/15 px-2.5 py-0.5 font-semibold hover:bg-white hover:text-tone-blue-deep " tabindex="-1">Google Form</a></span></div></div></div><header id="site-header" class="sticky top-0 z-50 bg-white/0 transition-all duration-300"><div class="wrap flex h-[72px] items-center justify-between gap-5"><a href="/#top" class="flex shrink-0 items-center" aria-label="AI Yatra home"><span class="flex items-center gap-3"><span class="flex h-12 w-12 shrink-0 items-center justify-center sm:h-14 sm:w-14"><img src="/aiyatra-logo-224.png" alt="" aria-hidden="true" width="224" height="224" class="h-full w-full object-contain "></span><span class="flex flex-col leading-none"><span class="font-display text-[22px] font-bold text-ink">AI Yatra</span><span class="mt-1 hidden text-[10px] font-semibold uppercase tracking-[0.22em] sm:block text-tone-blue-deep/80">Open-source AI community</span></span></span></a><nav class="hidden items-center gap-1 rounded-full border border-tone-blue-deep/10 bg-white/70 p-1 text-sm font-medium text-ink/80 xl:flex"><a href="/#meetups" class="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">Meetups</a><a href="/ambassadors" class="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">Ambassadors</a><a href="/labs" class="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">Research Labs</a><a href="/#community" class="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">Community</a><a href="/blog" class="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">Blog</a><a href="/contact" class="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">Contact Us</a></nav><div class="flex items-center gap-2"><button type="button" data-open-search aria-label="Search the blog" title="Search (Ctrl or ⌘ + K)" class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-tone-blue-deep/15 bg-white/70 text-ink/80 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-5 w-5" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg></button><a href="https://www.meetup.com/aiyatra/" target="_blank" rel="noreferrer" class="active-press group relative hidden h-11 shrink-0 items-center gap-2 overflow-hidden rounded-full bg-tone-blue-deep px-5 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_hsl(221_83%_53%/0.8)] transition-transform hover:-translate-y-0.5 sm:inline-flex"><span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>Join free <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><button type="button" id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-tone-blue-deep/15 bg-white text-ink xl:hidden"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-icon-open="true" class="lucide  h-5 w-5" aria-hidden="true"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-icon-close="true" class="lucide  hidden h-5 w-5" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div></div><nav id="mobile-nav" class="mobile-nav glass overflow-hidden border-t border-tone-blue-deep/10 xl:hidden" hidden><div class="wrap flex flex-col gap-1 py-4"><a href="/#meetups" style="--i:0" class="mobile-nav-item block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">Meetups</a><a href="/ambassadors" style="--i:1" class="mobile-nav-item block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">Ambassadors</a><a href="/labs" style="--i:2" class="mobile-nav-item block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">Research Labs</a><a href="/#community" style="--i:3" class="mobile-nav-item block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">Community</a><a href="/blog" style="--i:4" class="mobile-nav-item block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">Blog</a><a href="/contact" style="--i:5" class="mobile-nav-item block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">Contact Us</a><a href="https://www.meetup.com/aiyatra/" target="_blank" rel="noreferrer" class="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-tone-blue-deep font-semibold text-white">Join free on Meetup <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div></nav></header><script type="module" src="/blog/_astro/Header.astro_astro_type_script_index_0_lang.DOxNxKNP.js"></script><main id="main"><section id="top" class="page-band"><div class="wrap pb-10 pt-14 lg:pt-[74px]"><div data-reveal class="flex flex-wrap items-center gap-3"><a href="/blog" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg> All posts</a><span class="inline-flex items-center gap-1.5 rounded-full bg-tone-yellow px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide !text-ink">Research notes</span></div><div data-reveal style="--reveal-delay:0.08s"><h1 class="mt-5 max-w-4xl font-hand text-5xl font-bold leading-[1.02] tracking-tight sm:text-6xl">AI Operating System (AI OS): The Next Evolution of How We Use Computers</h1></div><div data-reveal style="--reveal-delay:0.14s"><div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold text-ink/70"><span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg><a href="/blog/authors/akhil-tummalapalli" class="underline underline-offset-4 hover:text-tone-blue-deep">Akhil Tummalapalli</a></span><span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg> <time datetime="2026-11-07">Nov 7, 2026</time></span><span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 17 min read</span><span class="hidden items-center gap-1.5" data-view-count><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg> <span></span></span></div></div></div></section><section class="border-t-2 border-ink bg-paper-soft"><div class="wrap py-14"><div data-reveal style="--reveal-delay:0.08s" class="post-layout  has-toc"><div class="min-w-0"><div class="mb-4 flex flex-wrap items-center justify-between gap-3"><button type="button" id="listen" hidden class="inline-flex h-10 items-center gap-2 rounded-xl border-2 border-ink bg-paper px-4 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg> <span data-listen-label>Listen to this post</span></button><div class="flex flex-wrap items-center gap-2" role="group" aria-label="Share this post" data-pagefind-ignore><a class="inline-flex h-10 min-w-10 items-center justify-center gap-1.5 rounded-xl border-2 border-ink bg-paper px-2.5 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5 hover:text-tone-blue-deep" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Faiyatra.io%2Fblog%2Fai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers" target="_blank" rel="noopener" aria-label="Share on LinkedIn" title="Share on LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg></a><a class="inline-flex h-10 min-w-10 items-center justify-center gap-1.5 rounded-xl border-2 border-ink bg-paper px-2.5 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5 hover:text-tone-blue-deep" href="https://x.com/intent/post?url=https%3A%2F%2Faiyatra.io%2Fblog%2Fai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers&amp;text=AI%20Operating%20System%20(AI%20OS)%3A%20The%20Next%20Evolution%20of%20How%20We%20Use%20Computers" target="_blank" rel="noopener" aria-label="Share on X" title="Share on X"><span aria-hidden="true" class="px-0.5">𝕏</span></a><a class="inline-flex h-10 min-w-10 items-center justify-center gap-1.5 rounded-xl border-2 border-ink bg-paper px-2.5 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5 hover:text-tone-blue-deep" href="https://wa.me/?text=AI%20Operating%20System%20(AI%20OS)%3A%20The%20Next%20Evolution%20of%20How%20We%20Use%20Computers%20https%3A%2F%2Faiyatra.io%2Fblog%2Fai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers" target="_blank" rel="noopener" aria-label="Share on WhatsApp" title="Share on WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class=" h-4 w-4" aria-hidden="true"><path d="m7.254 18.494l.724.423A7.95 7.95 0 0 0 12.001 20a8 8 0 1 0-8-8a7.95 7.95 0 0 0 1.084 4.024l.422.724l-.653 2.401zM2.005 22l1.352-4.968A9.95 9.95 0 0 1 2.001 12c0-5.523 4.477-10 10-10s10 4.477 10 10s-4.477 10-10 10a9.95 9.95 0 0 1-5.03-1.355zM8.392 7.308q.202-.014.403-.004q.081.006.162.016c.159.018.334.115.393.249q.447 1.015.868 2.04c.062.152.025.347-.093.537c-.06.097-.154.233-.263.372c-.113.145-.356.411-.356.411s-.099.118-.061.265c.014.056.06.137.102.205l.059.095c.256.427.6.86 1.02 1.268c.12.116.237.235.363.346c.468.413.998.75 1.57 1l.005.002c.085.037.128.057.252.11q.093.039.191.066q.036.01.073.011a.35.35 0 0 0 .295-.142c.723-.876.79-.933.795-.933v.002a.48.48 0 0 1 .378-.127q.092.004.177.04c.531.243 1.4.622 1.4.622l.582.261c.098.047.187.158.19.265c.004.067.01.175-.013.373c-.032.259-.11.57-.188.733a1.2 1.2 0 0 1-.21.302a2.4 2.4 0 0 1-.33.288q-.124.092-.125.09a5 5 0 0 1-.383.22a2 2 0 0 1-.833.23c-.185.01-.37.024-.556.014c-.008 0-.568-.087-.568-.087a9.45 9.45 0 0 1-3.84-2.046c-.226-.199-.436-.413-.65-.626c-.888-.885-1.561-1.84-1.97-2.742a3.5 3.5 0 0 1-.33-1.413a2.73 2.73 0 0 1 .565-1.68c.073-.094.142-.192.261-.305c.126-.12.207-.184.294-.228a1 1 0 0 1 .371-.1" /></svg></a><button type="button" class="inline-flex h-10 min-w-10 items-center justify-center gap-1.5 rounded-xl border-2 border-ink bg-paper px-2.5 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5 hover:text-tone-blue-deep" data-copy-link="https://aiyatra.io/blog/ai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers" aria-label="Copy link" title="Copy link"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> <span data-copy-label class="hidden">Copied</span></button></div></div><details class="post-toc-mobile mb-4 rounded-2xl border-2 border-ink bg-paper p-4 shadow-paper-sm"><summary class="cursor-pointer text-sm font-bold">In this post</summary><ol class="mt-3 space-y-2 text-sm font-medium"><li data-depth="2"><a href="#ai-operating-system-ai-os-is-this-the-future-of-computing" class="text-ink/75 hover:text-tone-blue-deep">AI Operating System (AI OS): Is This the Future of Computing?</a></li><li data-depth="2"><a href="#from-traditional-computing-to-intelligent-computing" class="text-ink/75 hover:text-tone-blue-deep">From Traditional Computing to Intelligent Computing</a></li><li data-depth="2"><a href="#what-exactly-is-an-ai-operating-system" class="text-ink/75 hover:text-tone-blue-deep">What Exactly Is an AI Operating System?</a></li><li data-depth="2"><a href="#how-is-an-ai-os-different-from-a-traditional-os" class="text-ink/75 hover:text-tone-blue-deep">How Is an AI OS Different From a Traditional OS?</a></li><li data-depth="2"><a href="#what-happens-inside-an-ai-os" class="text-ink/75 hover:text-tone-blue-deep">What Happens Inside an AI OS?</a></li><li data-depth="3"><a href="#understanding-the-workflow-through-an-example" class="text-ink/75 hover:text-tone-blue-deep">Understanding the workflow through an example</a></li><li data-depth="2"><a href="#ai-chatbots-ai-agents-and-ai-os-what-is-the-difference" class="text-ink/75 hover:text-tone-blue-deep">AI Chatbots, AI Agents and AI OS: What Is the Difference?</a></li><li data-depth="2"><a href="#are-ai-operating-systems-already-here" class="text-ink/75 hover:text-tone-blue-deep">Are AI Operating Systems Already Here?</a></li><li data-depth="3"><a href="#rabbit-os-3--an-agentic-operating-system" class="text-ink/75 hover:text-tone-blue-deep">rabbit OS 3 – An Agentic Operating System</a></li><li data-depth="3"><a href="#android-with-gemini-intelligence" class="text-ink/75 hover:text-tone-blue-deep">Android with Gemini Intelligence</a></li><li data-depth="3"><a href="#windows-copilot-pcs" class="text-ink/75 hover:text-tone-blue-deep">Windows Copilot+ PCs</a></li><li data-depth="3"><a href="#aios--llm-agent-operating-system-research-project" class="text-ink/75 hover:text-tone-blue-deep">AIOS – LLM Agent Operating System (Research Project)</a></li><li data-depth="3"><a href="#a-quick-comparison" class="text-ink/75 hover:text-tone-blue-deep">A Quick Comparison</a></li><li data-depth="2"><a href="#a-small-hands-on-example-creating-an-ai-agent" class="text-ink/75 hover:text-tone-blue-deep">A Small Hands-On Example: Creating an AI Agent</a></li><li data-depth="2"><a href="#interesting-facts-what-makes-ai-os-different" class="text-ink/75 hover:text-tone-blue-deep">Interesting Facts: What Makes AI OS Different?</a></li><li data-depth="2"><a href="#beyond-the-basics-what-would-make-an-ai-os-a-real-operating-system" class="text-ink/75 hover:text-tone-blue-deep">Beyond the Basics: What Would Make an AI OS a Real Operating System?</a></li><li data-depth="3"><a href="#the-lifecycle-of-an-ai-task" class="text-ink/75 hover:text-tone-blue-deep">The lifecycle of an AI task</a></li><li data-depth="3"><a href="#the-os-concepts-behind-an-ai-os" class="text-ink/75 hover:text-tone-blue-deep">The OS concepts behind an AI OS</a></li><li data-depth="3"><a href="#why-orchestration-matters-more-than-simply-adding-more-agents" class="text-ink/75 hover:text-tone-blue-deep">Why orchestration matters more than simply adding more agents</a></li><li data-depth="3"><a href="#a-small-python-example-permissions-before-actions" class="text-ink/75 hover:text-tone-blue-deep">A small Python example: permissions before actions</a></li><li data-depth="3"><a href="#the-difficult-engineering-questions" class="text-ink/75 hover:text-tone-blue-deep">The difficult engineering questions</a></li><li data-depth="2"><a href="#a-new-design-principle-human-intent-machine-execution-human-accountability" class="text-ink/75 hover:text-tone-blue-deep">A New Design Principle: Human Intent, Machine Execution, Human Accountability</a></li><li data-depth="2"><a href="#ai-os-in-the-workplace-the-next-big-shift" class="text-ink/75 hover:text-tone-blue-deep">AI OS in the Workplace: The Next Big Shift</a></li><li data-depth="3"><a href="#existing-enterprise-platforms-moving-in-this-direction" class="text-ink/75 hover:text-tone-blue-deep">Existing Enterprise Platforms Moving in This Direction</a></li><li data-depth="2"><a href="#what-could-the-future-of-ai-os-look-like" class="text-ink/75 hover:text-tone-blue-deep">What Could the Future of AI OS Look Like?</a></li><li data-depth="2"><a href="#what-are-the-challenges" class="text-ink/75 hover:text-tone-blue-deep">What Are the Challenges?</a></li><li data-depth="2"><a href="#the-bigger-picture" class="text-ink/75 hover:text-tone-blue-deep">The Bigger Picture</a></li></ol></details><article class="blog-body rounded-2xl border-2 border-ink bg-paper p-6 shadow-paper-sm sm:p-10 lg:p-14" data-pagefind-body><figure class="post-figure" data-size="small"><img src="/blog/images/uploads/image-20olz.webp" alt=""></figure>
+<h2 id="ai-operating-system-ai-os-is-this-the-future-of-computing">AI Operating System (AI OS): Is This the Future of Computing?</h2>
+<p><em>From opening applications and clicking buttons to simply telling computers what we want. Discover how Artificial Intelligence is changing the way we interact with technology.</em></p>
+<p>Imagine starting your day by telling your computer:</p>
+<p>“Check my emails, summarize the important ones, prepare a presentation for today’s meeting, collect the latest market updates, and share everything with my team.”</p>
+<p>Your computer understands the request, breaks it into smaller tasks, uses different applications, gathers information, prepares the presentation, and brings everything together.</p>
+<p>You don’t have to open ten different applications or manually perform every step.</p>
+<p>This is the idea behind an <strong>AI Operating System (AI OS)</strong>.</p>
+<p>Artificial Intelligence is no longer limited to answering questions or generating text. It is gradually moving towards systems that can understand instructions, plan tasks, interact with applications, and perform actions independently.</p>
+<p>But what exactly is an AI OS? How is it different from Windows or macOS? Are there any real examples today? And what could it mean for the future of work?</p>
+<p>Let’s explore.</p>
+<hr>
+<h2 id="from-traditional-computing-to-intelligent-computing">From Traditional Computing to Intelligent Computing</h2>
+<p>To understand why AI OS matters, let’s first look at how we currently interact with computers.</p>
+<p>Think about a normal working day. You open your browser to search for information, Excel to analyze data, Outlook to check emails, Teams to attend meetings, and other applications to complete your work.</p>
+<p>Every application performs a specific function, but you are responsible for connecting all the steps.</p>
+<p>This is how traditional computing works: <strong>the user operates the applications to achieve an outcome.</strong></p>
+<p>An AI-powered approach changes this interaction. Instead of navigating through different applications, you describe the outcome you want, and an intelligent system coordinates the required actions.</p>
+<p><img src="/blog/images/uploads/traditional-vs-ai-os.svg" alt="Traditional operating systems require users to switch between applications, while an AI-powered system can coordinate agents and tools around a user&#x27;s goal."></p>
+<p><em>The shift is from manually operating individual applications to describing an outcome and letting connected tools work together.</em></p>
+<h2 id="what-exactly-is-an-ai-operating-system">What Exactly Is an AI Operating System?</h2>
+<p>An Operating System (OS) is the fundamental software that manages a computer’s hardware, software, memory, processes, and applications.</p>
+<p>Some familiar examples are Windows, macOS, Linux, Android, and iOS.</p>
+<p>An <strong>AI Operating System</strong> takes this concept further by introducing an intelligent layer that understands user intent, manages context, coordinates AI agents, and connects different tools and applications to complete tasks.</p>
+<p>In simple words:</p>
+<p>A traditional OS helps you operate your computer.</p>
+<p>An AI OS aims to help your computer understand what you want to accomplish and work towards completing it.</p>
+<p>It is important to understand that AI OS is an evolving concept, not one universally defined product or a completely new replacement for Windows and Linux.</p>
+<p>Some implementations integrate AI into existing operating systems, while others build dedicated platforms for running and coordinating AI agents.</p>
+<h2 id="how-is-an-ai-os-different-from-a-traditional-os">How Is an AI OS Different From a Traditional OS?</h2>
+<p>The biggest difference is how users interact with technology.</p>
+<table>
+<thead>
+<tr>
+<th>Traditional OS</th>
+<th>AI OS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Application-driven</td>
+<td>Intent-driven</td>
+</tr>
+<tr>
+<td>Users manually open applications</td>
+<td>AI can select and use tools</td>
+</tr>
+<tr>
+<td>Executes predefined instructions</td>
+<td>Can interpret and plan tasks</td>
+</tr>
+<tr>
+<td>Limited understanding of context</td>
+<td>Can use context and memory</td>
+</tr>
+<tr>
+<td>Users connect individual workflows</td>
+<td>Agents can coordinate workflows</td>
+</tr>
+<tr>
+<td>Focuses on managing computing resources</td>
+<td>Also coordinates intelligent tasks</td>
+</tr>
+</tbody>
+</table>
+<p>Consider this example.</p>
+<p>You want to organize a business meeting.</p>
+<p>With a traditional OS, you open your calendar, check availability, open email, draft invitations, and prepare an agenda.</p>
+<p>With an AI OS, you could simply say:</p>
+<p>“Schedule a meeting with the engineering team next week, find a suitable time, prepare an agenda, and send invitations.”</p>
+<p>The AI system can coordinate the necessary applications and services to accomplish the task, with your permission.</p>
+<p>The difference is not simply speed. It is a change in how we communicate with computers.</p>
+<h2 id="what-happens-inside-an-ai-os">What Happens Inside an AI OS?</h2>
+<p>An AI OS is not just one large language model or a chatbot running in the background. It brings together several technologies that work as a coordinated system.</p>
+<p>Here are some of its important building blocks:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Its role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Large Language Models (LLMs)</td>
+<td>Understand instructions, interpret context, and reason about tasks</td>
+</tr>
+<tr>
+<td>AI Agents</td>
+<td>Perform specialized tasks such as research, coding, and analysis</td>
+</tr>
+<tr>
+<td>Memory &#x26; Context</td>
+<td>Retain useful information and previous interactions</td>
+</tr>
+<tr>
+<td>Orchestration Engine</td>
+<td>Coordinates agents and manages task execution</td>
+</tr>
+<tr>
+<td>APIs &#x26; Tool Integrations</td>
+<td>Connect with external applications, databases, and services</td>
+</tr>
+<tr>
+<td>Security &#x26; Permissions</td>
+<td>Controls what agents can access and which actions they can perform</td>
+</tr>
+</tbody>
+</table>
+<h3 id="understanding-the-workflow-through-an-example">Understanding the workflow through an example</h3>
+<p>Imagine asking your AI OS to prepare a report on the latest developments in Artificial Intelligence.</p>
+<p>Instead of doing everything yourself, the system can follow a workflow:</p>
+<figure class="post-figure" data-size="small"><img src="/blog/images/uploads/mermaid-diagram-46hmg.webp" alt=""></figure>
+<p>The process can be explained through a few simple steps:</p>
+<ul>
+<li>
+<p><strong>Understanding:</strong> The AI interprets what you are asking for.</p>
+</li>
+<li>
+<p><strong>Planning:</strong> It divides the request into smaller tasks.</p>
+</li>
+<li>
+<p><strong>Delegation:</strong> It assigns tasks to specialized agents.</p>
+</li>
+<li>
+<p><strong>Execution:</strong> Agents use permitted tools, APIs, and data sources.</p>
+</li>
+<li>
+<p><strong>Verification:</strong> The system checks whether the requested tasks were completed correctly.</p>
+</li>
+<li>
+<p><strong>Delivery:</strong> The final output is presented to the user.</p>
+</li>
+</ul>
+<p>For example, a research agent can collect information, an analysis agent can identify important findings, and a writing agent can prepare the report.</p>
+<p>The orchestration layer coordinates their work.</p>
+<p>This is what makes an AI OS more interesting than an ordinary chatbot.</p>
+<h2 id="ai-chatbots-ai-agents-and-ai-os-what-is-the-difference">AI Chatbots, AI Agents and AI OS: What Is the Difference?</h2>
+<p>These three terms are often used interchangeably, but they represent different capabilities.</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>AI Chatbot</th>
+<th>AI Agent</th>
+<th>AI OS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Answers questions</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Understands instructions</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Performs actions</td>
+<td>Tool-dependent</td>
+<td>Yes</td>
+<td>Coordinates actions</td>
+</tr>
+<tr>
+<td>Uses external applications</td>
+<td>Sometimes</td>
+<td>Yes</td>
+<td>Across connected systems</td>
+</tr>
+<tr>
+<td>Handles multi-step tasks</td>
+<td>Limited</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Coordinates multiple agents</td>
+<td>Usually not</td>
+<td>Not necessarily</td>
+<td>A central capability</td>
+</tr>
+<tr>
+<td>Manages shared context and permissions</td>
+<td>Application-dependent</td>
+<td>Application-dependent</td>
+<td>A broader system-level responsibility</td>
+</tr>
+</tbody>
+</table>
+<p>Think of an AI chatbot as someone who answers your questions.</p>
+<p>An AI agent is someone who can take responsibility for a task.</p>
+<p>An AI OS is the environment that brings multiple agents, tools, memory, and applications together to accomplish larger goals.</p>
+<h2 id="are-ai-operating-systems-already-here">Are AI Operating Systems Already Here?</h2>
+<p>Yes, but there is an important distinction.</p>
+<p>We already have products and research projects moving towards AI-native and agent-based computing. However, they do not all represent the same thing.</p>
+<p>Some are AI-enhanced operating systems, some are dedicated agentic operating systems, and others are enterprise platforms.</p>
+<p>Here are some interesting examples.</p>
+<h3 id="rabbit-os-3--an-agentic-operating-system">rabbit OS 3 – An Agentic Operating System</h3>
+<p><a href="https://www.rabbit.tech/newsroom/rabbitos-3-launch">rabbit OS 3</a>, announced in September 2026, is an interesting example of the agentic OS direction.</p>
+<p>Rather than requiring users to operate individual applications for every task, rabbit OS 3 provides a conversational interface where users describe the outcome they want.</p>
+<p>It can coordinate connected AI models, web services, skills, and devices. Its desktop experience can also interact with Windows, macOS, and Linux devices through a connected agent.</p>
+<p>The central idea is simple: tell the system what you want to accomplish, rather than manually managing every step.</p>
+<h3 id="android-with-gemini-intelligence">Android with Gemini Intelligence</h3>
+<p>Google is also moving Android towards a more intelligent operating experience.</p>
+<p>With <a href="https://blog.google/products-and-platforms/platforms/android/gemini-intelligence/">Gemini Intelligence</a>, announced in May 2026, Google is bringing more proactive AI capabilities to Android, including automating multi-step tasks across applications.</p>
+<p>Android is not being replaced by a separate AI OS here. Instead, intelligence is becoming a deeper part of the existing operating system.</p>
+<h3 id="windows-copilot-pcs">Windows Copilot+ PCs</h3>
+<p>Microsoft is integrating AI directly into Windows through Copilot+ PCs.</p>
+<p>These devices include dedicated AI components and hardware, such as Neural Processing Units (NPUs), to run certain AI workloads locally.</p>
+<p>This enables features such as AI-assisted image creation, editing, and language processing.</p>
+<p>It is an example of an existing operating system becoming more AI-powered rather than a completely new AI OS.</p>
+<h3 id="aios--llm-agent-operating-system-research-project">AIOS – LLM Agent Operating System (Research Project)</h3>
+<p>Another interesting example is <a href="https://github.com/agiresearch/AIOS">AIOS by AGI Research</a>.</p>
+<p>Unlike consumer operating systems, this project focuses on building an operating system specifically for LLM-based agents.</p>
+<p>It introduces an AIOS kernel that manages important resources such as:</p>
+<ul>
+<li>
+<p>Agent scheduling</p>
+</li>
+<li>
+<p>Memory management</p>
+</li>
+<li>
+<p>Context management</p>
+</li>
+<li>
+<p>Storage management</p>
+</li>
+<li>
+<p>Access control</p>
+</li>
+<li>
+<p>LLM and tool resources</p>
+</li>
+</ul>
+<p>The objective is to provide a structured environment where multiple AI agents can run and interact more efficiently.</p>
+<p>This is particularly interesting from a software engineering and AI research perspective.</p>
+<h3 id="a-quick-comparison">A Quick Comparison</h3>
+<table>
+<thead>
+<tr>
+<th>Product / Project</th>
+<th>Main Focus</th>
+<th>Category</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rabbit OS 3</td>
+<td>Conversational, multi-device task execution</td>
+<td>Agentic OS</td>
+</tr>
+<tr>
+<td>Android + Gemini Intelligence</td>
+<td>AI integrated into device experiences</td>
+<td>AI-enhanced OS</td>
+</tr>
+<tr>
+<td>Windows Copilot+ PCs</td>
+<td>On-device AI capabilities</td>
+<td>AI-enhanced OS</td>
+</tr>
+<tr>
+<td>AIOS by AGI Research</td>
+<td>Managing and running LLM agents</td>
+<td>Research AI OS</td>
+</tr>
+</tbody>
+</table>
+<p>These examples show that AI OS is not a single technology following one approach. Different companies and research teams are exploring different ways to make computing more intelligent.</p>
+<h2 id="a-small-hands-on-example-creating-an-ai-agent">A Small Hands-On Example: Creating an AI Agent</h2>
+<p>An AI OS may coordinate many agents, but each agent starts with a focused role. The following Python example uses CrewAI to create a simple research agent. It is not a complete AI OS; it demonstrates one building block that an agent-based system could coordinate.</p>
+<p>Install CrewAI:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">pip</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> crewai</span></span></code></pre>
+<p>Set your model provider’s API key in your environment, then run:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> crewai </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Agent, Task, Crew, Process</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">researcher </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Agent(</span></span>
+<span class="line"><span style="color:#FFAB70">    role</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"AI Systems Researcher"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    goal</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Explain the core building blocks of an AI operating system"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    backstory</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#9ECBFF">        "You are a software researcher who explains "</span></span>
+<span class="line"><span style="color:#9ECBFF">        "complex systems in clear, beginner-friendly language."</span></span>
+<span class="line"><span style="color:#E1E4E8">    ),</span></span>
+<span class="line"><span style="color:#FFAB70">    verbose</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">research_task </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Task(</span></span>
+<span class="line"><span style="color:#FFAB70">    description</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#9ECBFF">        "Explain how language models, agents, memory, "</span></span>
+<span class="line"><span style="color:#9ECBFF">        "orchestration, tools, and permissions can work "</span></span>
+<span class="line"><span style="color:#9ECBFF">        "together in an AI operating system. Give one example."</span></span>
+<span class="line"><span style="color:#E1E4E8">    ),</span></span>
+<span class="line"><span style="color:#FFAB70">    expected_output</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#9ECBFF">        "A concise explanation with the components, "</span></span>
+<span class="line"><span style="color:#9ECBFF">        "their responsibilities, and one practical example."</span></span>
+<span class="line"><span style="color:#E1E4E8">    ),</span></span>
+<span class="line"><span style="color:#FFAB70">    agent</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">researcher</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">crew </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Crew(</span></span>
+<span class="line"><span style="color:#FFAB70">    agents</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[researcher],</span></span>
+<span class="line"><span style="color:#FFAB70">    tasks</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[research_task],</span></span>
+<span class="line"><span style="color:#FFAB70">    process</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">Process.sequential,</span></span>
+<span class="line"><span style="color:#FFAB70">    verbose</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> crew.kickoff()</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(result)</span></span></code></pre>
+<p><strong>What does this demonstrate?</strong></p>
+<ul>
+<li><strong>Agent:</strong> Defines a specialist with a role and goal.</li>
+<li><strong>Task:</strong> Describes the work the agent must complete.</li>
+<li><strong>Crew:</strong> Coordinates the agent and task.</li>
+<li><strong>Kickoff:</strong> Starts execution and returns the result.</li>
+</ul>
+<p>A larger agentic system could add more agents, tools, memory, access controls, and an orchestration layer to coordinate a multi-step workflow.</p>
+<p>Documentation: <a href="https://docs.crewai.com/">CrewAI</a>.</p>
+<h2 id="interesting-facts-what-makes-ai-os-different">Interesting Facts: What Makes AI OS Different?</h2>
+<p>A few ideas from operating-systems research become especially interesting when applied to AI agents:</p>
+<ul>
+<li><strong>Agents need scheduling too.</strong> If several agents request access to a model or tool at the same time, a system needs a way to manage and prioritize those requests.</li>
+<li><strong>Context is a resource.</strong> Agents rely on context windows, memory, and relevant task history. Managing what information each agent receives can affect both cost and quality.</li>
+<li><strong>Tool access is a security boundary.</strong> An agent that can read a document should not automatically be allowed to delete it, send it externally, or approve a transaction.</li>
+<li><strong>Local AI changes the architecture.</strong> Devices with Neural Processing Units (NPUs) can accelerate supported AI workloads on-device, while larger or more demanding tasks may still use cloud models.</li>
+<li><strong>An AI OS needs more than a powerful model.</strong> Scheduling, memory, tool integration, observability, permissions, and recovery from errors are all part of making agent systems dependable.</li>
+</ul>
+<p>One research project exploring these ideas is <strong>AIOS: LLM Agent Operating System</strong>. It proposes an operating-system-style kernel for managing agent execution and resources, including scheduling, memory, and storage.</p>
+<p>Read the research: <a href="https://arxiv.org/abs/2403.16971">AIOS paper</a> · <a href="https://github.com/agiresearch/AIOS">Project on GitHub</a>.</p>
+<h2 id="beyond-the-basics-what-would-make-an-ai-os-a-real-operating-system">Beyond the Basics: What Would Make an AI OS a Real Operating System?</h2>
+<p>It is easy to imagine an AI OS as a chatbot connected to a collection of tools. But that alone is not enough.</p>
+<p>A dependable AI OS needs a runtime: a layer that manages how tasks are created, scheduled, executed, monitored, paused, resumed, and completed. This is where ideas from traditional operating-system design become useful.</p>
+<p>Think of an AI agent as a process. It has a goal, a current state, a context, resource requirements, and a set of permissions. The AI OS is responsible for coordinating those processes safely.</p>
+<h3 id="the-lifecycle-of-an-ai-task">The lifecycle of an AI task</h3>
+<p>A useful way to understand this is to follow a task from the moment a user makes a request until the result is delivered.</p>
+<pre><code class="language-mermaid">flowchart TD
+    A(["User request"]) --> B["Interpret&#x3C;br/>the intent"]
+    B --> C["Create a&#x3C;br/>task plan"]
+    C --> D["Check identity&#x3C;br/>and permissions"]
+    D --> E{"Approval&#x3C;br/>required?"}
+    E -- "Yes" --> F["Request human&#x3C;br/>approval"]
+    F --> G{"Approved?"}
+    G -- "No" --> H["Stop safely&#x3C;br/>and explain"]
+    G -- "Yes" --> I["Schedule&#x3C;br/>agent tasks"]
+    E -- "No" --> I
+    I --> J["Execute with&#x3C;br/>tools and models"]
+    J --> K["Validate&#x3C;br/>outputs"]
+    K --> L{"Task&#x3C;br/>successful?"}
+    L -- "No" --> M["Retry, recover,&#x3C;br/>or ask for help"]
+    M --> J
+    L -- "Yes" --> N["Save state and&#x3C;br/>deliver the result"]
+</code></pre>
+<p>The important detail is that the system does not simply ask an LLM to do everything. It separates planning, authorization, execution, and verification.</p>
+<h3 id="the-os-concepts-behind-an-ai-os">The OS concepts behind an AI OS</h3>
+<table>
+<thead>
+<tr>
+<th>Traditional OS concept</th>
+<th>AI OS equivalent</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Process scheduling</td>
+<td>Agent and task scheduling</td>
+<td>Decides which agent runs and when</td>
+</tr>
+<tr>
+<td>Memory management</td>
+<td>Context and agent memory management</td>
+<td>Controls what information is available to each task</td>
+</tr>
+<tr>
+<td>File system</td>
+<td>Persistent task state and knowledge storage</td>
+<td>Allows work to be saved and resumed</td>
+</tr>
+<tr>
+<td>Permissions and users</td>
+<td>Tool scopes and agent identities</td>
+<td>Limits what an agent is allowed to do</td>
+</tr>
+<tr>
+<td>Inter-process communication</td>
+<td>Agent-to-agent messages and shared task state</td>
+<td>Enables collaboration without losing context</td>
+</tr>
+<tr>
+<td>Monitoring and logging</td>
+<td>Traces, token usage, tool logs, and task status</td>
+<td>Makes failures and costs visible</td>
+</tr>
+<tr>
+<td>Error handling</td>
+<td>Retries, timeouts, fallback models, and recovery</td>
+<td>Prevents one failed tool call from breaking the whole workflow</td>
+</tr>
+</tbody>
+</table>
+<p>This comparison is an architectural analogy, not a claim that every AI OS implements these features exactly like a conventional operating system.</p>
+<h3 id="why-orchestration-matters-more-than-simply-adding-more-agents">Why orchestration matters more than simply adding more agents</h3>
+<p>Imagine a task that requires three agents:</p>
+<ul>
+<li>A research agent gathers information.</li>
+<li>An analysis agent checks the findings.</li>
+<li>A writing agent prepares the final report.</li>
+</ul>
+<p>If these agents run without coordination, they may repeat work, use outdated information, or disagree about which result is correct.</p>
+<p>An orchestration layer can define dependencies, pass structured outputs between agents, enforce timeouts, and decide when a task is ready for review.</p>
+<p>For example:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>Research Agent</span></span>
+<span class="line"><span>      |</span></span>
+<span class="line"><span>      v</span></span>
+<span class="line"><span>Verified Research Notes</span></span>
+<span class="line"><span>      |</span></span>
+<span class="line"><span>      v</span></span>
+<span class="line"><span>Analysis Agent</span></span>
+<span class="line"><span>      |</span></span>
+<span class="line"><span>      v</span></span>
+<span class="line"><span>Structured Findings</span></span>
+<span class="line"><span>      |</span></span>
+<span class="line"><span>      v</span></span>
+<span class="line"><span>Writing Agent</span></span>
+<span class="line"><span>      |</span></span>
+<span class="line"><span>      v</span></span>
+<span class="line"><span>Final Report</span></span></code></pre>
+<p>This is a simple sequential workflow. More advanced systems can run independent tasks in parallel and combine their results later.</p>
+<h3 id="a-small-python-example-permissions-before-actions">A small Python example: permissions before actions</h3>
+<p>One of the most important design principles is that an agent should not automatically receive unrestricted access to every tool.</p>
+<p>The following simplified example shows how an orchestration layer can check permissions before allowing an action. It is illustrative application code, not a production security system.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> dataclasses </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> dataclass</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">@dataclass</span></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> Agent</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    name: </span><span style="color:#79B8FF">str</span></span>
+<span class="line"><span style="color:#E1E4E8">    allowed_tools: set[</span><span style="color:#79B8FF">str</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> execute_tool</span><span style="color:#E1E4E8">(agent, tool_name, action):</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> tool_name </span><span style="color:#F97583">not</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> agent.allowed_tools:</span></span>
+<span class="line"><span style="color:#F97583">        raise</span><span style="color:#79B8FF"> PermissionError</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#F97583">            f</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">agent.name</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF"> is not allowed to use </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">tool_name</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span></span>
+<span class="line"><span style="color:#E1E4E8">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">    print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">agent.name</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF"> is using </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">tool_name</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> action()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">research_agent </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Agent(</span></span>
+<span class="line"><span style="color:#FFAB70">    name</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Research Agent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    allowed_tools</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">"web_search"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"read_documents"</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> search_web</span><span style="color:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#9ECBFF"> "Collected research results"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> execute_tool(</span></span>
+<span class="line"><span style="color:#E1E4E8">    research_agent,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "web_search"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    search_web</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(result)</span></span></code></pre>
+<p>Here, the agent can search the web and read documents, but it cannot automatically send emails, delete files, or access financial systems.</p>
+<p>A production implementation would also need authenticated identities, server-side authorization, audit logs, input validation, isolation, and approval checks. A prompt instruction alone is not a security boundary.</p>
+<h3 id="the-difficult-engineering-questions">The difficult engineering questions</h3>
+<p>Building an AI OS introduces questions that ordinary application development does not always face:</p>
+<ul>
+<li><strong>How should tasks be scheduled?</strong> Should urgent tasks run first? How do we prevent one agent from consuming all available model capacity?</li>
+<li><strong>How should memory be shared?</strong> What should be private to one agent, and what can be shared across a team of agents?</li>
+<li><strong>How do we prevent loops?</strong> An agent might repeatedly call tools without making progress. Systems need step limits, timeouts, and budgets.</li>
+<li><strong>How do we measure success?</strong> A model response is not proof that an action was completed. The system needs to verify the actual result.</li>
+<li><strong>How do we recover?</strong> If a network request fails halfway through a workflow, the system should know what succeeded and what can safely be retried.</li>
+</ul>
+<p>These are the problems that turn an impressive AI demo into dependable infrastructure.</p>
+<h2 id="a-new-design-principle-human-intent-machine-execution-human-accountability">A New Design Principle: Human Intent, Machine Execution, Human Accountability</h2>
+<p>The most useful AI OS may not be the one that automates everything. It may be the one that knows when to act independently and when to ask.</p>
+<p>A sensible system can handle low-risk tasks, such as summarizing documents or organizing information, while asking for confirmation before sending external messages, changing permissions, deleting data, or initiating financial actions.</p>
+<p>This creates a practical division of responsibility:</p>
+<table>
+<thead>
+<tr>
+<th>Work type</th>
+<th>Suitable system behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Low-risk, reversible tasks</td>
+<td>Automate with clear activity logs</td>
+</tr>
+<tr>
+<td>Tasks affecting other people</td>
+<td>Prepare the action and request confirmation</td>
+</tr>
+<tr>
+<td>Sensitive or financial actions</td>
+<td>Require explicit authorization and stronger checks</td>
+</tr>
+<tr>
+<td>High-impact decisions</td>
+<td>Provide evidence and recommendations; keep a human accountable</td>
+</tr>
+</tbody>
+</table>
+<p>This is a key part of making AI-native computing trustworthy. The goal is not to remove people from every workflow, but to reduce repetitive coordination while preserving human control.</p>
+<h2 id="ai-os-in-the-workplace-the-next-big-shift">AI OS in the Workplace: The Next Big Shift</h2>
+<p>One of the most exciting applications of AI OS is not necessarily on personal computers. It is in the workplace.</p>
+<p>Think about a modern organization. Employees use dozens of applications for communication, customer management, financial analysis, project management, reporting, and development.</p>
+<p>Information is distributed across multiple systems, and employees spend a significant amount of time moving between them.</p>
+<p>An AI-powered work environment could bring these systems together through intelligent agents.</p>
+<p>Imagine an employee asking:</p>
+<p>“Give me a summary of this week’s project progress, identify delayed tasks, check the latest customer updates, and prepare a management report.”</p>
+<p>A coordinated AI environment could involve:</p>
+<table>
+<thead>
+<tr>
+<th>Specialized Agent</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Email Agent</td>
+<td>Summarizes important communication</td>
+</tr>
+<tr>
+<td>Project Agent</td>
+<td>Checks project progress and pending tasks</td>
+</tr>
+<tr>
+<td>Data Agent</td>
+<td>Collects and analyzes business data</td>
+</tr>
+<tr>
+<td>Research Agent</td>
+<td>Finds relevant external information</td>
+</tr>
+<tr>
+<td>Reporting Agent</td>
+<td>Prepares the management report</td>
+</tr>
+<tr>
+<td>Coordinator</td>
+<td>Connects the results and manages the workflow</td>
+</tr>
+</tbody>
+</table>
+<p>Instead of manually collecting information from different systems, employees could interact with a unified intelligent interface.</p>
+<h3 id="existing-enterprise-platforms-moving-in-this-direction">Existing Enterprise Platforms Moving in This Direction</h3>
+<p>This idea is already visible in enterprise technology.</p>
+<p><strong>Microsoft Copilot Studio</strong></p>
+<p>Allows organizations to create AI agents and workflows that connect to business data and applications. Agents can collaborate with workflows and interact with users across channels.</p>
+<p><a href="https://learn.microsoft.com/microsoft-copilot-studio/overview">Explore Microsoft Copilot Studio</a></p>
+<p><strong>Palantir AIP</strong></p>
+<p>Connects AI models, enterprise data, agents, and operational workflows. It enables organizations to build AI-powered applications that can support real-world business decisions and actions.</p>
+<p><a href="https://www.palantir.com/platforms/aip/">Explore Palantir AIP</a></p>
+<p><strong>ServiceNow AI Control Tower</strong></p>
+<p>Focuses on discovering, observing, governing, securing, and managing AI systems, agents, and workflows across enterprise environments.</p>
+<p><a href="https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-expands-AI-Control-Tower-to-discover-observe-govern-secure-and-measure-AI-deployed-across-any-system-in-the-enterprise/">Explore ServiceNow AI Control Tower</a></p>
+<p>These platforms are not all complete AI operating systems in the traditional sense. However, they demonstrate how enterprise software is evolving towards connected, intelligent, and agent-driven operations.</p>
+<h2 id="what-could-the-future-of-ai-os-look-like">What Could the Future of AI OS Look Like?</h2>
+<p>The future of computing could look very different from what we are familiar with today.</p>
+<p>We may gradually move through the following stages:</p>
+<p><strong>Traditional Computing</strong></p>
+<p>Users manually operate applications and manage individual tasks.</p>
+<p><strong>AI-Assisted Computing</strong></p>
+<p>AI assistants help users write, search, summarize, and generate content.</p>
+<p><strong>Agentic Computing</strong></p>
+<p>AI agents can plan, use tools, collaborate, and execute multi-step tasks.</p>
+<p><strong>AI-Native Computing</strong></p>
+<p>AI becomes deeply integrated into the operating environment, with persistent context, coordinated agents, and intelligent automation.</p>
+<p><strong>The Future of Work</strong></p>
+<p>A unified intelligent environment could coordinate applications, employees, data, and specialized AI agents across an organization.</p>
+<p><img src="/blog/images/uploads/mermaid-diagram-2-derys.webp" alt=""></p>
+<p>This does not mean traditional operating systems will disappear overnight. Windows, Linux, macOS, Android, and iOS will likely continue to provide the underlying infrastructure.</p>
+<p>The bigger change could be the intelligent layer built on top of them.</p>
+<h2 id="what-are-the-challenges">What Are the Challenges?</h2>
+<p>Despite the possibilities, building a reliable AI OS comes with significant challenges.</p>
+<p><strong>Privacy and Data Protection:</strong> AI systems may need access to emails, documents, business information, and personal data. This information must be protected.</p>
+<p><strong>Security and Permissions:</strong> An AI agent should not have unrestricted access to every application or system. Access must be controlled.</p>
+<p><strong>Accuracy and Reliability:</strong> AI systems can misunderstand instructions or produce incorrect results. Important actions need verification.</p>
+<p><strong>Human Oversight:</strong> Financial transactions, sensitive communications, and critical business decisions may require human approval.</p>
+<p><strong>Integration:</strong> Connecting different applications, databases, and services reliably is a complex engineering challenge.</p>
+<p>The goal should not simply be to build an AI system that can do everything. It should be to build one that can do useful things safely, accurately, and transparently.</p>
+<h2 id="the-bigger-picture">The Bigger Picture</h2>
+<p>The evolution of computing has always been about making technology easier to use.</p>
+<p>We moved from command-line interfaces to graphical interfaces, from standalone applications to cloud platforms, and now towards AI-powered assistants and agents.</p>
+<p>AI Operating Systems represent another possible evolution.</p>
+<p>Instead of learning how to operate every application, users may increasingly describe the outcomes they want and allow intelligent systems to coordinate the work.</p>
+<p>For businesses, this could mean more connected workflows and less manual coordination. For individuals, it could mean a more personalised and intelligent computing experience.</p>
+<p>We are still in the early stages, and many technical and security challenges remain.</p>
+<p>But one thing is becoming clear: the future of computing may not be defined by how many applications we can use, but by how intelligently those applications can work together.</p>
+<p><strong>Perhaps the next big evolution in computing is not another application or another operating system. It is a system that understands our intentions and helps turn them into reality.</strong></p>
+<hr>
+<p><em>Further reading and references:</em></p>
+<ul>
+<li>
+<p><a href="https://www.rabbit.tech/newsroom/rabbitos-3-launch">rabbit OS 3 – Official announcement</a></p>
+</li>
+<li>
+<p><a href="https://blog.google/products-and-platforms/platforms/android/gemini-intelligence/">Google – Gemini Intelligence on Android</a></p>
+</li>
+<li>
+<p><a href="https://support.microsoft.com/en-us/servicing/os/windows/ai-components/2026/01/windows-copilot-ai-components">Microsoft – Windows AI Components</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/abs/2403.16971">AIOS – LLM Agent Operating System research</a></p>
+</li>
+<li>
+<p><a href="https://learn.microsoft.com/microsoft-copilot-studio/overview">Microsoft Copilot Studio</a></p>
+</li>
+<li>
+<p><a href="https://www.palantir.com/platforms/aip/">Palantir AIP</a></p>
+</li>
+</ul>
+<p>About the Author</p>
+<p>Akhil Tummalapalli is passionate about Artificial Intelligence, Machine Learning, Generative AI, and emerging technologies. He enjoys exploring how intelligent systems, AI agents, and automation are shaping the future of computing.</p></article></div><aside class="post-toc-side" aria-label="On this page"><nav class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl border-2 border-ink bg-paper p-5 shadow-paper-sm"><p class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">On this page</p><ol class="mt-3 space-y-2 text-sm font-medium"><li data-depth="2"><a href="#ai-operating-system-ai-os-is-this-the-future-of-computing" data-toc="ai-operating-system-ai-os-is-this-the-future-of-computing" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">AI Operating System (AI OS): Is This the Future of Computing?</a></li><li data-depth="2"><a href="#from-traditional-computing-to-intelligent-computing" data-toc="from-traditional-computing-to-intelligent-computing" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">From Traditional Computing to Intelligent Computing</a></li><li data-depth="2"><a href="#what-exactly-is-an-ai-operating-system" data-toc="what-exactly-is-an-ai-operating-system" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">What Exactly Is an AI Operating System?</a></li><li data-depth="2"><a href="#how-is-an-ai-os-different-from-a-traditional-os" data-toc="how-is-an-ai-os-different-from-a-traditional-os" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">How Is an AI OS Different From a Traditional OS?</a></li><li data-depth="2"><a href="#what-happens-inside-an-ai-os" data-toc="what-happens-inside-an-ai-os" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">What Happens Inside an AI OS?</a></li><li data-depth="3"><a href="#understanding-the-workflow-through-an-example" data-toc="understanding-the-workflow-through-an-example" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">Understanding the workflow through an example</a></li><li data-depth="2"><a href="#ai-chatbots-ai-agents-and-ai-os-what-is-the-difference" data-toc="ai-chatbots-ai-agents-and-ai-os-what-is-the-difference" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">AI Chatbots, AI Agents and AI OS: What Is the Difference?</a></li><li data-depth="2"><a href="#are-ai-operating-systems-already-here" data-toc="are-ai-operating-systems-already-here" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">Are AI Operating Systems Already Here?</a></li><li data-depth="3"><a href="#rabbit-os-3--an-agentic-operating-system" data-toc="rabbit-os-3--an-agentic-operating-system" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">rabbit OS 3 – An Agentic Operating System</a></li><li data-depth="3"><a href="#android-with-gemini-intelligence" data-toc="android-with-gemini-intelligence" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">Android with Gemini Intelligence</a></li><li data-depth="3"><a href="#windows-copilot-pcs" data-toc="windows-copilot-pcs" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">Windows Copilot+ PCs</a></li><li data-depth="3"><a href="#aios--llm-agent-operating-system-research-project" data-toc="aios--llm-agent-operating-system-research-project" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">AIOS – LLM Agent Operating System (Research Project)</a></li><li data-depth="3"><a href="#a-quick-comparison" data-toc="a-quick-comparison" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">A Quick Comparison</a></li><li data-depth="2"><a href="#a-small-hands-on-example-creating-an-ai-agent" data-toc="a-small-hands-on-example-creating-an-ai-agent" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">A Small Hands-On Example: Creating an AI Agent</a></li><li data-depth="2"><a href="#interesting-facts-what-makes-ai-os-different" data-toc="interesting-facts-what-makes-ai-os-different" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">Interesting Facts: What Makes AI OS Different?</a></li><li data-depth="2"><a href="#beyond-the-basics-what-would-make-an-ai-os-a-real-operating-system" data-toc="beyond-the-basics-what-would-make-an-ai-os-a-real-operating-system" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">Beyond the Basics: What Would Make an AI OS a Real Operating System?</a></li><li data-depth="3"><a href="#the-lifecycle-of-an-ai-task" data-toc="the-lifecycle-of-an-ai-task" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">The lifecycle of an AI task</a></li><li data-depth="3"><a href="#the-os-concepts-behind-an-ai-os" data-toc="the-os-concepts-behind-an-ai-os" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">The OS concepts behind an AI OS</a></li><li data-depth="3"><a href="#why-orchestration-matters-more-than-simply-adding-more-agents" data-toc="why-orchestration-matters-more-than-simply-adding-more-agents" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">Why orchestration matters more than simply adding more agents</a></li><li data-depth="3"><a href="#a-small-python-example-permissions-before-actions" data-toc="a-small-python-example-permissions-before-actions" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">A small Python example: permissions before actions</a></li><li data-depth="3"><a href="#the-difficult-engineering-questions" data-toc="the-difficult-engineering-questions" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">The difficult engineering questions</a></li><li data-depth="2"><a href="#a-new-design-principle-human-intent-machine-execution-human-accountability" data-toc="a-new-design-principle-human-intent-machine-execution-human-accountability" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">A New Design Principle: Human Intent, Machine Execution, Human Accountability</a></li><li data-depth="2"><a href="#ai-os-in-the-workplace-the-next-big-shift" data-toc="ai-os-in-the-workplace-the-next-big-shift" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">AI OS in the Workplace: The Next Big Shift</a></li><li data-depth="3"><a href="#existing-enterprise-platforms-moving-in-this-direction" data-toc="existing-enterprise-platforms-moving-in-this-direction" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">Existing Enterprise Platforms Moving in This Direction</a></li><li data-depth="2"><a href="#what-could-the-future-of-ai-os-look-like" data-toc="what-could-the-future-of-ai-os-look-like" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">What Could the Future of AI OS Look Like?</a></li><li data-depth="2"><a href="#what-are-the-challenges" data-toc="what-are-the-challenges" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">What Are the Challenges?</a></li><li data-depth="2"><a href="#the-bigger-picture" data-toc="the-bigger-picture" class="block border-l-2 border-transparent pl-3 text-ink/70 transition-colors hover:text-tone-blue-deep">The Bigger Picture</a></li></ol></nav></aside></div><div class="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border-2 border-ink bg-paper p-5 shadow-paper-sm" id="reactions" hidden><p class="font-hand text-2xl font-bold leading-tight">Did this help?</p><div class="flex flex-wrap gap-2"><button type="button" data-react="like" aria-pressed="false" class="react-btn"><span aria-hidden="true">👍</span> Helpful <span data-n></span></button><button type="button" data-react="insight" aria-pressed="false" class="react-btn"><span aria-hidden="true">💡</span> Learned something <span data-n></span></button><button type="button" data-react="love" aria-pressed="false" class="react-btn"><span aria-hidden="true">❤️</span> Loved it <span data-n></span></button></div></div><div class="mt-6 space-y-6"><div class="flex flex-wrap items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4 text-ink/55" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"></path><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"></circle></svg><a href="/blog/tags/ai" class="rounded-full border border-tone-blue-deep/20 bg-tone-blue/50 px-3 py-1 text-xs font-semibold text-ink/80 transition-colors hover:border-tone-blue-deep hover:text-tone-blue-deep">#AI</a><a href="/blog/tags/os" class="rounded-full border border-tone-blue-deep/20 bg-tone-blue/50 px-3 py-1 text-xs font-semibold text-ink/80 transition-colors hover:border-tone-blue-deep hover:text-tone-blue-deep">#OS</a><a href="/blog/tags/agents" class="rounded-full border border-tone-blue-deep/20 bg-tone-blue/50 px-3 py-1 text-xs font-semibold text-ink/80 transition-colors hover:border-tone-blue-deep hover:text-tone-blue-deep">#AGENTS</a><a href="/blog/tags/chatbots" class="rounded-full border border-tone-blue-deep/20 bg-tone-blue/50 px-3 py-1 text-xs font-semibold text-ink/80 transition-colors hover:border-tone-blue-deep hover:text-tone-blue-deep">#CHATBOTS</a></div><div class="flex items-center gap-4 rounded-2xl border-2 border-ink bg-paper p-5 shadow-paper-sm"><span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-tone-blue font-display text-lg font-bold text-tone-blue-deep">AT</span><div class="min-w-0"><p class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">Written by</p><p class="font-hand text-2xl font-bold leading-tight"><a href="/blog/authors/akhil-tummalapalli" class="hover:text-tone-blue-deep">Akhil Tummalapalli</a></p></div></div></div><div class="mt-6"><div class="flex flex-wrap items-center gap-2" role="group" aria-label="Share this post" data-pagefind-ignore><span class="mr-1 font-hand text-2xl font-bold leading-tight">Share this post</span><a class="inline-flex h-10 min-w-10 items-center justify-center gap-1.5 rounded-xl border-2 border-ink bg-paper px-2.5 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5 hover:text-tone-blue-deep" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Faiyatra.io%2Fblog%2Fai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers" target="_blank" rel="noopener" aria-label="Share on LinkedIn" title="Share on LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg></a><a class="inline-flex h-10 min-w-10 items-center justify-center gap-1.5 rounded-xl border-2 border-ink bg-paper px-2.5 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5 hover:text-tone-blue-deep" href="https://x.com/intent/post?url=https%3A%2F%2Faiyatra.io%2Fblog%2Fai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers&amp;text=AI%20Operating%20System%20(AI%20OS)%3A%20The%20Next%20Evolution%20of%20How%20We%20Use%20Computers" target="_blank" rel="noopener" aria-label="Share on X" title="Share on X"><span aria-hidden="true" class="px-0.5">𝕏</span></a><a class="inline-flex h-10 min-w-10 items-center justify-center gap-1.5 rounded-xl border-2 border-ink bg-paper px-2.5 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5 hover:text-tone-blue-deep" href="https://wa.me/?text=AI%20Operating%20System%20(AI%20OS)%3A%20The%20Next%20Evolution%20of%20How%20We%20Use%20Computers%20https%3A%2F%2Faiyatra.io%2Fblog%2Fai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers" target="_blank" rel="noopener" aria-label="Share on WhatsApp" title="Share on WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class=" h-4 w-4" aria-hidden="true"><path d="m7.254 18.494l.724.423A7.95 7.95 0 0 0 12.001 20a8 8 0 1 0-8-8a7.95 7.95 0 0 0 1.084 4.024l.422.724l-.653 2.401zM2.005 22l1.352-4.968A9.95 9.95 0 0 1 2.001 12c0-5.523 4.477-10 10-10s10 4.477 10 10s-4.477 10-10 10a9.95 9.95 0 0 1-5.03-1.355zM8.392 7.308q.202-.014.403-.004q.081.006.162.016c.159.018.334.115.393.249q.447 1.015.868 2.04c.062.152.025.347-.093.537c-.06.097-.154.233-.263.372c-.113.145-.356.411-.356.411s-.099.118-.061.265c.014.056.06.137.102.205l.059.095c.256.427.6.86 1.02 1.268c.12.116.237.235.363.346c.468.413.998.75 1.57 1l.005.002c.085.037.128.057.252.11q.093.039.191.066q.036.01.073.011a.35.35 0 0 0 .295-.142c.723-.876.79-.933.795-.933v.002a.48.48 0 0 1 .378-.127q.092.004.177.04c.531.243 1.4.622 1.4.622l.582.261c.098.047.187.158.19.265c.004.067.01.175-.013.373c-.032.259-.11.57-.188.733a1.2 1.2 0 0 1-.21.302a2.4 2.4 0 0 1-.33.288q-.124.092-.125.09a5 5 0 0 1-.383.22a2 2 0 0 1-.833.23c-.185.01-.37.024-.556.014c-.008 0-.568-.087-.568-.087a9.45 9.45 0 0 1-3.84-2.046c-.226-.199-.436-.413-.65-.626c-.888-.885-1.561-1.84-1.97-2.742a3.5 3.5 0 0 1-.33-1.413a2.73 2.73 0 0 1 .565-1.68c.073-.094.142-.192.261-.305c.126-.12.207-.184.294-.228a1 1 0 0 1 .371-.1" /></svg></a><button type="button" class="inline-flex h-10 min-w-10 items-center justify-center gap-1.5 rounded-xl border-2 border-ink bg-paper px-2.5 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5 hover:text-tone-blue-deep" data-copy-link="https://aiyatra.io/blog/ai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers" aria-label="Copy link" title="Copy link"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> <span data-copy-label class="hidden">Copied</span></button></div></div><div class="mt-6"><aside class="grid gap-4 rounded-2xl border-2 border-ink bg-tone-yellow/50 p-6 shadow-paper-sm lg:grid-cols-[1.2fr_1fr] lg:items-center" aria-label="Follow AIYatra" data-pagefind-ignore><div><p class="font-hand text-3xl font-bold leading-tight">Don’t miss the next one.</p><p class="mt-1 text-sm font-medium text-ink/75">New posts and session recaps from the AIYatra community.</p></div><div class="flex flex-wrap gap-2 lg:justify-end"><a class="inline-flex h-11 items-center gap-2 rounded-xl border-2 border-ink bg-paper px-4 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5" href="https://www.meetup.com/aiyatra/" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg> Meetup</a><a class="inline-flex h-11 items-center gap-2 rounded-xl border-2 border-ink bg-paper px-4 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5" href="https://chat.whatsapp.com/GWXTDtGjIs99fDtUGKJy5J?mode=gi_t" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class=" h-4 w-4" aria-hidden="true"><path d="m7.254 18.494l.724.423A7.95 7.95 0 0 0 12.001 20a8 8 0 1 0-8-8a7.95 7.95 0 0 0 1.084 4.024l.422.724l-.653 2.401zM2.005 22l1.352-4.968A9.95 9.95 0 0 1 2.001 12c0-5.523 4.477-10 10-10s10 4.477 10 10s-4.477 10-10 10a9.95 9.95 0 0 1-5.03-1.355zM8.392 7.308q.202-.014.403-.004q.081.006.162.016c.159.018.334.115.393.249q.447 1.015.868 2.04c.062.152.025.347-.093.537c-.06.097-.154.233-.263.372c-.113.145-.356.411-.356.411s-.099.118-.061.265c.014.056.06.137.102.205l.059.095c.256.427.6.86 1.02 1.268c.12.116.237.235.363.346c.468.413.998.75 1.57 1l.005.002c.085.037.128.057.252.11q.093.039.191.066q.036.01.073.011a.35.35 0 0 0 .295-.142c.723-.876.79-.933.795-.933v.002a.48.48 0 0 1 .378-.127q.092.004.177.04c.531.243 1.4.622 1.4.622l.582.261c.098.047.187.158.19.265c.004.067.01.175-.013.373c-.032.259-.11.57-.188.733a1.2 1.2 0 0 1-.21.302a2.4 2.4 0 0 1-.33.288q-.124.092-.125.09a5 5 0 0 1-.383.22a2 2 0 0 1-.833.23c-.185.01-.37.024-.556.014c-.008 0-.568-.087-.568-.087a9.45 9.45 0 0 1-3.84-2.046c-.226-.199-.436-.413-.65-.626c-.888-.885-1.561-1.84-1.97-2.742a3.5 3.5 0 0 1-.33-1.413a2.73 2.73 0 0 1 .565-1.68c.073-.094.142-.192.261-.305c.126-.12.207-.184.294-.228a1 1 0 0 1 .371-.1" /></svg> WhatsApp</a><a class="inline-flex h-11 items-center gap-2 rounded-xl border-2 border-ink bg-paper px-4 text-sm font-bold shadow-paper-sm transition-transform hover:-translate-y-0.5" href="/blog/rss.xml"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg> RSS</a></div></aside></div><script type="module">var e=document.getElementById(`giscus-slot`);if(e){let t=new IntersectionObserver(([n])=>{if(!n.isIntersecting)return;t.disconnect();let r=document.createElement(`script`);r.src=`https://giscus.app/client.js`,r.async=!0,r.crossOrigin=`anonymous`;let i={"data-repo":e.dataset.repo,"data-repo-id":e.dataset.repoId,"data-category":e.dataset.category,"data-category-id":e.dataset.categoryId,"data-mapping":`specific`,"data-term":e.dataset.term,"data-strict":`1`,"data-reactions-enabled":`0`,"data-emit-metadata":`0`,"data-input-position":`top`,"data-theme":`light`,"data-lang":`en`,"data-loading":`lazy`};for(let[e,t]of Object.entries(i))r.setAttribute(e,t);e.append(r)},{rootMargin:`400px`});t.observe(e)}</script><div class="mt-10 grid gap-4 sm:grid-cols-2"><span></span><a href="/blog/memorilla-for-frozen-llms-16-memory-tokens-and-4-212x-fewer-tokens-than-full-context" class="active-press group rounded-xl border-2 border-ink bg-paper-soft p-5 text-right shadow-paper-sm transition-transform hover:-translate-y-0.5"><p class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">Older <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-3.5 w-3.5" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></p><p class="mt-2 font-hand text-2xl font-bold leading-tight group-hover:text-tone-blue-deep">Memorilla for Frozen LLMs: 16 Memory Tokens and 4,212x Fewer Tokens than Full Context</p></a></div><div class="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border-2 border-dashed border-ink bg-paper p-5"><p class="text-sm font-medium text-ink/75"><span class="font-hand text-xl font-bold text-ink">Have a story of your own?</span> Anyone can write for the AIYatra blog.</p><span class="flex flex-wrap items-center gap-x-5 gap-y-2"><a href="/blog/guide" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg> Writing guide</a><a href="/blog/write" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 hover:text-tone-blue-deep">Write a guest post <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a></span></div></div></section><section class="border-t-2 border-ink bg-tone-blue/30"><div class="wrap py-16"><div data-reveal><p class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.25em] text-tone-blue-deep"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg> Keep reading</p><h2 class="mt-3 font-hand text-4xl font-bold leading-tight sm:text-5xl">More stories.</h2></div><div class="mt-8 grid items-stretch gap-6 md:grid-cols-3"><div class="h-full" data-reveal><a href="/blog/tiny-dino-a-21-699-parameter-policy-that-plays-without-a-safety-net" class="hover-lift flex h-full flex-col overflow-hidden rounded-2xl border-2 border-ink bg-paper-soft shadow-paper-sm"><div class="aspect-[16/9] overflow-hidden border-b-2 border-ink bg-tone-blue/30"><img src="https://raw.githubusercontent.com/AI-Yatra/aiyatra.io/fd6ab8569f12fbc2c4c1c50b16dee6aa6381ac46/apps/blog/public/images/uploads/tiny-dino-cover.png" alt="" loading="lazy" decoding="async" width="676" height="380" class="h-full w-full object-cover"></div><div class="flex flex-1 flex-col p-5"><p class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">Oct 26, 2026 · Monika Kusumanchi</p><p class="mt-1.5 font-hand text-2xl font-bold leading-tight">Tiny Dino: A 21,699-Parameter Policy That Plays Without a Safety Net</p></div></a></div><div class="h-full" data-reveal><a href="/blog/memorilla-for-frozen-llms-16-memory-tokens-and-4-212x-fewer-tokens-than-full-context" class="hover-lift flex h-full flex-col overflow-hidden rounded-2xl border-2 border-ink bg-paper-soft shadow-paper-sm"><div class="aspect-[16/9] overflow-hidden border-b-2 border-ink bg-tone-blue/30"><img src="/blog/images/uploads/cover-0f1s7.webp" alt="" loading="lazy" decoding="async" width="676" height="380" class="h-full w-full object-cover"></div><div class="flex flex-1 flex-col p-5"><p class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">Nov 7, 2026 · Khaja Moinuddin Mohammed</p><p class="mt-1.5 font-hand text-2xl font-bold leading-tight">Memorilla for Frozen LLMs: 16 Memory Tokens and 4,212x Fewer Tokens than Full Context</p></div></a></div><div class="h-full" data-reveal><a href="/blog/embeddinggemma-2-a-compact-multimodal-embedding-model" class="hover-lift flex h-full flex-col overflow-hidden rounded-2xl border-2 border-ink bg-paper-soft shadow-paper-sm"><div class="aspect-[16/9] overflow-hidden border-b-2 border-ink bg-tone-blue/30"><img src="https://aiyatra.io/illustrations/meetup-scene.webp" alt="" loading="lazy" decoding="async" width="676" height="380" class="h-full w-full object-cover"></div><div class="flex flex-1 flex-col p-5"><p class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink/55">Oct 8, 2026 · Khaja Moinuddin Mohammed</p><p class="mt-1.5 font-hand text-2xl font-bold leading-tight">EmbeddingGemma 2: A Compact Multimodal Embedding Model</p></div></a></div></div></div></section></main><footer class="relative overflow-hidden bg-ink text-white"><div aria-hidden="true" class="pointer-events-none absolute -top-40 left-1/2 h-80 w-[80%] -translate-x-1/2 glow [--glow:hsl(221_83%_53%/0.45)]"></div><div class="wrap relative grid w-full gap-10 pb-8 pt-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]"><div><a href="/#top" aria-label="AI Yatra home"><span class="flex items-center gap-3"><span class="flex h-12 w-12 shrink-0 items-center justify-center sm:h-14 sm:w-14"><img src="/aiyatra-logo-224.png" alt="" aria-hidden="true" width="224" height="224" class="h-full w-full object-contain brightness-0 invert"></span><span class="flex flex-col leading-none"><span class="font-display text-[22px] font-bold text-white">AI Yatra</span><span class="mt-1 hidden text-[10px] font-semibold uppercase tracking-[0.22em] sm:block text-white/60">Open-source AI community</span></span></span></a><p class="mt-4 max-w-sm text-sm leading-relaxed text-white/65">An open-source AI community from Hyderabad. Saturday meetups, a student ambassador network and an open research lab — free, forever, open to everyone.</p><div class="mt-5 flex flex-wrap items-center gap-2.5"><a href="https://www.meetup.com/aiyatra/" target="_blank" rel="noreferrer" aria-label="Meetup" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/75 transition-all hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-ink"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-[18px] w-[18px]" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></a><a href="https://github.com/AI-Yatra" target="_blank" rel="noreferrer" aria-label="GitHub" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/75 transition-all hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-ink"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-[18px] w-[18px]" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg></a><a href="https://www.linkedin.com/company/aiyatra/" target="_blank" rel="noreferrer" aria-label="LinkedIn" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/75 transition-all hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-ink"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-[18px] w-[18px]" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg></a><a href="https://www.instagram.com/aiyatra_io/" target="_blank" rel="noreferrer" aria-label="Instagram" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/75 transition-all hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-ink"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-[18px] w-[18px]" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></a><a href="https://chat.whatsapp.com/GWXTDtGjIs99fDtUGKJy5J?mode=gi_t" target="_blank" rel="noreferrer" aria-label="WhatsApp" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/75 transition-all hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-ink"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class=" h-[18px] w-[18px]" aria-hidden="true"><path d="m7.254 18.494l.724.423A7.95 7.95 0 0 0 12.001 20a8 8 0 1 0-8-8a7.95 7.95 0 0 0 1.084 4.024l.422.724l-.653 2.401zM2.005 22l1.352-4.968A9.95 9.95 0 0 1 2.001 12c0-5.523 4.477-10 10-10s10 4.477 10 10s-4.477 10-10 10a9.95 9.95 0 0 1-5.03-1.355zM8.392 7.308q.202-.014.403-.004q.081.006.162.016c.159.018.334.115.393.249q.447 1.015.868 2.04c.062.152.025.347-.093.537c-.06.097-.154.233-.263.372c-.113.145-.356.411-.356.411s-.099.118-.061.265c.014.056.06.137.102.205l.059.095c.256.427.6.86 1.02 1.268c.12.116.237.235.363.346c.468.413.998.75 1.57 1l.005.002c.085.037.128.057.252.11q.093.039.191.066q.036.01.073.011a.35.35 0 0 0 .295-.142c.723-.876.79-.933.795-.933v.002a.48.48 0 0 1 .378-.127q.092.004.177.04c.531.243 1.4.622 1.4.622l.582.261c.098.047.187.158.19.265c.004.067.01.175-.013.373c-.032.259-.11.57-.188.733a1.2 1.2 0 0 1-.21.302a2.4 2.4 0 0 1-.33.288q-.124.092-.125.09a5 5 0 0 1-.383.22a2 2 0 0 1-.833.23c-.185.01-.37.024-.556.014c-.008 0-.568-.087-.568-.087a9.45 9.45 0 0 1-3.84-2.046c-.226-.199-.436-.413-.65-.626c-.888-.885-1.561-1.84-1.97-2.742a3.5 3.5 0 0 1-.33-1.413a2.73 2.73 0 0 1 .565-1.68c.073-.094.142-.192.261-.305c.126-.12.207-.184.294-.228a1 1 0 0 1 .371-.1" /></svg></a><a href="mailto:global.aiyatra@gmail.com" rel="noreferrer" aria-label="Email" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/75 transition-all hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-ink"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-[18px] w-[18px]" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg></a></div></div><div><p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[hsl(199_89%_70%)]">Three verticals</p><ul class="mt-4 space-y-3 text-sm font-medium"><li><a href="/#meetups" class="inline-flex items-center gap-2 text-white/70 transition-colors hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg> Saturday Meetups</a></li><li><a href="/ambassadors" class="inline-flex items-center gap-2 text-white/70 transition-colors hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg> Student Ambassadors</a></li><li><a href="/labs" class="inline-flex items-center gap-2 text-white/70 transition-colors hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4" aria-hidden="true"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"></path><path d="M6.453 15h11.094"></path><path d="M8.5 2h7"></path></svg> Research Labs</a></li></ul></div><div><p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[hsl(199_89%_70%)]">Explore</p><ul class="mt-4 space-y-3 text-sm font-medium"><li><a href="/blog" class="text-white/70 transition-colors hover:text-white">Blog & recaps</a></li><li><a href="/blog/write" class="text-white/70 transition-colors hover:text-white">Write for AIYatra</a></li><li><a href="/blog/guide" class="text-white/70 transition-colors hover:text-white">Writing guide</a></li><li><a href="/#community" class="text-white/70 transition-colors hover:text-white">People & voices</a></li><li><a href="/#faq" class="text-white/70 transition-colors hover:text-white">Quick answers</a></li><li><a href="/contact" class="text-white/70 transition-colors hover:text-white">Contact us</a></li><li><a href="https://www.meetup.com/aiyatra/" target="_blank" rel="noreferrer" class="inline-flex items-center gap-1 text-white/70 transition-colors hover:text-white">Meetup group <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-3.5 w-3.5" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></li></ul></div><div><p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[hsl(199_89%_70%)]">Show up</p><ul class="mt-4 space-y-3 text-sm text-white/70"><li class="flex items-start gap-2.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  mt-0.5 h-4 w-4 shrink-0 text-[hsl(199_89%_70%)]" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg> Hyderabad</li><li class="flex items-center gap-2.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4 shrink-0 text-[hsl(199_89%_70%)]" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg> Every Saturday · mornings IST</li><li class="flex items-center gap-2.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4 shrink-0 text-[hsl(199_89%_70%)]" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2"></path><path d="M13 17v2"></path><path d="M13 11v2"></path></svg> Free, always</li><li class="flex items-center gap-2.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-4 w-4 shrink-0 text-[hsl(199_89%_70%)]" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg> <a href="mailto:global.aiyatra@gmail.com" class="hover:text-white">global.aiyatra@gmail.com</a></li></ul></div></div><div class="wrap relative flex w-full flex-col items-center justify-between gap-2 border-t border-white/10 py-4 text-center text-xs text-white/50 sm:flex-row sm:text-left"><p class="inline-flex items-center gap-1.5">Made with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-3.5 w-3.5 fill-red-500 text-red-500" aria-label="love" role="img"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg> in Hyderabad · open to the world</p><p>© 2026 AIYatra · Research. Build. Transform.</p><a href="#top" class="font-semibold text-white/70 hover:text-white">Back to top ↑</a></div></footer></div><dialog id="search-dialog" class="search-dialog" aria-label="Search the blog"><div class="search-tabs" role="tablist"><button type="button" role="tab" data-mode="keyword" aria-selected="true">Search words</button><button type="button" role="tab" data-mode="ask" aria-selected="false">Ask by meaning</button><button type="button" class="search-close" data-close-search aria-label="Close search"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide  h-5 w-5" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div><input id="search-input" class="search-input" type="search" placeholder="Search every post…" aria-label="Search" autocomplete="off"><p id="search-note" class="search-note" aria-live="polite"></p><button type="button" id="search-enable" class="search-enable active-press h-10 rounded-xl border-2 border-ink bg-tone-blue-deep px-4 text-sm font-bold text-white" hidden>Turn on Ask by meaning</button><ul id="search-results" class="search-results"></ul></dialog><script type="module" src="/blog/_astro/SearchDialog.astro_astro_type_script_index_0_lang.Bseg37G3.js"></script><script>
+			// Scroll reveal (see styles/blog.css). Inline so content can never
+			// stay hidden behind a script that failed to load.
+			(function () {
+				var els = document.querySelectorAll('[data-reveal]');
+				if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('is-in'); }); return; }
+				var io = new IntersectionObserver(function (entries) {
+					entries.forEach(function (entry) {
+						if (entry.isIntersecting) { entry.target.classList.add('is-in'); io.unobserve(entry.target); }
+					});
+				}, { rootMargin: '0px 0px 150px 0px' });
+				els.forEach(function (el) { io.observe(el); });
+			})();
+		</script></body></html><script type="module" src="/blog/_astro/_slug_.astro_astro_type_script_index_0_lang.DGIGRzy6.js"></script>
