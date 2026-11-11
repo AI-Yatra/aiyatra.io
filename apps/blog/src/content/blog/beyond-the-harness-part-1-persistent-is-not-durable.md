@@ -1,10 +1,10 @@
 ---
 cover: /blog/images/uploads/cover-7dcda.webp
-title: "Beyond the Harness, Part 1: Your Agent Is Persistent, Not Durable"
+title: "Building Durable AI Agents, Part 1: Resume Isn't Recovery"
 urlSlug: beyond-the-harness-part-1-persistent-is-not-durable
-excerpt: Claude Code, Codex, Hermes and Pi all save your conversation, but none
-  of them saves the work in progress. We kill an agent mid-task to see what that
-  costs, and define the four guarantees a durable agent has to keep.
+excerpt: Your coding agent can pick up the conversation after a crash. What it
+  can't tell you is whether the deploy it started ever went out. We killed a
+  few agents halfway through a task to see what really survives.
 category: Session recap
 tags:
   - AGENTS
@@ -16,29 +16,31 @@ date: 2026-11-09
 author: Jagadeeswara Reddy
 coAuthors: []
 ---
-*This is Part 1 of a three-part series we're writing alongside our Nov 14, 2026 session **Beyond the Harness: Engineering Durable AI Agents**. Part 2 is the hands-on fix in LangGraph. Part 3 compares the durable-execution stacks and ends with a checklist.*
+*We're running a session on durable AI agents at LSEG Hyderabad on November 14. While preparing it we ended up with far more material than fits into one morning, so we're writing it up as three posts. This one is about the problem. Part 2 fixes it in LangGraph, and Part 3 looks at the tools built for exactly this job.*
 
-## The 47-of-50 problem
+## The agent was on step 47
 
-Your agent has been running for forty minutes and is on step 47 of 50. It has read the repo, written a plan, edited six files and opened a branch. Then the laptop sleeps, the container is evicted or someone hits Ctrl+C.
+Imagine you've given a coding agent a real job: upgrade a library across a service, fix whatever breaks, open a PR and deploy to staging. It has been at it for about forty minutes. It has read the repo, written a plan, edited six files and pushed a branch. It's on step 47 of roughly 50, and step 47 is the deploy.
 
-What happens next depends on a word most of us use loosely: **durable**.
+You step away to take a call. While you're gone the laptop goes to sleep. Or the container it was running in gets evicted. Or someone at home restarts the machine because the fan was too loud.
 
-A lot of agent tooling says it can "resume", and it can, in a narrow sense. This post is about how narrow that is.
+When you come back you type `claude --resume`, or whatever your tool calls it, and the agent is right there with the whole conversation. It says it'll carry on from where it left off.
 
-## Persistent vs durable
+The trouble is that the agent has no idea whether the deploy went out. The last thing in the transcript is the call that started it, and whatever happened after that went down with the old process. All the agent can do is read the transcript and make its best guess about what happened next.
+
+## Remembering the chat vs remembering the work
+
+What these tools save is the conversation. After a restart they load the transcript back in, the model reads it, and it continues from what it *thinks* happened. We started calling this a **persistent** agent.
+
+What you actually wanted in that moment is something that remembers the work. It would know which step it was on, and whether that step finished. It wouldn't run a deploy or a payment a second time. It could wait for your approval over a long weekend, and afterwards you could see exactly who approved what. We started calling that a **durable** agent.
+
+For a chat assistant the difference hardly matters. For an agent that deploys code or moves money, it matters a lot.
 
 ![](/blog/images/uploads/fig1-persistent-vs-durable-e7qfz.webp)
 
-Persistent means the agent saves *the conversation*. After a restart you can reload the transcript and the model reads what happened.
+## We checked four coding agents
 
-Durable means the agent saves *the work*. After a crash it carries on from the exact step it was on, never runs a side-effecting tool twice, can wait days for a human and leaves an audit trail.
-
-The first is about memory. The second is about *execution*. Nearly every harness we use today does the first.
-
-## What your harness actually saves
-
-Before the session we went through the docs and source code of four popular coding-agent harnesses to see what they save and what "resume" actually does.
+Before the session we went through the docs, and where we could the source code, of four coding agents that people in our community use. We wanted to know what each one writes to disk and what "resume" really does.
 
 |  | Claude Code | OpenAI Codex CLI | Hermes Agent (Nous) | Pi |
 | --- | --- | --- | --- | --- |
@@ -48,25 +50,21 @@ Before the session we went through the docs and source code of four popular codi
 | A tool call cut off by a crash | Not re-run on resume | Replaced with a fake "aborted" result | Read-only: dropped. Side-effecting: kept and marked *"effect is UNKNOWN"* | Fake "No result provided" error |
 | Execution resumed? | No | No | No | No (yes in the separate `pi-durable` package) |
 
-All four are persistent. None is durable. "Resume" loads the saved transcript into a new model context. None of them continues a half-finished step, and none removes duplicate side effects. The model has to guess whether that `git push` or deploy already happened.
+Every one of them keeps the transcript, and none of them picks up a half-finished step. Resuming means loading the old conversation into a fresh model and letting the model work out whether that `git push` already happened. Anthropic is upfront about this in the Agent SDK docs, where sessions are described as persisting *"the conversation, not the filesystem."*
 
-Anthropic says so directly in the Agent SDK docs: sessions persist *"the conversation, not the filesystem."*
+We don't think that's a flaw in these tools. They were built to be good at conversations, and they are. But it does mean the job of not deploying twice falls on you.
 
-A few details stood out to us. Hermes is the most honest of the four. It separates read-only interrupted calls from side-effecting ones and stores the outcome as `unknown`. A turn lost in a gateway crash blocks the session until a human discards it.
+Hermes was the one that impressed us most here. When a call is interrupted, it checks whether that call could have changed anything. If it was only reading, Hermes drops it. If it might have had a side effect, Hermes keeps it and marks the result as unknown rather than pretending it failed. When a turn is lost in a gateway crash, the session simply stays blocked until a person decides what to do. It's a bit of a hassle, but nobody ends up acting on a guess.
 
-Pi ships a real durable harness as a separate library, `@earendil-works/pi-durable` (v1.0, Oct 2026). It saves a tool call's intent *before* running it, re-runs after a crash only tools marked `replay: "safe"`, and has a crash-loop limit.
+Pi doesn't do this out of the box, but its team ships a separate library for it, `@earendil-works/pi-durable` (v1.0, October 2026). Before running a tool, it writes down what the tool is about to do. After a crash it only re-runs tools that you've marked `replay: "safe"`, and if the agent keeps crashing in a loop, it stops.
 
-And Temporal ran Pi on Temporal ("The immortal life of Pi", Oct 2026). The demo kills the active worker every 15–40 seconds and the task carries on from another worker. Pi's session file keeps the conversation; Temporal keeps the execution.
+The Temporal team took Pi even further in a post called "The immortal life of Pi" (October 2026). They ran Pi on Temporal and killed the active worker every 15 to 40 seconds, and the task kept going on another worker. Pi kept the conversation and Temporal kept the execution. A Pi user on Reddit summed up the difference nicely: *"Base Pi already saves your sessions and tool history. The difference is Pi Durable also tracks the execution state."*
 
-One Pi user on Reddit summed it up: *"Base Pi already saves your sessions and tool history. The difference is Pi Durable also tracks the execution state."*
+## Then we broke one on purpose
 
-## Two failures you can reproduce in a minute
+We wanted to see this happen for ourselves, so we wrote two tiny scripts. They don't call an LLM and you don't need an API key. Each one builds a small agent-shaped graph in LangGraph, kills the process with `SIGKILL` partway through, and starts a new process on the same thread. `SIGKILL` gives the program no chance to clean up, which is roughly what a dead laptop or an evicted container does. The code is in Part 2.
 
-We built small scripts (no LLM, no API key) that start an agent-like graph, kill it with `SIGKILL` (no cleanup, no `finally`), and start a new process on the same thread. Part 2 has the code; here's what happened.
-
-### Failure 1: finished work is lost
-
-A five-node LangGraph graph with a SQLite checkpointer, using LangGraph's **default** durability mode. We killed it inside node 3:
+The first script has five steps, saves its progress to SQLite, and uses LangGraph's default settings. We killed it in the middle of step 3:
 
 ```text
 == process 1: run (will be killed in n3)
@@ -81,39 +79,31 @@ A five-node LangGraph graph with a SQLite checkpointer, using LangGraph's **defa
   ...
 ```
 
-`done=[]`. The two finished nodes had not been written to disk before the kill, so they ran again. In a real agent those are paid LLM calls, and a second run of an LLM call can give a different answer.
+We expected the second process to start at step 3. It started at step 1. Steps 1 and 2 had finished, but by default LangGraph saves progress in the background, and those writes hadn't reached the disk when the process died. In a real agent those are LLM calls you've already paid for, and there's no promise that the model answers the same way the second time.
 
-### Failure 2: the tool runs twice
-
-A `plan → charge → report` graph. `charge` pays, and then the process dies *before* the checkpoint records it. On resume the node runs again:
+The second script is even shorter: plan, charge, report. The charge is a stand-in for any step that changes something in the world, like a deploy, a payment or a message to a customer. We let the charge succeed and killed the process just before LangGraph recorded it. Then we resumed:
 
 ```text
 == naive: payments made = 2
 ```
 
-Two payments. A persistent checkpointer doesn't help here: it guarantees the node *will* run again, which is exactly the problem.
+One order, two payments, and LangGraph did exactly what it promises: it saw that the charge step had no saved result and ran it again. Saving progress is what *caused* the second payment. On its own, a checkpoint can't tell "never ran" apart from "ran, and we died before writing it down".
 
-## The four guarantees
+## What we want instead
 
-Those two failures give us the definition we'll use for the rest of the series. A durable agent makes four guarantees:
+After those two runs we wrote down what we'd want from an agent we could leave alone with something important:
 
-| \# | Guarantee | What breaks without it |
+| | We want | Without it |
 | --- | --- | --- |
-| 1 | **Crash mid-task → resume from the exact step** | Finished LLM calls are paid for and re-run, possibly with different answers |
-| 2 | **A tool that already ran never runs twice** | Double payments, double deploys, two PRs |
-| 3 | **A pending approval can wait days** | The pause lives in RAM, and a restart forgets it |
-| 4 | **Every step is recorded and auditable** | "Who approved this diff?" has no answer |
+| 1 | If it crashes, it carries on from the step it was on | Work you've paid for runs again, and may come out differently |
+| 2 | Anything that changes the world happens once | Two deploys, two payments, two PRs for the same fix |
+| 3 | It can wait days for a human | The pause lives in memory, and a restart forgets it |
+| 4 | Every step is written down | Nobody can say who approved the diff |
 
-Five ideas make those guarantees possible:
+Teams building payment systems and job queues have been solving these exact problems for years, and most of their answers carry over to agents with very little change. That's what the next two posts are about.
 
-1. Workflow vs step. The agent loop (workflow) must be deterministic. Anything non-deterministic or with a side effect, including the LLM call, every tool, HTTP requests and the clock, is a *step*: run once, record the result, and on replay return the recorded result.
-2. Deterministic replay. No `time.time()`, `random` or network I/O inside the workflow body. Use the engine's versions.
-3. At-least-once + idempotency key = effectively once. Engines retry a step until they record success, so a step can run twice. The downstream call must dedupe on a key built from durable ids, for example `f"{workflow_id}:{tool_call_id}"`.
-4. The outbox pattern. Commit the business change and a record of it in one transaction. Durable execution engines generalise this: their log is the outbox for every step.
-5. When you cannot know. Some providers ignore idempotency keys. A missing result is then *unknown*, not *failed*: park the run and reconcile it, and don't retry blindly.
+## Coming up
 
-## What's next
+In Part 2 we take the agent from these scripts and fix it, one failure at a time. Losing finished steps is a one-line fix. Approvals that survive a restart take one swap. Running a step exactly once needs a little more care, and we'll show the mistake that makes the double payment quietly come back even after you think you've fixed it.
 
-In **Part 2** we fix each failure in LangGraph, using last session's coding agent. It's one line for crash recovery, one swap for approvals that survive a restart, and a ledger for exactly-once tools. We also cover the key-generation mistake that quietly brings the double payment back.
-
-Come to the session on **Sat, Nov 14, 9:00 AM at LSEG Hyderabad** with a laptop. We'll kill agents live.
+If you're in Hyderabad, join us on **Saturday, November 14, at 9:00 AM at LSEG**. Bring a laptop. We'll be killing agents live, and you'll get to kill a few of your own.
