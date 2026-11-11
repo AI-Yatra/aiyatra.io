@@ -1,11 +1,10 @@
 ---
 cover: /blog/images/uploads/cover-37z0j.webp
-title: "Beyond the Harness, Part 2: Four Guarantees, Tested with kill -9 in LangGraph"
+title: "Building Durable AI Agents, Part 2: Making a LangGraph Agent Survive kill -9"
 urlSlug: beyond-the-harness-part-2-four-guarantees-tested-with-kill-9-in-langgraph
-excerpt: "We kill a LangGraph agent with SIGKILL at the worst possible moments
-  and fix each failure: synchronous checkpoints, approvals that survive a
-  restart, an idempotency ledger that stops double payments, and an audit trail
-  with replay, plus the traps we found along the way."
+excerpt: We took a small LangGraph agent, killed it at the worst moments we
+  could find, and fixed what broke. Some fixes were one line. One of them
+  looked right and still charged the customer twice.
 category: Session recap
 tags:
   - AGENTS
@@ -17,22 +16,24 @@ date: 2026-11-09
 author: Jagadeeswara Reddy
 coAuthors: []
 ---
-*Part 2 of 3. [Part 1](/blog/beyond-the-harness-part-1-persistent-is-not-durable/) covered why every popular harness is persistent but not durable, and set out four guarantees. This time we test each guarantee in LangGraph by killing the process at the worst possible moment.*
+*This is the second of three posts written alongside our Nov 14 session on durable AI agents. In [Part 1](/blog/beyond-the-harness-part-1-persistent-is-not-durable/) we killed an agent halfway through a task and watched it lose finished work and pay for one order twice. This time we fix it.*
 
-## Setup
+## The setup
 
-Everything below is plain Python with no LLM and no API key, so it behaves the same on every laptop, including whichever ones show up on Saturday. Each script starts a child process, kills it with `SIGKILL`, then starts a new process on the same `thread_id`.
+At the end of Part 1 we had a list of four things we wanted: carry on from the step you were on, do anything that changes the world exactly once, wait days for a human, and keep a record of every step. We'll go through them in the order they bit us, which isn't quite the order of the list.
+
+Every script here is plain Python. There's no LLM and no API key, so the results are the same on every laptop, including the ones people bring on Saturday. Each script starts a child process, kills it with `SIGKILL`, and then starts a new process on the same `thread_id`, the way a restarted container would.
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 alias lg='uv run --no-project -q --with langgraph==1.2.19 --with langgraph-checkpoint-sqlite==3.1.3 python'
 ```
 
-On Windows, run these in WSL (`SIGKILL` isn't available on Windows).
+If you're on Windows, run them in WSL, since Windows doesn't have `SIGKILL`.
 
-## Guarantee 1: resume from the exact step
+## Stop losing finished steps
 
-The first test graph is deliberately boring: five nodes, `n1` to `n5`, with a SQLite checkpointer. Process 1 kills itself inside `n3`. Process 2 calls `graph.invoke(None, config)`, where `None` means "continue this thread from its last checkpoint".
+The first failure in Part 1 was the five-node graph that forgot nodes 1 and 2 after we killed it in node 3. The graph itself was fine. The problem was when LangGraph wrote its checkpoints.
 
 ```python
 conn = sqlite3.connect("checkpoints.db", check_same_thread=False)
@@ -42,7 +43,7 @@ graph.invoke({"done": []}, CONFIG, durability="sync")   # process 1, killed in n
 graph.invoke(None, CONFIG, durability="sync")           # process 2, resume
 ```
 
-With `durability="sync"`:
+Passing `None` to `invoke` tells LangGraph to continue the thread from its last checkpoint instead of starting a new run. With `durability="sync"` the second process does what we wanted the first time:
 
 ```text
 == process 2: resume same thread_id
@@ -53,25 +54,23 @@ With `durability="sync"`:
   finished: done=['n1', 'n2', 'n3', 'n4', 'n5']
 ```
 
-It skips `n1` and `n2` and re-runs `n3` from the top. The unit of durability is the node: whatever was running when the process died runs again in full.
+Nodes 1 and 2 are skipped. Node 3 runs again from its first line, because it hadn't finished when the process died. Keep that in mind for everything that follows: LangGraph saves progress per node, so a node that was halfway through when the process died starts over from the top.
 
-### The default is not what you want
+LangGraph 1.2 has three durability modes, and the default isn't the one you want for an agent that does real work. We ran the same kill test against each:
 
-LangGraph 1.2 has three durability modes, and the default isn't the safe one. We ran the same kill against each:
-
-| Mode | When it writes | Our SIGKILL test |
-| --- | --- | --- |
+| Mode | When it writes | What our kill test showed |
+|---|---|---|
 | `"exit"` | Only when the run ends | No thread at all after the kill |
 | `"async"` (default) | In the background while the next step runs | With instant nodes, `n1` and `n2` were lost in 5 of 5 runs |
 | `"sync"` | Before the next step starts | Resumed at `n3` every time |
 
-So the rule we work with now: pass `durability="sync"` for any graph whose nodes have side effects or cost money. It costs one checkpoint write per super-step. Cheap, next to losing a run.
+The default makes sense for chat apps, where speed matters more than losing a step now and then. For anything that costs money or touches the outside world, pass `durability="sync"`. You pay one database write per step, which is nothing next to an LLM call.
 
-## Guarantee 3: an approval that waits days
+## Let the approval wait for the weekend
 
-A quick note on ordering: we're doing guarantee 3 before guarantee 2 here, because it's the simpler fix.
+The coding agent from our last session asked a human before writing a file, using LangGraph's `interrupt()`. Picture it asking at 6 PM on a Friday. You see the request on Monday morning and click approve. In last session's version that approval was gone long before Monday, because the paused run was held in `InMemorySaver`, and any restart over the weekend wiped it.
 
-Last session's coding agent asked a human before writing a file, using `interrupt()`. The pause was stored in `InMemorySaver`, so a restart lost it. The fix is a single swap:
+The fix is to swap one class:
 
 ```python
 from langgraph.checkpoint.sqlite import SqliteSaver   # pip install langgraph-checkpoint-sqlite
@@ -81,7 +80,7 @@ with SqliteSaver.from_conn_string("agent_state.db") as saver:
     graph.invoke(inputs, config, durability="sync")
 ```
 
-Process 1 pauses and exits. Process 2 is a fresh Python process started "three days later"; it loads the thread and resumes it:
+In our test, process 1 reaches the approval, pauses and exits completely. Process 2 is a brand-new Python process standing in for Monday morning. It loads the thread, sees what's waiting and resumes it:
 
 ```text
 == process 2: human approves (fresh process, same thread_id)
@@ -92,19 +91,21 @@ Process 1 pauses and exits. Process 2 is a fresh Python process started "three d
   write: writing hello.py
 ```
 
-Look at `node body starts` in that output. It prints twice, once when the node pauses and once on resume. In LangGraph's words, *"the runtime restarts the entire node from the beginning"*. So keep everything before `interrupt()` pure, and put the side effect after it.
+Look closely at the `node body starts` line. It prints once when the node pauses on Friday, and again when it resumes on Monday. The LangGraph docs say it directly: *"the runtime restarts the entire node from the beginning"*. So anything you put before `interrupt()` in that node runs twice. Keep that part free of side effects, and do the real work after the approval comes back.
 
-Two smaller gotchas: a raw `sqlite3.connect()` needs `check_same_thread=False`, and `PostgresSaver` raises `UndefinedTable` until you call `.setup()` once.
+Two smaller things caught us out. If you open the SQLite connection yourself with `sqlite3.connect()`, you need `check_same_thread=False`. And `PostgresSaver` throws `UndefinedTable` until you call `.setup()` on it once.
 
-## Guarantee 2: a tool that ran must not run twice
+## Charge the customer once
+
+This is the failure that costs real money.
+
+The test graph is `plan → charge → report`. We kill the process after `charge` has paid but before the node returns, so the payment happened and LangGraph never found out. As we saw in Part 1, LangGraph does exactly what it should on resume and runs `charge` again.
 
 ![](/blog/images/uploads/fig2-double-payment-2d3hh.webp)
 
-This is the one that costs real money. The graph is `plan → charge → report`, and we kill the process after `charge` pays but before the node returns. We tried three versions of `charge`:
+You can't stop a step from running twice. A crash at the wrong moment will always leave you unsure whether it finished, so every system that retries steps can run one twice. What you can do is make the second run harmless. Give each side effect an idempotency key, and have the thing doing the work check whether it has already seen that key.
 
-- **naive:** insert a payment.
-- **ledger:** a ledger table keyed by `(thread_id, tool_call_id)`, written in the *same transaction* as the payment. The key is created in `plan`, so it's saved in the checkpoint.
-- **ledger_bad:** the same ledger, but the key is created *inside* `charge`.
+We tried three versions of `charge`. The first, which we called naive, just inserts a payment. The second keeps a ledger table keyed on `(thread_id, tool_call_id)`. It writes the ledger row in the same database transaction as the payment, so either both are saved or neither is, and it creates the key earlier, in `plan`, so the key is saved in the checkpoint. The third, `ledger_bad`, uses the same ledger but creates the key inside `charge` itself.
 
 ```python
 def idempotent_pay(db, thread_id, tool_call_id, amount):
@@ -118,7 +119,7 @@ def idempotent_pay(db, thread_id, tool_call_id, amount):
     return receipt
 ```
 
-Results:
+After the kill, the three versions did this:
 
 ```text
 == naive:      payments made = 2
@@ -127,13 +128,13 @@ Results:
 == ledger_bad: payments made = 2
 ```
 
-The `ledger_bad` line is the one that matters: the key must come from saved state. A key created inside the node that re-runs is a new key on every run, so the ledger never matches. In a real agent, use the id from `AIMessage.tool_calls[i]["id"]`; it was written in the previous super-step, so it's the same on resume.
+The ledger worked. The ledger with the key made in the wrong place didn't, and nothing in the code looks wrong when you read it. Since `charge` runs again from the top, it makes a fresh key on every run, so the ledger never finds a match. The key has to come from somewhere that was saved before the step started. In a real agent, the tool call id in `AIMessage.tool_calls[i]["id"]` does the job. It was written in the previous step, so it's the same on every retry.
 
-When the downstream system is an API rather than your own database, pass the same key as its idempotency key: Stripe's `Idempotency-Key`, `INSERT ... ON CONFLICT DO NOTHING`, or pushing a known git SHA. If the provider has no idempotency support at all, treat a missing result as *unknown* and park the run for reconciliation.
+When the payment, deploy or message goes to someone else's API rather than your own database, send the same key along: Stripe's `Idempotency-Key` header, an `INSERT ... ON CONFLICT DO NOTHING`, or pushing a known git SHA. Some providers have no way to dedupe at all. In that case a missing result really is unknown. Pause the run and have someone check, rather than retrying and hoping.
 
-## Guarantee 4: an audit trail you can query
+## Find out who approved it
 
-LangGraph keeps every checkpoint, so `get_state_history()` works as an audit log:
+The last thing on our list was a record of every step. LangGraph already keeps every checkpoint, so `get_state_history()` gives you an audit log for free:
 
 ```text
 step=-1  input  __start__ -> {'path': 'hello.py', 'diff': '', 'decision': ''}
@@ -143,25 +144,22 @@ step= 2  loop   write    -> {}
 step= 3  loop   (end)
 ```
 
-That answers "who approved what, and what did the tool return?" You can also go back in time: pick the paused checkpoint, edit the diff with `update_state(..., as_node="propose")`, and approve the edited version.
+From that you can see who approved what and what the tool returned. You can also go back in time. Pick the checkpoint where the run was paused, change the diff with `update_state(..., as_node="propose")`, and approve the edited version on a new branch.
 
-Two traps cost us time here:
+We hit two surprises doing this. First, `invoke(Command(resume="reject"), old_checkpoint)` quietly ignored our "reject" and reused the old "approve", because the earlier answer is stored on that checkpoint. What worked was calling `invoke(None, old_config)` to raise the interrupt again on a fresh branch, and then answering it. Second, replaying from an old checkpoint isn't like reading from a cache. Every node after that point runs again for real, side effects included. That's one more reason to have the ledger in place before you start time-travelling.
 
-1. `invoke(Command(resume="reject"), old_checkpoint)` silently reuses the old answer (`'approve'`), because that answer is stored as a pending write on the checkpoint. The pattern that works: `invoke(None, old_config)` to trigger the interrupt again on a new branch, then resume the thread.
-2. Replay is not a cache. Nodes after the chosen checkpoint run again for real, *including their side effects*. That's one more reason to have the ledger from guarantee 2.
+## What's still missing
 
-## What a checkpointer does not give you
+With these four fixes our little agent survives a crash, waits over a weekend for a human and charges the customer once. We were pretty pleased with it, right up until we asked what happens if the worker dies at 3 AM and nobody is awake.
 
-With these four fixes in place, our LangGraph agent survives crashes, waits for humans across restarts and never double-charges. One gap is left, and it matters: nothing restarts a dead run by itself. A checkpointer saves state between steps. It doesn't notice a run has died, restart it, or stop two workers from resuming the same `thread_id` at once. Something has to call `invoke(None, config)`.
+The answer is nothing. A checkpointer saves state, but it doesn't notice that a run has died, it doesn't restart it, and it won't stop two workers from both resuming the same thread. Somebody, or some script, has to call `invoke(None, config)`. The tools that handle that for you are what Part 3 is about.
 
-That something is what durable-execution engines are for, and they're the subject of Part 3.
+## Try it yourself
 
-## Homework
+If you were at our last session, take the `step06_self_evaluate.py` agent and get it to pass three tests:
 
-Take last session's `step06_self_evaluate.py` agent and make it pass three tests:
+1. `kill -9` during the evaluate loop, and it resumes without repeating LLM calls that already finished.
+2. Leave an approval pending overnight, and it resumes in a new process.
+3. Kill `write_file` right after it writes, and it doesn't write a second time. (Key the ledger on the tool call id.)
 
-1. `kill -9` during the evaluate loop resumes without repeating finished LLM calls.
-2. An approval left pending overnight resumes in a new process.
-3. `write_file` killed after writing does not write twice (ledger keyed on the tool call id).
-
-Bring what you find to the next session.
+Bring it on Saturday and we'll try to break it.
