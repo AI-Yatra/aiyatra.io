@@ -1,5 +1,6 @@
 ---
-cover: /blog/images/uploads/cover-7dcda.webp
+cover: /blog/images/uploads/durable-agents-cover-1.webp
+coverAlt: "A chai agent's four steps; it is killed with kill -9 during charge_upi and pays twice"
 title: "Building Durable AI Agents, Part 1: Build a Chai Agent, Then Kill It"
 urlSlug: beyond-the-harness-part-1-persistent-is-not-durable
 excerpt: "We build a small LangGraph agent that takes a chai order, charges ₹80 over UPI and sends the order to the kitchen. Then we kill -9 it right after the charge and watch it charge the customer twice. Commands for macOS, Linux and Windows."

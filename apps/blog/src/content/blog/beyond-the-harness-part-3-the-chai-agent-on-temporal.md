@@ -1,5 +1,6 @@
 ---
-cover: /blog/images/uploads/chai-temporal-timeline.webp
+cover: /blog/images/uploads/durable-agents-cover-3.webp
+coverAlt: "worker-1 is killed during charge_upi; worker-2 retries with the same key and finishes the order"
 title: "Building Durable AI Agents, Part 3: The Chai Agent on Temporal"
 urlSlug: beyond-the-harness-part-3-the-chai-agent-on-temporal
 excerpt: "The same chai agent as a Temporal workflow. Kill the worker that's charging the customer, type nothing, and watch another worker finish the order and charge once. Free and local, no account needed."
