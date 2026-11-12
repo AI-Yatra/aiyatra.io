@@ -325,7 +325,7 @@ Click **reset** before each experiment. Restarting the shop also starts it from 
 `DEMO_PAUSE=8` wasn't set for that run. On macOS / Linux it goes on the same line as the command. On Windows, check it with `$env:DEMO_PAUSE`; if you opened a new window, set it again.
 
 **I killed it, but the dashboard shows 0 payments**
-You killed it before the charge. Wait for the line that says `charged ₹80 · 8s to kill me…`, then kill it.
+You killed it before the charge. Wait for the line that says `▶ charged ₹80 · moving on · 8s to kill me…`, then kill it.
 
 **I pressed Ctrl+C instead**
 Ctrl+C is a polite stop, and you'll see a `KeyboardInterrupt` traceback. It shows the same double charge here, but use the kill command to see a real crash.

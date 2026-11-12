@@ -74,12 +74,12 @@ The `thread_id` in the config (`order-1`) is the key to all of this. One order, 
 
 ### Is that enough?
 
-Kill it after the charge, the same as in part 1, and look at what the second run does with fix 1 alone:
+Suppose we stopped here, with checkpoints but nothing else. Kill it after the charge, the same as in part 1, and the second run looks like this (shortened; the repo's `durable_agent.py` already has the next fix, so you'll see this only if you take fix 2 out):
 
 ```
 found a saved run · resuming at ['charge_upi']
 ▶ about to charge ₹80
-charge_upi: ₹80 -> rcpt-2
+charge_upi: ₹80 -> rcpt-2 (success)
 ```
 
 There's good news and bad news:
@@ -113,7 +113,7 @@ def charge_upi(state: State) -> dict:
 
 Because `read_order` finished and was checkpointed, the key is on disk. When `charge_upi` re-runs, it sends the same key.
 
-Click **reset**, then run it, kill it during `charged ₹80 · 8s to kill me…`, and run it again:
+Click **reset** on the dashboard, then run it, kill it during `▶ charged ₹80 · moving on · 8s to kill me…`, and run it again. (If you've already played with `durable_agent.py`, first delete its saved orders: `rm -f durable.db` on macOS / Linux, `Remove-Item durable.db` on Windows. Otherwise it says `order-1 already finished`.)
 
 **macOS / Linux**
 
@@ -259,7 +259,7 @@ def ask_customer(state: State) -> dict:
     return {"choice": choice}
 ```
 
-Every wait needs a **deadline and a safe default**. If the customer doesn't answer in 2 hours, we refund: giving the money back is the safe choice.
+Every wait needs a **deadline and a safe default**. Here the deadline (2 hours) is saved with the wait, and the safe default is a refund: giving the money back is the safe choice. Something still has to notice that the deadline passed. In this repo, you play the clock by running `customer no-reply`. In production, a scheduled job would look for expired waits; in part 3 we'll see an engine that keeps the timer for you.
 
 The refund itself can't be undone either, so it runs once (with its own key). Small refunds are automatic; above ₹2,000 an admin approves, and the agent waits for them, for days if it has to:
 
@@ -358,7 +358,7 @@ One payment, one refund, no chai, a happy-enough customer. Other endings to try 
 - `bank reversed`: no money was taken, so the agent only tells the customer. Nothing to refund.
 - `customer coffee`: the order switches to coffee.
 - `customer no-reply`: the deadline passed, so it refunds.
-- A big order whose ₹4,000 refund waits for `uv run python durable_agent.py admin approve`. Start it with `ORDER="200 chai for 98765 43210" MOCK_LLM=1 uv run python durable_agent.py` (macOS / Linux) or `$env:ORDER="200 chai for 98765 43210"` then `uv run python durable_agent.py` (Windows; `Remove-Item Env:ORDER` afterwards).
+- A big order: 200 chai is ₹4,000, above the ₹2,000 auto-refund limit. Only 20 are in stock, so it waits for the customer; `customer refund` then waits for an admin; `admin approve` refunds. Start it with `ORDER="200 chai for 98765 43210" MOCK_LLM=1 uv run python durable_agent.py` (macOS / Linux) or `$env:ORDER="200 chai for 98765 43210"` then `uv run python durable_agent.py` (Windows; `Remove-Item Env:ORDER` afterwards), then run `uv run python durable_agent.py customer refund` and `uv run python durable_agent.py admin approve`.
 
 Instead of deleting `durable.db`, you can also give each experiment its own order: `ORDER_ID=order-2` (or `$env:ORDER_ID="order-2"`).
 
@@ -423,6 +423,12 @@ docker start -a chai-agent
 
 The `docker` commands themselves are the same everywhere. The checkpoints live on a Docker volume, so they outlive the container. To start over: `docker compose run --rm chai-agent rm -f /data/durable.db`.
 
+When you're done, stop the containers so the local shop can have its port back:
+
+```bash
+docker compose down
+```
+
 ## What's still missing
 
 Look at what we did after every crash: **we restarted it by hand.**
@@ -448,7 +454,7 @@ Same cause: a half-finished order-1 from an earlier experiment is still in `dura
 - Or the shop restarted between the two runs. A new shop forgets the keys it has seen (that's the clean slate), so the re-run looks like a new payment. Keep terminal 1 running for the whole experiment.
 
 **It says `⏸ waiting for the bank` every time**
-The bank is still in pending mode, and it's waiting for you: run `uv run python durable_agent.py bank success`. Click **reset** on the dashboard to switch pending mode off.
+The bank is in pending mode, and the agent is waiting for you to settle it: run `uv run python durable_agent.py bank success`. Pending mode stays on for later orders; switch it off with `curl -X POST http://127.0.0.1:8099/mode -d '{"pending": false}'` (Windows: `Invoke-RestMethod -Method Post http://127.0.0.1:8099/mode -Body '{"pending": false}'`). Don't click **reset** in the middle of a wait: reset deletes the payment the agent is waiting on. Reset only when you start over, together with deleting `durable.db`.
 
 **`nobody is waiting for the customer right now`** (or the bank, or the admin)
 The answer came too late, or it's for a different wait. Run `uv run python durable_agent.py` with no arguments to see what the order is waiting for now.

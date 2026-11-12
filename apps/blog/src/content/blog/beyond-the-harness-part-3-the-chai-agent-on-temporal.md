@@ -83,7 +83,8 @@ async def read_order(text: str) -> dict:
 async def charge_upi(order_id: str, amount: int, key: str) -> str:
     r = shop("/pay", {"order_id": order_id, "amount": amount, "key": key})
     say(f"charge_upi: ₹{amount} -> {r['receipt']}" + ("  · bank: same key, not charged again" if r["duplicate"] else ""))
-    for left in range(DEMO_PAUSE, 0, -1):     # the window to kill this worker
+    pause = int(os.environ.get("DEMO_PAUSE", "0"))
+    for left in range(pause, 0, -1):          # the window to kill this worker
         activity.heartbeat(left)              # "I'm still alive"
         await asyncio.sleep(1)
     return r["receipt"]
@@ -190,7 +191,7 @@ $env:MOCK_LLM="1"
 uv run python temporal_agent.py start order-1
 ```
 
-One worker picks it up:
+One worker picks it up (each line also starts with `[pid …]`; it's left out here):
 
 ```
 [worker-1] about to charge ₹80 · key order-1:charge
@@ -252,7 +253,7 @@ On the shop dashboard, the timeline shows a `worker-1` block that stops after th
 
 ## Docker version
 
-The same on every OS. Stop the local shop and workers first, so the containers get the ports:
+The same on every OS. Stop the local shop, the workers and any local `temporal server start-dev` first (Ctrl+C in their terminals), so the containers get the ports:
 
 ```bash
 docker compose up -d shop
@@ -300,7 +301,7 @@ No worker is running, or the workers are on a different task queue. Each worker 
 
 **Nobody picked up the order after the kill**
 - The other worker isn't running. Two workers are the point of this demo.
-- You killed it before the charge. Wait for `charged ₹80 · 8s to kill me…`.
+- You killed it before the charge. Wait for `▶ charged ₹80 · 8s to kill me…`.
 - On Windows, you killed both: `'%worker%'` matches both workers. Include the name: `'%worker worker-1%'`.
 
 **It took longer than 3 seconds**
