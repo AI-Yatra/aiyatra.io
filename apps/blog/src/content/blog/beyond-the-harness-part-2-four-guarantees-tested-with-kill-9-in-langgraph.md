@@ -1,5 +1,6 @@
 ---
-cover: /blog/images/uploads/cover-37z0j.webp
+cover: /blog/images/uploads/durable-agents-cover-2.webp
+coverAlt: "The same four steps, each saved, with an idempotency key on charge_upi: it pays once"
 title: "Building Durable AI Agents, Part 2: Make the Chai Agent Survive kill -9"
 urlSlug: beyond-the-harness-part-2-four-guarantees-tested-with-kill-9-in-langgraph
 excerpt: "Four fixes that turn the chai agent into one you can kill anywhere: checkpoints on disk, an idempotency key made once, saved waits for the bank and the customer, and an audit log for free. One fix looks right and still charges twice."
