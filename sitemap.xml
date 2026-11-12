@@ -73,6 +73,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://aiyatra.io/blog/beyond-the-harness-part-2-four-guarantees-tested-with-kill-9-in-langgraph</loc>
+    <lastmod>2026-11-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://aiyatra.io/blog/ai-operating-system-ai-os-the-next-evolution-of-how-we-use-computers</loc>
     <lastmod>2026-11-12</lastmod>
     <changefreq>monthly</changefreq>
