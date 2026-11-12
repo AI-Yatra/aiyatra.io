@@ -1,10 +1,8 @@
 ---
 cover: /blog/images/uploads/cover-37z0j.webp
-title: "Building Durable AI Agents, Part 2: Making a LangGraph Agent Survive kill -9"
+title: "Building Durable AI Agents, Part 2: Make the Chai Agent Survive kill -9"
 urlSlug: beyond-the-harness-part-2-four-guarantees-tested-with-kill-9-in-langgraph
-excerpt: We took a small LangGraph agent, killed it at the worst moments we
-  could find, and fixed what broke. Some fixes were one line. One of them
-  looked right and still charged the customer twice.
+excerpt: "Four fixes that turn the chai agent into one you can kill anywhere: checkpoints on disk, an idempotency key made once, saved waits for the bank and the customer, and an audit log for free. One fix looks right and still charges twice."
 category: Session recap
 tags:
   - AGENTS
@@ -15,151 +13,455 @@ tags:
 date: 2026-11-09
 author: Jagadeeswara Reddy
 coAuthors: []
+series: Building Durable AI Agents
 ---
-*This is the second of three posts written alongside our Nov 14 session on durable AI agents. In [Part 1](/blog/beyond-the-harness-part-1-persistent-is-not-durable/) we killed an agent halfway through a task and watched it lose finished work and pay for one order twice. This time we fix it.*
+*Written alongside our session on durable AI agents at LSEG Hyderabad on November 14. Every command here is shown for macOS / Linux and for Windows, so you can follow along on your own laptop.*
 
-## The setup
+In [part 1](/blog/beyond-the-harness-part-1-persistent-is-not-durable) we built a chai ordering agent, killed it one second after it charged the customer, ran it again, and watched it charge the customer a second time.
 
-At the end of Part 1 we had a list of four things we wanted: carry on from the step you were on, do anything that changes the world exactly once, wait days for a human, and keep a record of every step. We'll go through them in the order they bit us, which isn't quite the order of the list.
+In this post we fix it. The result is [`durable_agent.py`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/durable_agent.py): the same agent with four fixes, one for each promise from part 1.
 
-Every script here is plain Python. There's no LLM and no API key, so the results are the same on every laptop, including the ones people bring on Saturday. Each script starts a child process, kills it with `SIGKILL`, and then starts a new process on the same `thread_id`, the way a restarted container would.
+| Promise | Fix |
+|---|---|
+| Resume from the exact step | checkpoints on disk, written before the next step starts |
+| Side effects happen once | an idempotency key, made once and saved |
+| Wait for a person | `interrupt()`: a saved pause |
+| Write every step down | the checkpoint history |
+
+Code: **https://github.com/been-there-done-that/durable-ai-agents**. Keep the shop running from part 1 (`uv run python shop_mock.py`) with the dashboard open at http://localhost:8099.
+
+As in part 1, commands that differ are shown for **macOS / Linux** and for **Windows (PowerShell)**. In PowerShell, `$env:NAME="value"` stays set for the whole window, which matters for one of the experiments below.
+
+## Fix 1: save every step to disk
+
+The normal agent saved its state after every step, to memory:
+
+```python
+graph = build(InMemorySaver())
+```
+
+The durable one saves it to a SQLite file:
+
+```python
+from langgraph.checkpoint.sqlite import SqliteSaver
+
+def saver() -> SqliteSaver:
+    return SqliteSaver(sqlite3.connect("durable.db", check_same_thread=False))
+```
+
+There's one more setting, and it's the one people miss:
+
+```python
+graph.invoke(value, config, durability="sync")
+```
+
+LangGraph's default is `"async"`: the checkpoint is written in the background *while the next step already runs*. That's faster, and a `kill -9` at the wrong moment loses the last step. `"sync"` writes each checkpoint to disk **before** the next step starts. For steps that touch money, that's the one you want.
+
+Now, when the agent starts, it can ask whether there's a saved run for this order:
+
+```python
+snap = graph.get_state(config)
+if snap.next:                                   # a saved run that didn't finish
+    say(f"found a saved run · resuming at {list(snap.next)}")
+    graph.invoke(None, config, durability="sync")   # None = carry on from the checkpoint
+elif snap.values:
+    say("already finished · nothing to do")
+else:
+    graph.invoke({"text": ORDER}, config, durability="sync")
+```
+
+The `thread_id` in the config (`order-1`) is the key to all of this. One order, one thread, one saved history.
+
+### Is that enough?
+
+Kill it after the charge, the same as in part 1, and look at what the second run does with fix 1 alone:
+
+```
+found a saved run · resuming at ['charge_upi']
+▶ about to charge ₹80
+charge_upi: ₹80 -> rcpt-2
+```
+
+There's good news and bad news:
+
+- **Good:** no `LLM call` line. `read_order` finished before the crash, its result was on disk, and it came back for free.
+- **Bad:** it **still charged twice**.
+
+The reason: a checkpoint is saved *after* a step finishes. `charge_upi` was killed halfway, after the bank charged but before the step returned, so as far as LangGraph knows it never ran. On resume it runs again, and the bank sees what looks like a brand-new payment.
+
+This is true of every durable system, Temporal included: **a step that dies in the middle runs again.** That's called *at-least-once*. You can't checkpoint your way out of it, because there will always be a gap between "the bank did it" and "we wrote it down". What you can do is make running it again harmless.
+
+## Fix 2: charge once, with an idempotency key
+
+An idempotency key is a unique id you send with a request. The bank remembers it: if the same key comes in twice, it returns the original result instead of charging again. Many payment APIs support this; Stripe's `Idempotency-Key` header is the best-known example.
+
+The trick is *where you make the key*. It has to be made **once**, and saved **before** the charge:
+
+```python
+def read_order(state: State) -> dict:
+    order = llm_read_order(state["text"])
+    # the payment key is made here, once, and saved with this step
+    return {**order, "pay_key": f"{ORDER_ID}:{uuid.uuid4().hex[:8]}"}
+
+
+def charge_upi(state: State) -> dict:
+    amount = state["qty"] * PRICE
+    key = state["pay_key"]                      # the saved key, the same on every re-run
+    r = shop("/pay", {"order_id": ORDER_ID, "amount": amount, "key": key})
+    ...
+```
+
+Because `read_order` finished and was checkpointed, the key is on disk. When `charge_upi` re-runs, it sends the same key.
+
+Click **reset**, then run it, kill it during `charged ₹80 · 8s to kill me…`, and run it again:
+
+**macOS / Linux**
 
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-alias lg='uv run --no-project -q --with langgraph==1.2.19 --with langgraph-checkpoint-sqlite==3.1.3 python'
+MOCK_LLM=1 DEMO_PAUSE=8 uv run python durable_agent.py     # terminal 2
+pkill -9 -f durable_agent.py                               # terminal 3, during the countdown
+MOCK_LLM=1 DEMO_PAUSE=8 uv run python durable_agent.py     # terminal 2 again
 ```
 
-If you're on Windows, run them in WSL, since Windows doesn't have `SIGKILL`.
+**Windows (PowerShell)**
 
-## Stop losing finished steps
+```powershell
+# terminal 2
+$env:MOCK_LLM="1"; $env:DEMO_PAUSE="8"
+uv run python durable_agent.py
 
-The first failure in Part 1 was the five-node graph that forgot nodes 1 and 2 after we killed it in node 3. The graph itself was fine. The problem was when LangGraph wrote its checkpoints.
+# terminal 3, during the countdown
+Get-CimInstance Win32_Process -Filter "CommandLine LIKE '%durable_agent.py%'" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
+
+# terminal 2 again
+uv run python durable_agent.py
+```
+
+First run:
+
+```
+[pid 2651486] starting fresh · order-1
+[pid 2651486] LLM call: read_order('4 chai for 98765 43210')
+[pid 2651486] read_order: 4 chai for 9876543210
+[pid 2651486] ▶ about to charge ₹80 · key order-1:b2308cd3
+[pid 2651486] charge_upi: ₹80 -> rcpt-1 (success)
+Killed
+```
+
+(`Killed` is what bash prints. PowerShell prints nothing; the output just stops.)
+
+Second run:
+
+```
+[pid 2651491] found a saved run · resuming at ['charge_upi'] · done so far: ['pay_key', 'phone', 'qty']
+[pid 2651491] ▶ about to charge ₹80 · key order-1:b2308cd3
+[pid 2651491] charge_upi: ₹80 -> rcpt-1 (success)  · bank: same key, not charged again
+[pid 2651491] check_payment: rcpt-1 is success
+[pid 2651491] check_stock: 20 chai left, need 4
+[pid 2651491] send_receipt: sms sent
+[pid 2651491] send_to_kitchen: kot-1
+[pid 2651491] done · payment success · kitchen kot-1 · refund - · payments made 1
+```
+
+Same key, same receipt, **payments made: 1.**
+
+![One payment](/blog/images/uploads/chai-paid-once.webp)
+
+### The trap
+
+It's tempting to make the key right where you use it:
 
 ```python
-conn = sqlite3.connect("checkpoints.db", check_same_thread=False)
-graph = build(SqliteSaver(conn))
-
-graph.invoke({"done": []}, CONFIG, durability="sync")   # process 1, killed in n3
-graph.invoke(None, CONFIG, durability="sync")           # process 2, resume
+def charge_upi(state: State) -> dict:
+    key = f"{ORDER_ID}:{uuid.uuid4().hex[:8]}"    # looks fine, isn't
 ```
 
-Passing `None` to `invoke` tells LangGraph to continue the thread from its last checkpoint instead of starting a new run. With `durability="sync"` the second process does what we wanted the first time:
+Try it. The repo has a switch for exactly this mistake. First delete the saved order (otherwise the agent says `order-1 already finished`) and reset the dashboard:
 
-```text
-== process 2: resume same thread_id
-  saved state: done=['n1', 'n2'] next=('n3',)
-  running n3  (done so far: ['n1', 'n2'])
-  running n4 ...
-  running n5 ...
-  finished: done=['n1', 'n2', 'n3', 'n4', 'n5']
+**macOS / Linux**
+
+```bash
+rm -f durable.db
+MOCK_LLM=1 DEMO_PAUSE=8 KEY_FROM=node uv run python durable_agent.py
+pkill -9 -f durable_agent.py                     # terminal 3, during the countdown
+MOCK_LLM=1 DEMO_PAUSE=8 KEY_FROM=node uv run python durable_agent.py
 ```
 
-Nodes 1 and 2 are skipped. Node 3 runs again from its first line, because it hadn't finished when the process died. Keep that in mind for everything that follows: LangGraph saves progress per node, so a node that was halfway through when the process died starts over from the top.
+**Windows (PowerShell)**
 
-LangGraph 1.2 has three durability modes, and the default isn't the one you want for an agent that does real work. We ran the same kill test against each:
+```powershell
+Remove-Item durable.db -ErrorAction SilentlyContinue
+$env:MOCK_LLM="1"; $env:DEMO_PAUSE="8"; $env:KEY_FROM="node"
+uv run python durable_agent.py
 
-| Mode | When it writes | What our kill test showed |
-|---|---|---|
-| `"exit"` | Only when the run ends | No thread at all after the kill |
-| `"async"` (default) | In the background while the next step runs | With instant nodes, `n1` and `n2` were lost in 5 of 5 runs |
-| `"sync"` | Before the next step starts | Resumed at `n3` every time |
+# terminal 3, during the countdown
+Get-CimInstance Win32_Process -Filter "CommandLine LIKE '%durable_agent.py%'" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
 
-The default makes sense for chat apps, where speed matters more than losing a step now and then. For anything that costs money or touches the outside world, pass `durability="sync"`. You pay one database write per step, which is nothing next to an LLM call.
+# terminal 2 again
+uv run python durable_agent.py
 
-## Let the approval wait for the weekend
+# done with the trap: switch it off, or every later run in this window pays twice
+Remove-Item Env:KEY_FROM
+```
 
-The coding agent from our last session asked a human before writing a file, using LangGraph's `interrupt()`. Picture it asking at 6 PM on a Friday. You see the request on Monday morning and click approve. In last session's version that approval was gone long before Monday, because the paused run was held in `InMemorySaver`, and any restart over the weekend wiped it.
+```
+▶ about to charge ₹80 · key order-1:f95c5482
+charge_upi: ₹80 -> rcpt-1 (success)
+Killed
+found a saved run · resuming at ['charge_upi']
+▶ about to charge ₹80 · key order-1:b0b23080
+charge_upi: ₹80 -> rcpt-2 (success)
+done · ... · payments made 2
+```
 
-The fix is to swap one class:
+A new key on every re-run looks like a new payment to the bank. An idempotency key only works if it survives the crash, so make it in an *earlier* step that has already been saved.
+
+The same goes for every other side effect. The SMS and the kitchen order carry keys too (`order-1:sms:receipt`, `order-1:kitchen`), so a re-run never sends a second text or a second ticket.
+
+## Fix 3: when you can't know yet, wait
+
+Fixes 1 and 2 cover the clean crash. Real life is messier. Here's the case we'll handle:
+
+> The customer pays. The agent crashes. Two minutes later it's back, and two things have changed:
+> 1. The payment is **pending**: the money left the customer's account but hasn't reached the shop. (Anyone who has used UPI has seen this. The bank settles it later: success, or reversed.)
+> 2. The chai is **sold out**.
+
+What should the agent do?
+
+- **Retry the charge?** No. That's a second payment.
+- **Refund?** Not yet. If you refund now and the bank later reverses the pending payment, the customer gets ₹160 back for an ₹80 order. A refund can't be undone, so never refund money you don't have yet.
+- **Wait for the bank.** Yes. Then, once the money is really ours, **ask the customer** what they want.
+
+The tricky part is that the wait can take minutes, hours, or until the next day. You can't hold a process open that long, and if you do, it will crash. The wait has to be **saved**, like every other step.
+
+LangGraph's tool for this is `interrupt()`. It pauses the graph, saves the pause in the checkpoint, and returns control to you. Later, possibly from a different process on a different day, you resume it with an answer.
 
 ```python
-from langgraph.checkpoint.sqlite import SqliteSaver   # pip install langgraph-checkpoint-sqlite
-
-with SqliteSaver.from_conn_string("agent_state.db") as saver:
-    graph = builder.compile(checkpointer=saver)        # was: InMemorySaver()
-    graph.invoke(inputs, config, durability="sync")
+def check_payment(state: State) -> dict:
+    status = shop(f"/payment?receipt={state['receipt']}")["status"]
+    if status == "pending":
+        # not "retry" (a new payment) and not "failed" (the money may still land): wait
+        interrupt({"waiting_for": "bank", "receipt": state["receipt"]})
+        status = shop(f"/payment?receipt={state['receipt']}")["status"]   # the bank is the truth
+    return {"payment": status}
 ```
 
-In our test, process 1 reaches the approval, pauses and exits completely. Process 2 is a brand-new Python process standing in for Monday morning. It loads the thread, sees what's waiting and resumes it:
+One rule: **when you resume, the step runs again from the top**, and the `interrupt()` call returns the answer instead of pausing. So anything above `interrupt()` must be safe to run twice. Here it only reads.
 
-```text
-== process 2: human approves (fresh process, same thread_id)
-  loaded thread: next=('approve',)
-  pending interrupt value: {'tool': 'write_file', 'path': 'hello.py', ...}
-  approve: node body starts (this line re-runs on resume)
-  approve: got answer 'approve'
-  write: writing hello.py
-```
-
-Look closely at the `node body starts` line. It prints once when the node pauses on Friday, and again when it resumes on Monday. The LangGraph docs say it directly: *"the runtime restarts the entire node from the beginning"*. So anything you put before `interrupt()` in that node runs twice. Keep that part free of side effects, and do the real work after the approval comes back.
-
-Two smaller things caught us out. If you open the SQLite connection yourself with `sqlite3.connect()`, you need `check_same_thread=False`. And `PostgresSaver` throws `UndefinedTable` until you call `.setup()` on it once.
-
-## Charge the customer once
-
-This is the failure that costs real money.
-
-The test graph is `plan → charge → report`. We kill the process after `charge` has paid but before the node returns, so the payment happened and LangGraph never found out. As we saw in Part 1, LangGraph does exactly what it should on resume and runs `charge` again.
-
-![](/blog/images/uploads/fig2-double-payment-2d3hh.webp)
-
-You can't stop a step from running twice. A crash at the wrong moment will always leave you unsure whether it finished, so every system that retries steps can run one twice. What you can do is make the second run harmless. Give each side effect an idempotency key, and have the thing doing the work check whether it has already seen that key.
-
-We tried three versions of `charge`. The first, which we called naive, just inserts a payment. The second keeps a ledger table keyed on `(thread_id, tool_call_id)`. It writes the ledger row in the same database transaction as the payment, so either both are saved or neither is, and it creates the key earlier, in `plan`, so the key is saved in the checkpoint. The third, `ledger_bad`, uses the same ledger but creates the key inside `charge` itself.
+The customer gets the same treatment:
 
 ```python
-def idempotent_pay(db, thread_id, tool_call_id, amount):
-    with db:  # effect + ledger row commit together, or neither does
-        row = db.execute("select result from ledger where thread_id=? and tool_call_id=?",
-                         (thread_id, tool_call_id)).fetchone()
-        if row:
-            return row[0]                     # already paid: return the saved receipt
-        receipt = pay(db, thread_id, amount)
-        db.execute("insert into ledger values (?, ?, ?)", (thread_id, tool_call_id, receipt))
-    return receipt
+def ask_customer(state: State) -> dict:
+    shop("/sms", {"to": state["phone"], "text": "Sorry, chai's sold out. Reply WAIT (10 min), COFFEE or REFUND.",
+                  "key": f"{ORDER_ID}:sms:ask"})          # keyed: re-running sends nothing new
+    choice = interrupt({"waiting_for": "customer", "options": ["wait", "coffee", "refund"],
+                        "deadline": time.time() + CUSTOMER_TIMEOUT})
+    return {"choice": choice}
 ```
 
-After the kill, the three versions did this:
+Every wait needs a **deadline and a safe default**. If the customer doesn't answer in 2 hours, we refund: giving the money back is the safe choice.
 
-```text
-== naive:      payments made = 2
-== ledger:     ledger hit for 6577613a -> returning saved receipt-3, NOT paying again
-               payments made = 1
-== ledger_bad: payments made = 2
+The refund itself can't be undone either, so it runs once (with its own key). Small refunds are automatic; above ₹2,000 an admin approves, and the agent waits for them, for days if it has to:
+
+```python
+def refund(state: State) -> dict:
+    amount = state["qty"] * PRICE
+    if amount > REFUND_AUTO_LIMIT:
+        if interrupt({"waiting_for": "admin", "refund": amount}) != "approve":
+            return {"refund": "rejected"}
+    r = shop("/refund", {"receipt": state["receipt"], "key": f"{ORDER_ID}:refund"})   # once, even if re-run
+    ...
 ```
 
-The ledger worked. The ledger with the key made in the wrong place didn't, and nothing in the code looks wrong when you read it. Since `charge` runs again from the top, it makes a fresh key on every run, so the ledger never finds a match. The key has to come from somewhere that was saved before the step started. In a real agent, the tool call id in `AIMessage.tool_calls[i]["id"]` does the job. It was written in the previous step, so it's the same on every retry.
+Here's the full graph:
 
-When the payment, deploy or message goes to someone else's API rather than your own database, send the same key along: Stripe's `Idempotency-Key` header, an `INSERT ... ON CONFLICT DO NOTHING`, or pushing a known git SHA. Some providers have no way to dedupe at all. In that case a missing result really is unknown. Pause the run and have someone check, rather than retrying and hoping.
-
-## Find out who approved it
-
-The last thing on our list was a record of every step. LangGraph already keeps every checkpoint, so `get_state_history()` gives you an audit log for free:
-
-```text
-step=-1  input  __start__ -> {'path': 'hello.py', 'diff': '', 'decision': ''}
-step= 0  loop   propose  -> {'diff': "+ print('hello')"}
-step= 1  loop   approve [INTERRUPT 'write_file'] -> {'decision': 'approve'}
-step= 2  loop   write    -> {}
-step= 3  loop   (end)
+```
+read_order -> charge_upi -> check_payment --pending--> (wait for the bank)
+                                |--reversed--> tell_customer                (no money taken)
+                                '--success---> check_stock --in stock--> send_receipt -> send_to_kitchen
+                                                   '--sold out--> ask_customer (wait for the customer)
+                                                                     |-- wait   -> check_stock
+                                                                     |-- coffee -> send_receipt -> send_to_kitchen
+                                                                     '-- refund / no reply -> refund
+                                                                                 (above ₹2,000: wait for an admin)
 ```
 
-From that you can see who approved what and what the tool returned. You can also go back in time. Pick the checkpoint where the run was paused, change the diff with `update_state(..., as_node="propose")`, and approve the edited version on a new branch.
+### Try it
 
-We hit two surprises doing this. First, `invoke(Command(resume="reject"), old_checkpoint)` quietly ignored our "reject" and reused the old "approve", because the earlier answer is stored on that checkpoint. What worked was calling `invoke(None, old_config)` to raise the interrupt again on a fresh branch, and then answering it. Second, replaying from an old checkpoint isn't like reading from a cache. Every node after that point runs again for real, side effects included. That's one more reason to have the ledger in place before you start time-travelling.
+Reset the dashboard and start fresh. The second line tells the fake bank to leave payments pending (reset switches it off again):
+
+**macOS / Linux**
+
+```bash
+rm -f durable.db
+curl -X POST http://127.0.0.1:8099/mode -d '{"pending": true}'
+MOCK_LLM=1 uv run python durable_agent.py
+```
+
+**Windows (PowerShell)**
+
+```powershell
+Remove-Item durable.db -ErrorAction SilentlyContinue
+Invoke-RestMethod -Method Post http://127.0.0.1:8099/mode -Body '{"pending": true}'
+$env:MOCK_LLM="1"; $env:DEMO_PAUSE="0"
+uv run python durable_agent.py
+```
+
+(`DEMO_PAUSE="0"` turns the countdown off if it's still set in that window. On Windows, use `Invoke-RestMethod`: in Windows PowerShell 5, `curl` is a different command with different options.)
+```
+starting fresh · order-1
+LLM call: read_order('4 chai for 98765 43210')
+read_order: 4 chai for 9876543210
+▶ about to charge ₹80 · key order-1:a1821aeb
+charge_upi: ₹80 -> rcpt-1 (pending)
+⏸ paused · waiting for the bank · saved, safe to kill · next: python durable_agent.py bank success|reversed
+```
+
+**The process exits.** Nothing is running. The wait lives in `durable.db`. Start it again, as a crash-and-restart would:
+
+```bash
+MOCK_LLM=1 uv run python durable_agent.py       # macOS / Linux
+uv run python durable_agent.py                  # Windows, same window
+```
+
+```
+⏸ paused · waiting for the bank · saved, safe to kill · next: python durable_agent.py bank success|reversed
+```
+
+It comes back still waiting and charges nothing. Now the chai runs out, and then the bank settles. From here on, the commands are the same on every OS:
+
+```bash
+uv run python durable_agent.py stock 0
+uv run python durable_agent.py bank success
+```
+
+```
+check_payment: rcpt-1 is success
+check_stock: 0 chai left, need 4
+⏸ paused · waiting for the customer · saved, safe to kill · next: python durable_agent.py customer wait|coffee|refund|no-reply
+```
+
+The customer wants their money back:
+
+```bash
+uv run python durable_agent.py customer refund
+```
+
+```
+ask_customer: customer said refund
+refund: ₹80 -> rf-1
+done · payment success · kitchen - · refund rf-1 · payments made 1
+```
+
+One payment, one refund, no chai, a happy-enough customer. Other endings to try (each from a reset and a fresh `durable.db`: `rm -f durable.db` on macOS / Linux, `Remove-Item durable.db` on Windows):
+
+- `bank reversed`: no money was taken, so the agent only tells the customer. Nothing to refund.
+- `customer coffee`: the order switches to coffee.
+- `customer no-reply`: the deadline passed, so it refunds.
+- A big order whose ₹4,000 refund waits for `uv run python durable_agent.py admin approve`. Start it with `ORDER="200 chai for 98765 43210" MOCK_LLM=1 uv run python durable_agent.py` (macOS / Linux) or `$env:ORDER="200 chai for 98765 43210"` then `uv run python durable_agent.py` (Windows; `Remove-Item Env:ORDER` afterwards).
+
+Instead of deleting `durable.db`, you can also give each experiment its own order: `ORDER_ID=order-2` (or `$env:ORDER_ID="order-2"`).
+
+## Fix 4: write every step down
+
+When the customer calls on Monday asking *"where's my money?"*, or the auditor asks *"who approved this refund?"*, you need an answer.
+
+You already have one. With a checkpointer, LangGraph keeps **every** checkpoint, not just the last. The history of a thread is an audit log:
+
+```python
+def audit(graph, config) -> list[str]:
+    history = list(graph.get_state_history(config))[::-1]          # oldest first
+    for before, after in zip(history, history[1:]):
+        ran = ", ".join(before.next)                                # the step that ran
+        changed = {k: v for k, v in after.values.items() if before.values.get(k) != v}
+        waited = [i.value for t in before.tasks for i in t.interrupts]   # did it pause?
+        ...
+```
+
+```bash
+uv run python durable_agent.py audit
+```
+
+```
+Thu 20:47:55  read_order       phone=9876543210, qty=4
+Thu 20:47:55  charge_upi       receipt=rcpt-1
+Thu 20:48:00  check_payment    ⏸ waited for the bank (0:00:04) · payment=success
+Thu 20:48:00  check_stock      in_stock=False
+Thu 20:48:02  ask_customer     ⏸ waited for the customer (0:00:02) · choice=refund, item=chai
+Thu 20:48:02  refund           refund=rf-1
+```
+
+Each step has a time, what changed, and how long each wait took. In real life those waits are hours, not seconds.
+
+One warning: LangGraph can also *replay* from an old checkpoint ("time travel"). Replaying re-runs every later step for real, so without the idempotency keys from fix 2, that's a great way to refund twice.
+
+## The same thing in Docker
+
+`kill -9` on your laptop and `docker kill` on a container are the same crash. The repo has a compose file:
+
+Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) (macOS, Windows) or Docker Engine (Linux), and make sure it's running. Stop the local shop from terminal 1 first, since the container uses the same port.
+
+**macOS / Linux**
+
+```bash
+docker compose build
+docker compose up -d shop                                # dashboard: http://localhost:8099
+AGENT=durable_agent docker compose up chai-agent
+docker kill chai-agent                                   # from another terminal, during the countdown
+docker start -a chai-agent                               # resumes at charge_upi → payments made 1
+```
+
+**Windows (PowerShell)**
+
+```powershell
+docker compose build
+docker compose up -d shop
+$env:AGENT="durable_agent"; docker compose up chai-agent
+docker kill chai-agent                                   # from another terminal, during the countdown
+docker start -a chai-agent
+```
+
+The `docker` commands themselves are the same everywhere. The checkpoints live on a Docker volume, so they outlive the container. To start over: `docker compose run --rm chai-agent rm -f /data/durable.db`.
 
 ## What's still missing
 
-With these four fixes our little agent survives a crash, waits over a weekend for a human and charges the customer once. We were pretty pleased with it, right up until we asked what happens if the worker dies at 3 AM and nobody is awake.
+Look at what we did after every crash: **we restarted it by hand.**
 
-The answer is nothing. A checkpointer saves state, but it doesn't notice that a run has died, it doesn't restart it, and it won't stop two workers from both resuming the same thread. Somebody, or some script, has to call `invoke(None, config)`. The tools that handle that for you are what Part 3 is about.
+A checkpoint saves the work, but nothing *notices* that the run died. If the process dies at 3 AM, the order sits half-done until someone comes in at 10. If two people restart it, two processes run the same order.
 
-## Try it yourself
+You could add a restart policy (`restart: unless-stopped`, Kubernetes, systemd). The process would come back, but it wouldn't know *which* orders were half-done. You'd still write the "find stalled runs and resume them" code yourself, along with the locking that stops two processes grabbing the same order.
 
-If you were at our last session, take the `step06_self_evaluate.py` agent and get it to pass three tests:
+That's exactly what a **durable execution engine** does. In [part 3](/blog/beyond-the-harness-part-3-the-chai-agent-on-temporal) we run the same chai agent on Temporal: kill the worker, type nothing, and watch the order finish anyway.
 
-1. `kill -9` during the evaluate loop, and it resumes without repeating LLM calls that already finished.
-2. Leave an approval pending overnight, and it resumes in a new process.
-3. Kill `write_file` right after it writes, and it doesn't write a second time. (Key the ledger on the tool call id.)
+## If something goes wrong
 
-Bring it on Saturday and we'll try to break it.
+Part 1 covers setup problems (uv, the shop, ports). These are the ones specific to the durable agent:
+
+**`order-1 already finished · nothing to do`**
+That's the durable agent working: `durable.db` remembers that order-1 is done, and **reset on the dashboard doesn't clear it**. Delete the file (`rm -f durable.db` / `Remove-Item durable.db`) or use a new `ORDER_ID`.
+
+**It resumed an old order I didn't mean to**
+Same cause: a half-finished order-1 from an earlier experiment is still in `durable.db`. Delete the file and reset the dashboard to start clean.
+
+**The durable agent paid twice**
+- `KEY_FROM=node` is still set. On Windows it stays set in the window: run `Remove-Item Env:KEY_FROM`, or open a new window.
+- Or the shop restarted between the two runs. A new shop forgets the keys it has seen (that's the clean slate), so the re-run looks like a new payment. Keep terminal 1 running for the whole experiment.
+
+**It says `⏸ waiting for the bank` every time**
+The bank is still in pending mode, and it's waiting for you: run `uv run python durable_agent.py bank success`. Click **reset** on the dashboard to switch pending mode off.
+
+**`nobody is waiting for the customer right now`** (or the bank, or the admin)
+The answer came too late, or it's for a different wait. Run `uv run python durable_agent.py` with no arguments to see what the order is waiting for now.
+
+**`database is locked` (SQLite)**
+Another copy of the agent is still running in some window, or the folder is synced by OneDrive or Dropbox. Close the other one, and on Windows clone the repo outside OneDrive (for example `C:\code\durable-ai-agents`).
+
+**`docker: command not found`, or "Cannot connect to the Docker daemon"**
+Docker Desktop isn't installed or isn't running. Start it and wait until it says it's running. With an old Docker, the command is `docker-compose` (with a dash).
+
+**`docker compose up -d shop` says the port is in use**
+The local shop from terminal 1 is still running. Stop it with Ctrl+C.
+
+---
+
+*This series accompanies the AI Yatra session "Durable AI Agents" at LSEG Hyderabad, 14 Nov 2026. Code: [been-there-done-that/durable-ai-agents](https://github.com/been-there-done-that/durable-ai-agents).*

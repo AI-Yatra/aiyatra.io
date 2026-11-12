@@ -1,109 +1,344 @@
 ---
 cover: /blog/images/uploads/cover-7dcda.webp
-title: "Building Durable AI Agents, Part 1: Resume Isn't Recovery"
+title: "Building Durable AI Agents, Part 1: Build a Chai Agent, Then Kill It"
 urlSlug: beyond-the-harness-part-1-persistent-is-not-durable
-excerpt: Your coding agent can pick up the conversation after a crash. What it
-  can't tell you is whether the deploy it started ever went out. We killed a
-  few agents halfway through a task to see what really survives.
+excerpt: "We build a small LangGraph agent that takes a chai order, charges ₹80 over UPI and sends the order to the kitchen. Then we kill -9 it right after the charge and watch it charge the customer twice. Commands for macOS, Linux and Windows."
 category: Session recap
 tags:
   - AGENTS
   - DURABLE EXECUTION
   - LANGGRAPH
-  - CLAUDE CODE
-  - PI
+  - PYTHON
+  - HANDS-ON
 date: 2026-11-09
 author: Jagadeeswara Reddy
 coAuthors: []
+series: Building Durable AI Agents
 ---
-*We're running a session on durable AI agents at LSEG Hyderabad on November 14. While preparing it we ended up with far more material than fits into one morning, so we're writing it up as three posts. This one is about the problem. Part 2 fixes it in LangGraph, and Part 3 looks at the tools built for exactly this job.*
+*Written alongside our session on durable AI agents at LSEG Hyderabad on November 14. Every command here is shown for macOS / Linux and for Windows, so you can follow along on your own laptop.*
 
-## The agent was on step 47
+A customer sends a message: *"4 chai for 98765 43210"*. An agent reads it, charges ₹80 over UPI, texts a receipt and tells the kitchen to make four chai.
 
-Imagine you've given a coding agent a real job: upgrade a library across a service, fix whatever breaks, open a PR and deploy to staging. It has been at it for about forty minutes. It has read the repo, written a plan, edited six files and pushed a branch. It's on step 47 of roughly 50, and step 47 is the deploy.
+That's the whole agent. It works. Then the process dies one second after the charge, and when it comes back the customer pays again.
 
-You step away to take a call. While you're gone the laptop goes to sleep. Or the container it was running in gets evicted. Or someone at home restarts the machine because the fan was too loud.
+This series is about that second. In this post we build the agent and break it. [Part 2](/blog/beyond-the-harness-part-2-four-guarantees-tested-with-kill-9-in-langgraph) makes it durable, and [part 3](/blog/beyond-the-harness-part-3-the-chai-agent-on-temporal) runs it on Temporal so that nobody even has to restart it.
 
-When you come back you type `claude --resume`, or whatever your tool calls it, and the agent is right there with the whole conversation. It says it'll carry on from where it left off.
+All the code is here: **https://github.com/been-there-done-that/durable-ai-agents**
 
-The trouble is that the agent has no idea whether the deploy went out. The last thing in the transcript is the call that started it, and whatever happened after that went down with the old process. All the agent can do is read the transcript and make its best guess about what happened next.
+## What you need
 
-## Remembering the chat vs remembering the work
+- [git](https://git-scm.com/downloads) and [uv](https://docs.astral.sh/uv/). uv installs the right Python (3.12+) for you.
+- Three terminal windows
+- Ten minutes
 
-What these tools save is the conversation. After a restart they load the transcript back in, the model reads it, and it continues from what it *thinks* happened. We started calling this a **persistent** agent.
+No API key is needed. The LLM step can run in mock mode (`MOCK_LLM=1`), which also makes every crash repeatable. If you want a real model, any OpenAI-compatible endpoint works; NVIDIA's free endpoint is the default (`LLM_API_KEY=nvapi-...`).
 
-What you actually wanted in that moment is something that remembers the work. It would know which step it was on, and whether that step finished. It wouldn't run a deploy or a payment a second time. It could wait for your approval over a long weekend, and afterwards you could see exactly who approved what. We started calling that a **durable** agent.
+Every command in this series is shown twice where it differs: once for **macOS / Linux** (bash or zsh), once for **Windows (PowerShell)**. On Windows, use PowerShell, ideally inside [Windows Terminal](https://aka.ms/terminal), not the old `cmd.exe`. If you use WSL, follow the macOS / Linux commands.
 
-For a chat assistant the difference hardly matters. For an agent that deploys code or moves money, it matters a lot.
+Install uv:
 
-![](/blog/images/uploads/fig1-persistent-vs-durable-e7qfz.webp)
+**macOS / Linux**
 
-## We checked four coding agents
-
-Before the session we went through the docs, and where we could the source code, of four coding agents that people in our community use. We wanted to know what each one writes to disk and what "resume" really does.
-
-|  | Claude Code | OpenAI Codex CLI | Hermes Agent (Nous) | Pi |
-| --- | --- | --- | --- | --- |
-| Transcript | JSONL in `~/.claude/projects/` | JSONL rollouts in `~/.codex/sessions/` | SQLite `~/.hermes/state.db` | JSONL tree in `~/.pi/agent/sessions/` |
-| Resume | `claude --continue` / `--resume` | `codex resume --last` | `hermes -c` | `pi --continue` |
-| File undo | `/rewind` (file-edit tools only, not Bash) | `thread/revert` rewrites history only | Opt-in shadow git, `/rollback` | None built in |
-| A tool call cut off by a crash | Not re-run on resume | Replaced with a fake "aborted" result | Read-only: dropped. Side-effecting: kept and marked *"effect is UNKNOWN"* | Fake "No result provided" error |
-| Execution resumed? | No | No | No | No (yes in the separate `pi-durable` package) |
-
-Every one of them keeps the transcript, and none of them picks up a half-finished step. Resuming means loading the old conversation into a fresh model and letting the model work out whether that `git push` already happened. Anthropic is upfront about this in the Agent SDK docs, where sessions are described as persisting *"the conversation, not the filesystem."*
-
-We don't think that's a flaw in these tools. They were built to be good at conversations, and they are. But it does mean the job of not deploying twice falls on you.
-
-Hermes was the one that impressed us most here. When a call is interrupted, it checks whether that call could have changed anything. If it was only reading, Hermes drops it. If it might have had a side effect, Hermes keeps it and marks the result as unknown rather than pretending it failed. When a turn is lost in a gateway crash, the session simply stays blocked until a person decides what to do. It's a bit of a hassle, but nobody ends up acting on a guess.
-
-Pi doesn't do this out of the box, but its team ships a separate library for it, `@earendil-works/pi-durable` (v1.0, October 2026). Before running a tool, it writes down what the tool is about to do. After a crash it only re-runs tools that you've marked `replay: "safe"`, and if the agent keeps crashing in a loop, it stops.
-
-The Temporal team took Pi even further in a post called "The immortal life of Pi" (October 2026). They ran Pi on Temporal and killed the active worker every 15 to 40 seconds, and the task kept going on another worker. Pi kept the conversation and Temporal kept the execution. A Pi user on Reddit summed up the difference nicely: *"Base Pi already saves your sessions and tool history. The difference is Pi Durable also tracks the execution state."*
-
-## Then we broke one on purpose
-
-We wanted to see this happen for ourselves, so we wrote two tiny scripts. They don't call an LLM and you don't need an API key. Each one builds a small agent-shaped graph in LangGraph, kills the process with `SIGKILL` partway through, and starts a new process on the same thread. `SIGKILL` gives the program no chance to clean up, which is roughly what a dead laptop or an evicted container does. The code is in Part 2.
-
-The first script has five steps, saves its progress to SQLite, and uses LangGraph's default settings. We killed it in the middle of step 3:
-
-```text
-== process 1: run (will be killed in n3)
-  running n1  (done so far: [])
-  running n2  (done so far: ['n1'])
-  running n3  (done so far: ['n1', 'n2'])
-  SIGKILL inside n3
-== process 2: resume same thread_id
-  saved state: done=[] next=('__start__',)
-  running n1  (done so far: [])
-  running n2  (done so far: ['n1'])
-  ...
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-We expected the second process to start at step 3. It started at step 1. Steps 1 and 2 had finished, but by default LangGraph saves progress in the background, and those writes hadn't reached the disk when the process died. In a real agent those are LLM calls you've already paid for, and there's no promise that the model answers the same way the second time.
+**Windows (PowerShell)**
 
-The second script is even shorter: plan, charge, report. The charge is a stand-in for any step that changes something in the world, like a deploy, a payment or a message to a customer. We let the charge succeed and killed the process just before LangGraph recorded it. Then we resumed:
-
-```text
-== naive: payments made = 2
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-One order, two payments, and LangGraph did exactly what it promises: it saw that the charge step had no saved result and ran it again. Saving progress is what *caused* the second payment. On its own, a checkpoint can't tell "never ran" apart from "ran, and we died before writing it down".
+Then **close the terminal and open a new one**, so it finds `uv`. Check with `uv --version`.
 
-## What we want instead
+Get the code (the same on every OS):
 
-After those two runs we wrote down what we'd want from an agent we could leave alone with something important:
+```bash
+git clone https://github.com/been-there-done-that/durable-ai-agents
+cd durable-ai-agents
+uv sync
+```
 
-| | We want | Without it |
-| --- | --- | --- |
-| 1 | If it crashes, it carries on from the step it was on | Work you've paid for runs again, and may come out differently |
-| 2 | Anything that changes the world happens once | Two deploys, two payments, two PRs for the same fix |
-| 3 | It can wait days for a human | The pause lives in memory, and a restart forgets it |
-| 4 | Every step is written down | Nobody can say who approved the diff |
+## The outside world
 
-Teams building payment systems and job queues have been solving these exact problems for years, and most of their answers carry over to agents with very little change. That's what the next two posts are about.
+An agent is only interesting when it *does* something, and the things worth doing (charging money, sending messages, placing orders) happen in someone else's system. So the repo comes with a fake outside world, `shop_mock.py`: a UPI bank, an SMS gateway and a kitchen with 20 chai in stock.
 
-## Coming up
+In terminal 1 (the same on every OS):
 
-In Part 2 we take the agent from these scripts and fix it, one failure at a time. Losing finished steps is a one-line fix. Approvals that survive a restart take one swap. Running a step exactly once needs a little more care, and we'll show the mistake that makes the double payment quietly come back even after you think you've fixed it.
+```bash
+uv run python shop_mock.py
+```
 
-If you're in Hyderabad, join us on **Saturday, November 14, at 9:00 AM at LSEG**. Bring a laptop. We'll be killing agents live, and you'll get to kill a few of your own.
+Leave it running and open **http://localhost:8099**. The dashboard counts everything the agent does to the world. The number to watch all series long is **payments made**. For one order it must be 1.
+
+![The shop dashboard](/blog/images/uploads/chai-dashboard.webp)
+
+## The agent
+
+We build it with [LangGraph](https://langchain-ai.github.io/langgraph/), because an agent is a loop of steps with some state passed between them, and LangGraph makes those steps explicit. That will matter in part 2: you can only resume from "the exact step" if your code *has* steps.
+
+The whole agent is [`normal_agent.py`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/normal_agent.py). It's 70 lines.
+
+### The state
+
+Everything the agent knows about this order:
+
+```python
+class State(TypedDict, total=False):
+    text: str      # the customer's message
+    phone: str
+    qty: int
+    receipt: str   # from the bank
+    kitchen: str   # the kitchen ticket
+```
+
+### The four steps
+
+Each step is a function that takes the state and returns what changed.
+
+**1. Read the order.** The LLM turns free text into structured data:
+
+```python
+def read_order(state: State) -> dict:
+    order = llm_read_order(state["text"])     # -> {"phone": "9876543210", "qty": 4}
+    say(f"read_order: {order['qty']} chai for {order['phone']}")
+    return order
+```
+
+`llm_read_order` (in [`common.py`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/common.py)) sends one prompt, *"Extract the order. Reply with JSON only"*, and parses the answer. In mock mode it uses a regex instead.
+
+**2. Charge the customer.** This is the step that touches money:
+
+```python
+def charge_upi(state: State) -> dict:
+    amount = state["qty"] * PRICE
+    banner(f"about to charge ₹{amount}")
+    r = shop("/pay", {"order_id": "order-1", "amount": amount})
+    say(f"charge_upi: ₹{amount} -> {r['receipt']}")
+    banner(f"charged ₹{amount} · moving on")
+    return {"receipt": r["receipt"]}
+```
+
+`banner()` prints a line and, if you set `DEMO_PAUSE=8`, waits 8 seconds. That's your window to kill the process.
+
+**3 and 4. Text the receipt, send the order to the kitchen:**
+
+```python
+def send_receipt(state: State) -> dict:
+    shop("/sms", {"to": state["phone"], "text": f"Paid ₹{state['qty'] * PRICE}, receipt {state['receipt']}"})
+    return {}
+
+
+def send_to_kitchen(state: State) -> dict:
+    r = shop("/kitchen", {"order_id": "order-1", "qty": state["qty"]})
+    return {"kitchen": r.get("ticket", "sold out")}
+```
+
+### Wiring it up
+
+```python
+def build(checkpointer):
+    g = StateGraph(State)
+    for node in (read_order, charge_upi, send_receipt, send_to_kitchen):
+        g.add_node(node)
+    g.add_edge(START, "read_order")
+    g.add_edge("read_order", "charge_upi")
+    g.add_edge("charge_upi", "send_receipt")
+    g.add_edge("send_receipt", "send_to_kitchen")
+    g.add_edge("send_to_kitchen", END)
+    return g.compile(checkpointer=checkpointer)
+
+
+graph = build(InMemorySaver())
+graph.invoke({"text": ORDER}, {"configurable": {"thread_id": "order-1"}})
+```
+
+```
+read_order ──> charge_upi(₹80) ──> send_receipt ──> send_to_kitchen
+   (LLM)          (bank)              (SMS)            (kitchen)
+```
+
+Note the `InMemorySaver()`. LangGraph saves the state after every step, and this one saves it to memory. Keep an eye on it.
+
+## Run it
+
+In terminal 2:
+
+**macOS / Linux**
+
+```bash
+MOCK_LLM=1 uv run python normal_agent.py
+```
+
+**Windows (PowerShell)**
+
+```powershell
+$env:MOCK_LLM="1"
+uv run python normal_agent.py
+```
+
+> **Windows:** `NAME=value command` is bash syntax and doesn't work in PowerShell. There you set `$env:NAME="value"` first, and it **stays set for that window** until you close it. So in the same window you only set it once. To unset one: `Remove-Item Env:NAME`.
+
+```
+[pid 2651475] starting fresh
+[pid 2651475] LLM call: read_order('4 chai for 98765 43210')
+[pid 2651475] read_order: 4 chai for 9876543210
+[pid 2651475] ▶ about to charge ₹80
+[pid 2651475] charge_upi: ₹80 -> rcpt-1
+[pid 2651475] ▶ charged ₹80 · moving on
+[pid 2651475] send_receipt: sms sent
+[pid 2651475] send_to_kitchen: kot-1
+[pid 2651475] done · payments made 1 · kitchen kot-1
+```
+
+One payment, one SMS, one kitchen ticket. Ship it?
+
+## Now kill it
+
+Click **reset** on the dashboard. Run it again, this time with the pause:
+
+**macOS / Linux**
+
+```bash
+MOCK_LLM=1 DEMO_PAUSE=8 uv run python normal_agent.py
+```
+
+**Windows (PowerShell)**
+
+```powershell
+$env:MOCK_LLM="1"; $env:DEMO_PAUSE="8"
+uv run python normal_agent.py
+```
+
+When it prints `▶ charged ₹80 · moving on · 8s to kill me…`, kill it from terminal 3. You have 8 seconds:
+
+**macOS / Linux**
+
+```bash
+pkill -9 -f normal_agent.py
+```
+
+**Windows (PowerShell)**
+
+```powershell
+Get-CimInstance Win32_Process -Filter "CommandLine LIKE '%normal_agent.py%'" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
+```
+
+Both find the process by its command line and kill it on the spot. On Windows, `Stop-Process -Force` is the equivalent of `kill -9`. If the one-liner is too much to type in 8 seconds, every line the agent prints starts with its process id, `[pid 12345]`, so `taskkill /F /PID 12345` works too, and so does a bigger `DEMO_PAUSE`.
+
+`kill -9` is a crash, not a shutdown. The process gets no warning and no chance to clean up or save anything. It's what happens when a container runs out of memory, a node is drained, a laptop lid closes or a deploy replaces the pod. Ctrl+C is the polite version, and real failures are rarely polite.
+
+The money has left the customer's account. The receipt never went out, and the kitchen never heard about the order. The customer is waiting.
+
+So we do what anyone would do: run it again, in terminal 2.
+
+**macOS / Linux**
+
+```bash
+MOCK_LLM=1 DEMO_PAUSE=8 uv run python normal_agent.py
+```
+
+**Windows (PowerShell)** (the variables are still set in this window)
+
+```powershell
+uv run python normal_agent.py
+```
+
+```
+[pid 2651475] starting fresh
+[pid 2651475] LLM call: read_order('4 chai for 98765 43210')
+[pid 2651475] read_order: 4 chai for 9876543210
+[pid 2651475] ▶ about to charge ₹80
+[pid 2651475] charge_upi: ₹80 -> rcpt-2
+...
+[pid 2651475] done · payments made 2 · kitchen kot-1
+```
+
+(The pid is different on your machine, and it changes with every run.)
+
+`starting fresh`. It read the order again, which is a second LLM call you pay for, and then **charged the customer again**: `rcpt-2`. The dashboard shows both payments in red, each from a different process.
+
+![Two payments for one order](/blog/images/uploads/chai-paid-twice.webp)
+
+## Why
+
+Everything the agent knew lived in RAM: the parsed order, the fact that `charge_upi` had finished, the receipt. `kill -9` threw all of it away. The new process had no idea an earlier one existed, so it did the only thing it could, which was to start from the top.
+
+Starting from the top is fine for a step like `read_order`, which only costs money and time. It's *not* fine for `charge_upi`, because that step changed something in someone else's system, and that change didn't die with our process.
+
+That's the difference between two kinds of steps:
+
+| Step | Run it twice and… |
+|---|---|
+| `read_order` (LLM) | you pay for tokens twice. Annoying. |
+| `charge_upi` (bank) | the customer pays twice. A support ticket, a refund and a lost customer. |
+| `send_receipt` (SMS) | the customer gets two texts. Confusing. |
+| `send_to_kitchen` | four extra chai nobody paid for. |
+
+## "But my agent framework saves the conversation"
+
+Most agent harnesses (coding agents, chat frameworks) do save the chat history: you can close the window and pick the conversation up again. That's **persistence**. It saves *what was said*.
+
+What we need is **durability**: saving *what was done*, step by step, so that after a crash the agent continues from the exact step instead of starting over, and never repeats something the world already saw.
+
+A saved conversation that ends with *"I'll charge the customer now"* doesn't tell you whether the charge happened.
+
+## What a durable agent has to promise
+
+1. **Resume from the exact step.** After a crash, continue where it stopped, not from the top.
+2. **Side effects happen once.** A charge that went through is never sent again.
+3. **Wait for a person.** Some steps need a human (a bank confirming, a customer choosing, an admin approving), and that wait can take hours. The wait has to survive restarts too.
+4. **Write every step down.** When the customer calls asking *"where's my money?"*, you can answer.
+
+In [part 2](/blog/beyond-the-harness-part-2-four-guarantees-tested-with-kill-9-in-langgraph) we add all four to this agent, in one file. The kill test stays the same, and the result changes: **payments made: 1**.
+
+## If something goes wrong
+
+**`uv: command not found`, or `uv` "is not recognized"**
+The installer added uv to your PATH, but only new terminals see it. Close the terminal and open a new one. On Windows, if the install script is blocked, check that you copied the whole `powershell -ExecutionPolicy ByPass ...` line.
+
+**`uv sync` hangs or fails to download**
+You're probably behind a company proxy. Set it first: `export HTTPS_PROXY=http://proxy:port` (macOS / Linux) or `$env:HTTPS_PROXY="http://proxy:port"` (Windows), or try a different network.
+
+**`can't reach the shop at http://127.0.0.1:8099`**
+The shop isn't running. Start `uv run python shop_mock.py` in terminal 1 and leave it open. All three terminals must be on the same machine: on Windows, don't run the shop in WSL and the agent in PowerShell, or the other way round.
+
+**`[shop] can't use port 8099`**
+Something else is using the port, often an old shop you forgot in another window. Close it, or use another port in **both** terminals:
+
+```bash
+PORT=8199 uv run python shop_mock.py                                       # macOS / Linux, terminal 1
+SHOP_URL=http://127.0.0.1:8199 MOCK_LLM=1 uv run python normal_agent.py    # terminal 2
+```
+
+```powershell
+$env:PORT="8199"; uv run python shop_mock.py                               # Windows, terminal 1
+$env:SHOP_URL="http://127.0.0.1:8199"; uv run python normal_agent.py       # terminal 2
+```
+
+On Windows, Hyper-V and WSL reserve some port ranges, and the error is `WinError 10013`. The same fix works.
+
+**The dashboard shows numbers from an earlier run**
+Click **reset** before each experiment. Restarting the shop also starts it from zero.
+
+**It finished before I could kill it**
+`DEMO_PAUSE=8` wasn't set for that run. On macOS / Linux it goes on the same line as the command. On Windows, check it with `$env:DEMO_PAUSE`; if you opened a new window, set it again.
+
+**I killed it, but the dashboard shows 0 payments**
+You killed it before the charge. Wait for the line that says `charged ₹80 · 8s to kill me…`, then kill it.
+
+**I pressed Ctrl+C instead**
+Ctrl+C is a polite stop, and you'll see a `KeyboardInterrupt` traceback. It shows the same double charge here, but use the kill command to see a real crash.
+
+**`LLM_API_KEY is not set`**
+You left out `MOCK_LLM=1`, so it tried to call a real LLM. Add `MOCK_LLM=1`, or set `LLM_API_KEY` to your key.
+
+**Odd characters like `â‚¹` instead of `₹` (Windows)**
+That's an old console font or code page. Use Windows Terminal. The scripts already print UTF-8.
+
+**Windows Firewall asks about Python**
+The shop only listens on your own machine (`127.0.0.1`), so you can click **Cancel**.
+
+---
+
+*This series accompanies the AI Yatra session "Durable AI Agents" at LSEG Hyderabad, 14 Nov 2026. Code: [been-there-done-that/durable-ai-agents](https://github.com/been-there-done-that/durable-ai-agents).*
