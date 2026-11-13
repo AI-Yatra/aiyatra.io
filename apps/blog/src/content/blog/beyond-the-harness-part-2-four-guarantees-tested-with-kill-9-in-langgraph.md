@@ -20,7 +20,7 @@ series: Building Durable AI Agents
 
 In [part 1](/blog/beyond-the-harness-part-1-persistent-is-not-durable) we built a chai ordering agent, killed it one second after it charged the customer, ran it again, and watched it charge the customer a second time.
 
-In this post we fix it. The result is [`durable_agent.py`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/durable_agent.py): the same agent with four fixes, one for each promise from part 1.
+In this post we fix it. The result is [`durable_agent.py`](https://github.com/AI-Yatra/durable-ai-agents/blob/main/durable_agent.py): the same agent with four fixes, one for each promise from part 1.
 
 | Promise | Fix |
 |---|---|
@@ -29,7 +29,7 @@ In this post we fix it. The result is [`durable_agent.py`](https://github.com/be
 | Wait for a person | `interrupt()`: a saved pause |
 | Write every step down | the checkpoint history |
 
-Code: **https://github.com/been-there-done-that/durable-ai-agents**. Keep the shop running from part 1 (`uv run python shop_mock.py`) with the dashboard open at http://localhost:8099.
+Code: **https://github.com/AI-Yatra/durable-ai-agents**. Keep the shop running from part 1 (`uv run python shop_mock.py`) with the dashboard open at http://localhost:8099.
 
 As in part 1, commands that differ are shown for **macOS / Linux** and for **Windows (PowerShell)**. In PowerShell, `$env:NAME="value"` stays set for the whole window, which matters for one of the experiments below.
 
@@ -287,7 +287,7 @@ read_order -> charge_upi -> check_payment --pending--> (wait for the bank)
                                                                                  (above ₹2,000: wait for an admin)
 ```
 
-LangGraph draws the same graph for you: `uv run python durable_agent.py graph` saves `durable_agent_graph.png` and opens it, without touching `durable.db` or placing an order (it needs internet; the picture comes from mermaid.ink). Solid arrows always happen; dotted ones are the branches, the `add_conditional_edges` calls in [`build()`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/durable_agent.py):
+LangGraph draws the same graph for you: `uv run python durable_agent.py graph` saves `durable_agent_graph.png` and opens it, without touching `durable.db` or placing an order (it needs internet; the picture comes from mermaid.ink). Solid arrows always happen; dotted ones are the branches, the `add_conditional_edges` calls in [`build()`](https://github.com/AI-Yatra/durable-ai-agents/blob/main/durable_agent.py):
 
 ![The durable agent's graph, drawn by LangGraph](/blog/images/uploads/chai-graph-durable.webp)
 
@@ -477,4 +477,4 @@ The local shop from terminal 1 is still running. Stop it with Ctrl+C.
 
 ---
 
-*This series accompanies the AI Yatra session "Durable AI Agents" at LSEG Hyderabad, 14 Nov 2026. Code: [been-there-done-that/durable-ai-agents](https://github.com/been-there-done-that/durable-ai-agents).*
+*This series accompanies the AI Yatra session "Durable AI Agents" at LSEG Hyderabad, 14 Nov 2026. Code: [AI-Yatra/durable-ai-agents](https://github.com/AI-Yatra/durable-ai-agents).*
