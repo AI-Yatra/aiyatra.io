@@ -38,7 +38,7 @@ As in part 1, commands that differ are shown for **macOS / Linux** and for **Win
 The normal agent saved its state after every step, to memory:
 
 ```python
-graph = build(InMemorySaver())
+graph = build_graph(InMemorySaver())
 ```
 
 The durable one saves it to a SQLite file:
@@ -108,7 +108,7 @@ def read_order(state: State) -> dict:
 def charge_upi(state: State) -> dict:
     amount = state["qty"] * PRICE
     key = state["pay_key"]                      # the saved key, the same on every re-run
-    r = shop("/pay", {"order_id": ORDER_ID, "amount": amount, "key": key})
+    r = shop("/pay", {"order_id": ORDER_ID, "phone": state["phone"], "amount": amount, "key": key})
     ...
 ```
 
@@ -286,6 +286,12 @@ read_order -> charge_upi -> check_payment --pending--> (wait for the bank)
                                                                      '-- refund / no reply -> refund
                                                                                  (above ₹2,000: wait for an admin)
 ```
+
+LangGraph draws the same graph for you: `uv run python durable_agent.py graph` saves `durable_agent_graph.png` and opens it, without touching `durable.db` or placing an order (it needs internet; the picture comes from mermaid.ink). Solid arrows always happen; dotted ones are the branches, the `add_conditional_edges` calls in [`build()`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/durable_agent.py):
+
+![The durable agent's graph, drawn by LangGraph](/blog/images/uploads/chai-graph-durable.webp)
+
+Compare it with part 1's straight line. The happy path is the same four steps; everything else is what happens when the world doesn't cooperate.
 
 ### Try it
 

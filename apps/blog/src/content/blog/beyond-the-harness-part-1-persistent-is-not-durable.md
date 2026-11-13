@@ -78,7 +78,7 @@ Leave it running and open **http://localhost:8099**. The dashboard counts everyt
 
 We build it with [LangGraph](https://langchain-ai.github.io/langgraph/), because an agent is a loop of steps with some state passed between them, and LangGraph makes those steps explicit. That will matter in part 2: you can only resume from "the exact step" if your code *has* steps.
 
-The whole agent is [`normal_agent.py`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/normal_agent.py). It's 70 lines.
+The whole agent is [`normal_agent.py`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/normal_agent.py). It's about 100 lines, and half of those are comments explaining each step.
 
 ### The state
 
@@ -86,11 +86,17 @@ Everything the agent knows about this order:
 
 ```python
 class State(TypedDict, total=False):
-    text: str      # the customer's message
-    phone: str
-    qty: int
-    receipt: str   # from the bank
-    kitchen: str   # the kitchen ticket
+    text: str     # the customer's message, as they typed it
+    phone: str    # who to send the receipt to
+    qty: int      # how many chai
+    receipt: str  # payment receipt number from the shop
+    kitchen: str  # kitchen ticket, or "sold out"
+```
+
+And which order this is. Running the same order again is exactly the bug we are about to show; a new order needs a new id (`ORDER_ID=order-2`):
+
+```python
+ORDER_ID = os.environ.get("ORDER_ID", "order-1")
 ```
 
 ### The four steps
@@ -114,11 +120,14 @@ def read_order(state: State) -> dict:
 def charge_upi(state: State) -> dict:
     amount = state["qty"] * PRICE
     banner(f"about to charge ₹{amount}")
-    r = shop("/pay", {"order_id": "order-1", "amount": amount})
-    say(f"charge_upi: ₹{amount} -> {r['receipt']}")
+    response = shop("/pay", {"order_id": ORDER_ID, "phone": state["phone"], "amount": amount})
+    say(f"charge_upi: ₹{amount} -> {response['receipt']}")
+    crash_point("after_pay")  # the tests kill the agent here; it does nothing unless CRASH_AT=after_pay
     banner(f"charged ₹{amount} · moving on")
-    return {"receipt": r["receipt"]}
+    return {"receipt": response["receipt"]}
 ```
+
+The bank gets the order id and the customer's phone. That's how its dashboard can tell "this customer paid for this order again" from "a different order".
 
 `banner()` prints a line and, if you set `DEMO_PAUSE=8`, waits 8 seconds. That's your window to kill the process.
 
@@ -126,38 +135,47 @@ def charge_upi(state: State) -> dict:
 
 ```python
 def send_receipt(state: State) -> dict:
-    shop("/sms", {"to": state["phone"], "text": f"Paid ₹{state['qty'] * PRICE}, receipt {state['receipt']}"})
+    amount = state["qty"] * PRICE
+    shop("/sms", {"to": state["phone"], "text": f"Paid ₹{amount}, receipt {state['receipt']}"})
     return {}
 
 
 def send_to_kitchen(state: State) -> dict:
-    r = shop("/kitchen", {"order_id": "order-1", "qty": state["qty"]})
-    return {"kitchen": r.get("ticket", "sold out")}
+    response = shop("/kitchen", {"order_id": ORDER_ID, "qty": state["qty"]})
+    return {"kitchen": response.get("ticket", "sold out")}
 ```
 
 ### Wiring it up
 
 ```python
-def build(checkpointer):
-    g = StateGraph(State)
-    for node in (read_order, charge_upi, send_receipt, send_to_kitchen):
-        g.add_node(node)
-    g.add_edge(START, "read_order")
-    g.add_edge("read_order", "charge_upi")
-    g.add_edge("charge_upi", "send_receipt")
-    g.add_edge("send_receipt", "send_to_kitchen")
-    g.add_edge("send_to_kitchen", END)
-    return g.compile(checkpointer=checkpointer)
+def build_graph(checkpointer):
+    builder = StateGraph(State)
+
+    # The four steps.
+    builder.add_node("read_order", read_order)
+    builder.add_node("charge_upi", charge_upi)
+    builder.add_node("send_receipt", send_receipt)
+    builder.add_node("send_to_kitchen", send_to_kitchen)
+
+    # Run them one after another, in a straight line.
+    builder.add_edge(START, "read_order")
+    builder.add_edge("read_order", "charge_upi")
+    builder.add_edge("charge_upi", "send_receipt")
+    builder.add_edge("send_receipt", "send_to_kitchen")
+    builder.add_edge("send_to_kitchen", END)
+
+    return builder.compile(checkpointer=checkpointer)
 
 
-graph = build(InMemorySaver())
-graph.invoke({"text": ORDER}, {"configurable": {"thread_id": "order-1"}})
+graph = build_graph(InMemorySaver())
+config = {"configurable": {"thread_id": ORDER_ID}}
+prompt = "4 chai for me my number is 98765 43210"  # the customer's message
+graph.invoke({"text": prompt}, config)
 ```
 
-```
-read_order ──> charge_upi(₹80) ──> send_receipt ──> send_to_kitchen
-   (LLM)          (bank)              (SMS)            (kitchen)
-```
+LangGraph can draw the graph it built. Run `uv run python normal_agent.py graph` and it saves `normal_agent_graph.png` and opens it, without placing an order (it needs internet: the picture is drawn by the mermaid.ink website):
+
+![The normal agent: four steps in a straight line](/blog/images/uploads/chai-graph-normal.webp)
 
 Note the `InMemorySaver()`. LangGraph saves the state after every step, and this one saves it to memory. Keep an eye on it.
 
@@ -181,8 +199,8 @@ uv run python normal_agent.py
 > **Windows:** `NAME=value command` is bash syntax and doesn't work in PowerShell. There you set `$env:NAME="value"` first, and it **stays set for that window** until you close it. So in the same window you only set it once. To unset one: `Remove-Item Env:NAME`.
 
 ```
-[pid 2651475] starting fresh
-[pid 2651475] LLM call: read_order('4 chai for 98765 43210')
+[pid 2651475] starting fresh · order-1 · '4 chai for me my number is 98765 43210'
+[pid 2651475] LLM call: read_order('4 chai for me my number is 98765 43210')
 [pid 2651475] read_order: 4 chai for 9876543210
 [pid 2651475] ▶ about to charge ₹80
 [pid 2651475] charge_upi: ₹80 -> rcpt-1
@@ -246,8 +264,8 @@ uv run python normal_agent.py
 ```
 
 ```
-[pid 2651475] starting fresh
-[pid 2651475] LLM call: read_order('4 chai for 98765 43210')
+[pid 2651475] starting fresh · order-1 · '4 chai for me my number is 98765 43210'
+[pid 2651475] LLM call: read_order('4 chai for me my number is 98765 43210')
 [pid 2651475] read_order: 4 chai for 9876543210
 [pid 2651475] ▶ about to charge ₹80
 [pid 2651475] charge_upi: ₹80 -> rcpt-2
@@ -257,7 +275,7 @@ uv run python normal_agent.py
 
 (The pid is different on your machine, and it changes with every run.)
 
-`starting fresh`. It read the order again, which is a second LLM call you pay for, and then **charged the customer again**: `rcpt-2`. The dashboard shows both payments in red, each from a different process.
+`starting fresh`. It read the order again, which is a second LLM call you pay for, and then **charged the customer again**: `rcpt-2`. The dashboard shows both payments in red, each from a different process, and the shop's terminal says it plainly: `order-1 (9876543210) is now paid 2×`.
 
 ![Two payments for one order](/blog/images/uploads/chai-paid-twice.webp)
 
