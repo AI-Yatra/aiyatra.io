@@ -428,7 +428,7 @@ A sensible path: start with checkpoints and idempotency keys. That fixes most of
 - **Kill a worker during the refund** with `DEMO_PAUSE`, and check the refund still happens once (`order-2:refund` is its key).
 - **Run three workers** and kill two.
 
-Or pick one of the 100 problems from the session's hackathon: every one of them has to survive a `kill -9`.
+Or pick one of the [100 problems from the session's hackathon](https://github.com/AI-Yatra/durable-ai-agents/blob/main/hackathon/README.md): every one of them has to survive a `kill -9`.
 
 ## If something goes wrong
 
