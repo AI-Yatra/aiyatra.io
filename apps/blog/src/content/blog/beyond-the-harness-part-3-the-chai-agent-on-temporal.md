@@ -22,7 +22,7 @@ In [part 2](/blog/beyond-the-harness-part-2-four-guarantees-tested-with-kill-9-i
 
 But read that again: *run it again.* After every crash, somebody restarted it. Nothing noticed that the run had died. At 3 AM, nobody would.
 
-In this post we run the same agent on [Temporal](https://temporal.io), a durable execution engine. We start two workers, kill the one that's charging the customer, and **don't touch anything**. The other worker finishes the order, and the customer pays once.
+In this post we run the same agent on [Temporal](https://temporal.io), a durable execution engine. We start two workers, kill the one that's charging the customer, and **don't touch anything**. The other worker finishes the order, and the customer pays once. Then we give it part 2's harder cases (a pending payment, a sold-out kitchen, a big refund) and kill the workers while it waits for people.
 
 It's free and runs on your laptop. No account is needed.
 
@@ -72,7 +72,7 @@ Keep the shop running from part 1 (`uv run python shop_mock.py`, dashboard at ht
 
 ### Activities: the steps that touch the world
 
-These are the same four steps as before, with decorators:
+These are the same steps as `durable_agent.py` in part 2, with decorators: `read_order`, `charge_upi`, `check_payment`, `tell_customer`, `check_stock`, `ask_customer`, `send_receipt`, `send_to_kitchen` and `refund`. Three of them:
 
 ```python
 @activity.defn
@@ -81,9 +81,9 @@ async def read_order(text: str) -> dict:
 
 
 @activity.defn
-async def charge_upi(order_id: str, amount: int, key: str) -> str:
-    r = shop("/pay", {"order_id": order_id, "amount": amount, "key": key})
-    say(f"charge_upi: ₹{amount} -> {r['receipt']}" + ("  · bank: same key, not charged again" if r["duplicate"] else ""))
+async def charge_upi(order_id: str, phone: str, amount: int, key: str) -> str:
+    r = shop("/pay", {"order_id": order_id, "phone": phone, "amount": amount, "key": key})
+    say(f"charge_upi: ₹{amount} -> {r['receipt']} ({r['status']})" + ("  · bank: same key, not charged again" if r["duplicate"] else ""))
     pause = int(os.environ.get("DEMO_PAUSE", "0"))
     for left in range(pause, 0, -1):          # the window to kill this worker
         activity.heartbeat(left)              # "I'm still alive"
@@ -92,15 +92,12 @@ async def charge_upi(order_id: str, amount: int, key: str) -> str:
 
 
 @activity.defn
-async def send_receipt(phone: str, text: str, key: str) -> None:
-    shop("/sms", {"to": phone, "text": text, "key": key})
-
-
-@activity.defn
-async def send_to_kitchen(order_id: str, qty: int, key: str) -> str:
-    r = shop("/kitchen", {"order_id": order_id, "qty": qty, "key": key})
+async def send_to_kitchen(order_id: str, qty: int) -> str:
+    r = shop("/kitchen", {"order_id": order_id, "qty": qty, "key": f"{order_id}:kitchen"})
     return r.get("ticket", "sold out")
 ```
+
+The rest are in [`temporal_agent.py`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/temporal_agent.py), and each one that changes something sends a key built from the order id (`order-1:sms:receipt`, `order-1:refund`, …).
 
 Note the **keys** again. Temporal retries an activity that died in the middle, which is the same *at-least-once* problem from part 2. Temporal doesn't make the bank idempotent. You still send a key, and the bank still remembers it.
 
@@ -119,36 +116,67 @@ While `charge_upi` runs, it calls `activity.heartbeat()` every second. When a `k
 ### The workflow: the agent loop
 
 ```python
-@workflow.defn
-class ChaiOrder:
-    @workflow.run
-    async def run(self, text: str) -> dict:
-        order_id = workflow.info().workflow_id
-        order = await workflow.execute_activity(read_order, text, **STEP)
-        amount = order["qty"] * PRICE
-        receipt = await workflow.execute_activity(charge_upi, args=[order_id, amount, f"{order_id}:charge"], **STEP)
-        await workflow.execute_activity(send_receipt, args=[order["phone"], f"Paid ₹{amount}, receipt {receipt}", f"{order_id}:sms"], **STEP)
-        kitchen = await workflow.execute_activity(send_to_kitchen, args=[order_id, order["qty"], f"{order_id}:kot"], **STEP)
-        return {"receipt": receipt, "kitchen": kitchen}
+@workflow.run
+async def run(self, job: dict) -> dict:
+    order_id = workflow.info().workflow_id
+    step = workflow.execute_activity
+
+    order = await step(read_order, job["text"], **STEP)
+    phone, qty = order["phone"], order["qty"]
+    amount = qty * PRICE
+    receipt = await step(charge_upi, args=[order_id, phone, amount, f"{order_id}:charge"], **STEP)
+
+    # Payment pending? Not "retry" (a new payment) and not "failed" (the money may still land). Wait.
+    payment = await step(check_payment, receipt, **STEP)
+    if payment == "pending":
+        await self.wait_for("bank", receipt=receipt)
+        payment = await step(check_payment, receipt, **STEP)
+    if payment == "reversed":
+        await step(tell_customer, args=[order_id, phone], **STEP)
+        return {"payment": payment, "receipt": receipt}
+
+    # Sold out? Ask the customer. No reply in time counts as "refund".
+    item = "chai"
+    while not await step(check_stock, qty, **STEP):
+        await step(ask_customer, args=[order_id, phone], **STEP)
+        choice = await self.wait_for("customer", timeout=timedelta(seconds=job["customer_timeout"]))
+        if choice == "wait":
+            continue
+        if choice == "coffee":
+            item = "coffee"
+            break
+        if amount > job["refund_auto_limit"] and await self.wait_for("admin", refund=amount) != "approve":
+            return {"payment": payment, "receipt": receipt, "refund": "rejected"}
+        refunded = await step(refund, args=[order_id, phone, amount, receipt], **STEP)
+        return {"payment": payment, "receipt": receipt, "refund": refunded}
+
+    await step(send_receipt, args=[order_id, phone, amount, receipt], **STEP)
+    kitchen = "coffee" if item == "coffee" else await step(send_to_kitchen, args=[order_id, qty], **STEP)
+    return {"payment": payment, "receipt": receipt, "kitchen": kitchen}
 ```
 
-It reads like the normal agent from part 1. That's the point.
+The happy path is the first four lines, and it reads like the normal agent from part 1. The rest is part 2's branches, written as plain `if` and `while` instead of graph edges.
 
-There's one rule for workflow code: **it must be deterministic.** When a worker picks up a run, it replays the workflow function from the top, and each `execute_activity` that already finished returns its *recorded* result from the history instead of running again. That's how `read_order` (and its LLM call) is never repeated. So no random numbers, clocks or network calls directly in the workflow: those belong in activities. The idempotency key here is built from the workflow id, which is the same on every replay.
+There's one rule for workflow code: **it must be deterministic.** When a worker picks up a run, it replays the workflow function from the top, and each `execute_activity` that already finished returns its *recorded* result from the history instead of running again. That's how `read_order` (and its LLM call) is never repeated. So no random numbers, clocks, network calls or environment variables directly in the workflow: those belong in activities. That's why the refund limit and the customer's timeout come in with the order (`job`) instead of being read from `os.environ` inside `run`. And the idempotency key is built from the workflow id, which is the same on every replay.
+
+There's no graph object to draw here, since the workflow is plain Python, so `uv run python temporal_agent.py graph` draws a hand-written picture of the same flow:
+
+![The Temporal workflow: the same steps and waits as the durable agent](/blog/images/uploads/chai-graph-temporal.webp)
 
 ### Workers and starting an order
 
 ```python
 async def worker(name: str):
     client = await Client.connect("127.0.0.1:7233")
-    w = Worker(client, task_queue="chai", workflows=[ChaiOrder],
-               activities=[read_order, charge_upi, send_receipt, send_to_kitchen])
+    w = Worker(client, task_queue="chai", workflows=[ChaiOrder], activities=ACTIVITIES)
     await w.run()
 
 
 async def start(order_id: str):
     client = await Client.connect("127.0.0.1:7233")
-    result = await client.execute_workflow(ChaiOrder.run, ORDER, id=order_id, task_queue="chai")
+    job = {"text": ORDER, "refund_auto_limit": REFUND_AUTO_LIMIT, "customer_timeout": CUSTOMER_TIMEOUT}
+    handle = await client.start_workflow(ChaiOrder.run, job, id=order_id, task_queue="chai")
+    await report(handle)   # returns when the order is done, or waiting for somebody
 ```
 
 The workflow id is the order id. Temporal won't run two live workflows with the same id, so two people "starting" order-1 can't charge twice either.
@@ -196,7 +224,7 @@ One worker picks it up (each line also starts with `[pid …]`; it's left out he
 
 ```
 [worker-1] about to charge ₹80 · key order-1:charge
-charge_upi: ₹80 -> rcpt-1
+charge_upi: ₹80 -> rcpt-1 (success)
 ▶ charged ₹80 · 8s to kill me…
 ```
 
@@ -220,7 +248,9 @@ Now **type nothing.** About 3 seconds later, in the other terminal:
 
 ```
 [worker-2] about to charge ₹80 · key order-1:charge
-charge_upi: ₹80 -> rcpt-1  · bank: same key, not charged again
+charge_upi: ₹80 -> rcpt-1 (success)  · bank: same key, not charged again
+check_payment: rcpt-1 is success
+check_stock: 20 chai left, need 4
 send_receipt: sms sent
 send_to_kitchen: kot-1
 ```
@@ -228,7 +258,7 @@ send_to_kitchen: kot-1
 And in terminal C:
 
 ```
-done · {'receipt': 'rcpt-1', 'kitchen': 'kot-1'} · payments made 1
+done · payment success · kitchen kot-1 · refund - · payments made 1
 ```
 
 What happened, step by step:
@@ -238,7 +268,7 @@ What happened, step by step:
 3. The heartbeats stopped. After 3 seconds, the server failed that attempt and scheduled a retry.
 4. Worker-2 picked the run up and replayed the workflow. `read_order` came back from history, so there was **no second LLM call**.
 5. Worker-2 retried `charge_upi` with the same key, `order-1:charge`. The bank said *already paid*.
-6. Worker-2 sent the receipt and the kitchen order. Done.
+6. Worker-2 checked the payment and the stock, then sent the receipt and the kitchen order. Done.
 
 Nobody restarted anything.
 
@@ -251,6 +281,120 @@ The Timeline tab shows the same thing over time: the `charge_upi` bar starts red
 ![Temporal timeline](/blog/images/uploads/chai-temporal-timeline.webp)
 
 On the shop dashboard, the timeline shows a `worker-1` block that stops after the charge, and a `worker-2` block that finishes the order.
+
+## Waiting for people
+
+Part 2's agent paused for the bank, the customer and an admin with `interrupt()`, and somebody ran the script again with the answer. On Temporal, a wait is two small pieces of the workflow class:
+
+```python
+@workflow.signal
+def answer(self, who: str, value: str) -> None:      # the answer comes in here
+    if self._waiting and self._waiting["waiting_for"] == who:
+        self._answers[who] = value
+
+async def wait_for(self, who, timeout=None, **details):
+    self._waiting = {"waiting_for": who, **details}
+    try:
+        await workflow.wait_condition(lambda: who in self._answers, timeout=timeout)
+        return self._answers.pop(who)
+    except asyncio.TimeoutError:
+        return None                                   # nobody answered in time
+    finally:
+        self._waiting = None
+```
+
+A **signal** is a message sent to a running workflow, and Temporal writes it into the history like everything else. `wait_condition` pauses the workflow until the answer is there. While it waits, no worker is busy and no process has to stay up: the wait lives on the server. A `@workflow.query` called `waiting` lets the command line ask "who are you waiting for?" before it answers.
+
+The `timeout` is a **durable timer**: the server keeps the clock. If the customer never replies, the order refunds itself after `CUSTOMER_TIMEOUT` seconds (default 2 hours), even if every worker was restarted in between. In part 2, someone had to run `customer no-reply`.
+
+### Try it
+
+Keep one worker running (terminal A from above, or `uv run python temporal_agent.py worker worker-1`) and reset the dashboard. Then tell the bank to leave payments pending and place a new order:
+
+**macOS / Linux**
+
+```bash
+curl -X POST http://127.0.0.1:8099/mode -d '{"pending": true}'
+MOCK_LLM=1 uv run python temporal_agent.py start order-2
+```
+
+**Windows (PowerShell)**
+
+```powershell
+Invoke-RestMethod -Method Post http://127.0.0.1:8099/mode -Body '{"pending": true}'
+$env:MOCK_LLM="1"
+uv run python temporal_agent.py start order-2
+```
+
+This time `start` doesn't sit there. It returns as soon as the order is waiting:
+
+```
+placing order-2: '4 chai for 98765 43210'
+⏸ paused · waiting for the bank · saved on the Temporal server · next: python temporal_agent.py bank success|reversed order-2
+```
+
+Now make it harder. The chai runs out while we wait, then the bank says the money landed (the commands are the same on every OS):
+
+```bash
+uv run python temporal_agent.py stock 0
+uv run python temporal_agent.py bank success order-2
+```
+
+```
+⏸ paused · waiting for the customer · saved on the Temporal server · next: python temporal_agent.py customer wait|coffee|refund|no-reply order-2
+```
+
+The customer has been asked by SMS: wait, coffee or refund. Before answering, **kill the worker** (Ctrl+C is fine here, or the `kill -9` from above). Nothing is running now. Try to answer anyway:
+
+```bash
+uv run python temporal_agent.py customer refund order-2
+```
+
+```
+can't ask order-2 who it is waiting for (Timeout expired). Is there such an order, and is a worker running?
+```
+
+Nothing was lost; there's just nobody to hand the answer to. Start a worker (any name; `worker-2` is fine) and answer again:
+
+```bash
+uv run python temporal_agent.py customer refund order-2
+```
+
+```
+done · payment success · kitchen - · refund rf-1 · payments made 1
+```
+
+The new worker had never seen this order. It replayed the history, found the workflow waiting for the customer, took the answer and refunded once.
+
+**The record.** `audit` reads every step back from Temporal's history:
+
+```bash
+uv run python temporal_agent.py audit order-2
+```
+
+```
+Fri 14:57:15  read_order       {"phone": "9876543210", "qty": 4}
+Fri 14:57:15  charge_upi       "rcpt-1"
+Fri 14:57:15  check_payment    "pending"
+Fri 14:57:40  ⏸ bank           answered success
+Fri 14:57:40  check_payment    "success"
+Fri 14:57:40  check_stock      false
+Fri 14:57:40  ask_customer
+Fri 14:58:05  ⏸ customer       answered refund
+Fri 14:58:05  refund           "rf-1"
+```
+
+The same history is in the UI at http://localhost:8233, with the signals as their own events.
+
+**More to try:**
+
+- `customer wait` (still sold out: asked again), then `uv run python temporal_agent.py stock 20` and `customer wait` once more: the chai is made.
+- `customer coffee`: a receipt, no kitchen ticket.
+- `bank reversed` instead of `bank success`: one SMS, no kitchen, no refund needed.
+- Let the timer do it: start an order with the stock at 0 and `CUSTOMER_TIMEOUT=30` (`$env:CUSTOMER_TIMEOUT="30"` on Windows), answer nothing, and watch the refund appear on the dashboard 30 seconds later.
+- A big order: `ORDER="200 chai for 98765 43210"` (`$env:ORDER=...`) is ₹4,000, above the ₹2,000 limit, so `customer refund` waits for `admin approve` (or `admin reject`).
+
+Turn pending mode off again when you're done: click **reset** on the dashboard.
 
 ## Docker version
 
@@ -271,7 +415,8 @@ docker kill worker-1         # or worker-2, whichever printed "charged ₹80"
 | Resume from the exact step | ✓ the checkpoint | ✓ the event history |
 | Side effects once | your idempotency keys | your idempotency keys |
 | Wait for a person | `interrupt()` + `Command(resume=…)` | signals + `workflow.wait_condition`, durable timers |
-| Write every step down | `get_state_history()` | event history + UI |
+| Write every step down | `get_state_history()` → `audit` | event history → `audit` + UI |
+| Nobody answers in time | someone runs `customer no-reply` | a durable timer refunds by itself |
 | Someone notices a dead run | **you** (restart it) | **the engine** |
 | What you run | a SQLite or Postgres file | a server + workers |
 
@@ -279,11 +424,9 @@ A sensible path: start with checkpoints and idempotency keys. That fixes most of
 
 ## Try next
 
-The Temporal agent here does only the happy path. The pending-payment and sold-out flow from part 2 is a good exercise:
-
-- Wait for the bank with a **signal**: `@workflow.signal def bank_settled(self, outcome)` plus `await workflow.wait_condition(lambda: self.outcome)`.
-- Give the customer 2 hours with a **durable timer**: `await workflow.wait_condition(..., timeout=timedelta(hours=2))`. It survives worker restarts, and the server keeps the clock.
-- Kill the workers while they wait, and check the wait is still there.
+- **Make WAIT mean 10 minutes.** The SMS promises it, but `customer wait` just checks the stock again straight away. Add `await workflow.sleep(timedelta(minutes=10))` before the check: another durable timer.
+- **Kill a worker during the refund** with `DEMO_PAUSE`, and check the refund still happens once (`order-2:refund` is its key).
+- **Run three workers** and kill two.
 
 Or pick one of the 100 problems from the session's hackathon: every one of them has to survive a `kill -9`.
 
@@ -297,8 +440,17 @@ The server isn't up yet. Check that `docker compose --profile temporal up -d tem
 **`order-1 is already running`**
 An earlier order-1 hasn't finished, often because no worker was running when you started it. Start a worker and it finishes, or use a new id: `start order-2`. You can also cancel it in the UI.
 
-**`start order-1` just sits there**
-No worker is running, or the workers are on a different task queue. Each worker should print `polling task queue 'chai'`. If you set `TASK_QUEUE` in one terminal, set the same value in all of them.
+**`start order-1` says `no worker is answering`**
+No worker is running, or the workers are on a different task queue. Each worker should print `polling task queue 'chai'`. If you set `TASK_QUEUE` in one terminal, set the same value in all of them. The order is safe on the server: start a worker and it carries on.
+
+**`nobody is waiting for the customer right now`**
+The order isn't at that step. It may be waiting for someone else (the last `⏸ paused` line says who), or already done: check with `audit`.
+
+**`can't ask order-2 who it is waiting for`**
+No worker is running (start one and answer again), or there's no order with that id on this server.
+
+**An old order fails with a "nondeterminism" error in the UI**
+It was started by an older version of `temporal_agent.py`, before this post's changes, and the new code can't replay it. Terminate it in the UI, or restart `temporal server start-dev` for a clean slate, and use a new order id.
 
 **Nobody picked up the order after the kill**
 - The other worker isn't running. Two workers are the point of this demo.
