@@ -24,7 +24,7 @@ That's the whole agent. It works. Then the process dies one second after the cha
 
 This series is about that second. In this post we build the agent and break it. [Part 2](/blog/beyond-the-harness-part-2-four-guarantees-tested-with-kill-9-in-langgraph) makes it durable, and [part 3](/blog/beyond-the-harness-part-3-the-chai-agent-on-temporal) runs it on Temporal so that nobody even has to restart it.
 
-All the code is here: **https://github.com/been-there-done-that/durable-ai-agents**
+All the code is here: **https://github.com/AI-Yatra/durable-ai-agents**
 
 ## What you need
 
@@ -55,7 +55,7 @@ Then **close the terminal and open a new one**, so it finds `uv`. Check with `uv
 Get the code (the same on every OS):
 
 ```bash
-git clone https://github.com/been-there-done-that/durable-ai-agents
+git clone https://github.com/AI-Yatra/durable-ai-agents
 cd durable-ai-agents
 uv sync
 ```
@@ -78,7 +78,7 @@ Leave it running and open **http://localhost:8099**. The dashboard counts everyt
 
 We build it with [LangGraph](https://langchain-ai.github.io/langgraph/), because an agent is a loop of steps with some state passed between them, and LangGraph makes those steps explicit. That will matter in part 2: you can only resume from "the exact step" if your code *has* steps.
 
-The whole agent is [`normal_agent.py`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/normal_agent.py). It's about 100 lines, and half of those are comments explaining each step.
+The whole agent is [`normal_agent.py`](https://github.com/AI-Yatra/durable-ai-agents/blob/main/normal_agent.py). It's about 100 lines, and half of those are comments explaining each step.
 
 ### The state
 
@@ -112,7 +112,7 @@ def read_order(state: State) -> dict:
     return order
 ```
 
-`llm_read_order` (in [`common.py`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/common.py)) sends one prompt, *"Extract the order. Reply with JSON only"*, and parses the answer. In mock mode it uses a regex instead.
+`llm_read_order` (in [`common.py`](https://github.com/AI-Yatra/durable-ai-agents/blob/main/common.py)) sends one prompt, *"Extract the order. Reply with JSON only"*, and parses the answer. In mock mode it uses a regex instead.
 
 **2. Charge the customer.** This is the step that touches money:
 
@@ -360,4 +360,4 @@ The shop only listens on your own machine (`127.0.0.1`), so you can click **Canc
 
 ---
 
-*This series accompanies the AI Yatra session "Durable AI Agents" at LSEG Hyderabad, 14 Nov 2026. Code: [been-there-done-that/durable-ai-agents](https://github.com/been-there-done-that/durable-ai-agents).*
+*This series accompanies the AI Yatra session "Durable AI Agents" at LSEG Hyderabad, 14 Nov 2026. Code: [AI-Yatra/durable-ai-agents](https://github.com/AI-Yatra/durable-ai-agents).*

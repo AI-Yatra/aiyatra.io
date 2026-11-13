@@ -26,7 +26,7 @@ In this post we run the same agent on [Temporal](https://temporal.io), a durable
 
 It's free and runs on your laptop. No account is needed.
 
-Code: **https://github.com/been-there-done-that/durable-ai-agents**, file [`temporal_agent.py`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/temporal_agent.py).
+Code: **https://github.com/AI-Yatra/durable-ai-agents**, file [`temporal_agent.py`](https://github.com/AI-Yatra/durable-ai-agents/blob/main/temporal_agent.py).
 
 ## Restarting a process isn't the same as finishing the work
 
@@ -97,7 +97,7 @@ async def send_to_kitchen(order_id: str, qty: int) -> str:
     return r.get("ticket", "sold out")
 ```
 
-The rest are in [`temporal_agent.py`](https://github.com/been-there-done-that/durable-ai-agents/blob/main/temporal_agent.py), and each one that changes something sends a key built from the order id (`order-1:sms:receipt`, `order-1:refund`, …).
+The rest are in [`temporal_agent.py`](https://github.com/AI-Yatra/durable-ai-agents/blob/main/temporal_agent.py), and each one that changes something sends a key built from the order id (`order-1:sms:receipt`, `order-1:refund`, …).
 
 Note the **keys** again. Temporal retries an activity that died in the middle, which is the same *at-least-once* problem from part 2. Temporal doesn't make the bank idempotent. You still send a key, and the bank still remembers it.
 
@@ -468,4 +468,4 @@ Inside Docker, the containers talk to each other by name (`shop`, `temporal`). S
 
 ---
 
-*This series accompanies the AI Yatra session "Durable AI Agents" at LSEG Hyderabad, 14 Nov 2026. Code: [been-there-done-that/durable-ai-agents](https://github.com/been-there-done-that/durable-ai-agents).*
+*This series accompanies the AI Yatra session "Durable AI Agents" at LSEG Hyderabad, 14 Nov 2026. Code: [AI-Yatra/durable-ai-agents](https://github.com/AI-Yatra/durable-ai-agents).*
