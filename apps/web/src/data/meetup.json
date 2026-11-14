@@ -1,23 +1,49 @@
 {
-	"syncedAt": "2026-11-13T10:04:59.235Z",
+	"syncedAt": "2026-11-14T22:37:20.812Z",
 	"source": "https://www.meetup.com/aiyatra/events/",
 	"group": {
-		"members": 8138,
+		"members": 8222,
 		"rating": 4.65,
-		"ratingsCount": 184,
-		"pastEvents": 18
+		"ratingsCount": 191,
+		"pastEvents": 19
 	},
 	"events": [
+		{
+			"id": "317425521",
+			"title": "LLM Observability: From Pre-Training to Production",
+			"url": "https://www.meetup.com/aiyatra/events/317425521/",
+			"start": "2026-11-28T09:00:00+05:30",
+			"end": "2026-11-28T12:30:00+05:30",
+			"going": 47,
+			"photo": "https://secure.meetupstatic.com/photos/event/2/0/e/f/highres_537128431.jpeg",
+			"online": false,
+			"status": "ACTIVE",
+			"formUrl": "https://forms.gle/QqPNKqavEGK7phjG9",
+			"summary": "About the event Traditional monitoring tracks infrastructure health, but it often misses failures unique to LLMs. Models can experience training instability, reward hacking, inference degradation, or hallucinations while conventional dashboards continue to show everything as…"
+		},
+		{
+			"id": "317425727",
+			"title": "React Hyderabad UTSAVAM",
+			"url": "https://www.meetup.com/aiyatra/events/317425727/",
+			"start": "2026-11-21T09:00:00+05:30",
+			"end": "2026-11-21T17:00:00+05:30",
+			"going": 42,
+			"photo": "https://secure.meetupstatic.com/photos/event/2/2/7/b/highres_537128827.jpeg",
+			"online": false,
+			"status": "ACTIVE",
+			"formUrl": null,
+			"summary": "Celebrating 1 Year of React Hyderabad Join us for UTSAVAM 2026, React Hyderabad's first-anniversary celebration, bringing together 400–500 developers, students, tech enthusiasts, industry leaders, and innovators for a full-day technology experience."
+		},
 		{
 			"id": "317217848",
 			"title": "Beyond the Harness: Engineering Durable AI Agents on Your Favourite Harness",
 			"url": "https://www.meetup.com/aiyatra/events/317217848/",
 			"start": "2026-11-14T09:00:00+05:30",
 			"end": "2026-11-14T12:30:00+05:30",
-			"going": 299,
+			"going": 294,
 			"photo": "https://secure.meetupstatic.com/photos/event/e/5/f/highres_537003679.jpeg",
 			"online": false,
-			"status": "ACTIVE",
+			"status": "PAST",
 			"formUrl": "https://forms.gle/whpN8ZUJAuoikGcz6",
 			"summary": "Venue Details Lseg, Capitaland Building, Block A, 11th Floor, Opposite to JP Morgan Building, Inorbit Mall Rd, Vittal Rao Nagar, Madhapur, Hyderabad, Telangana 500081, India · Hyderabad"
 		},
