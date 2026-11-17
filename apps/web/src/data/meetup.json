@@ -1,8 +1,8 @@
 {
-	"syncedAt": "2026-11-15T23:00:30.677Z",
+	"syncedAt": "2026-11-17T01:55:14.811Z",
 	"source": "https://www.meetup.com/aiyatra/events/",
 	"group": {
-		"members": 8289,
+		"members": 8372,
 		"rating": 4.64,
 		"ratingsCount": 196,
 		"pastEvents": 19
@@ -14,7 +14,7 @@
 			"url": "https://www.meetup.com/aiyatra/events/317425521/",
 			"start": "2026-11-28T09:00:00+05:30",
 			"end": "2026-11-28T12:30:00+05:30",
-			"going": 61,
+			"going": 76,
 			"photo": "https://secure.meetupstatic.com/photos/event/2/0/e/f/highres_537128431.jpeg",
 			"online": false,
 			"status": "ACTIVE",
@@ -27,7 +27,7 @@
 			"url": "https://www.meetup.com/aiyatra/events/317425727/",
 			"start": "2026-11-21T09:00:00+05:30",
 			"end": "2026-11-21T17:00:00+05:30",
-			"going": 82,
+			"going": 98,
 			"photo": "https://secure.meetupstatic.com/photos/event/2/2/7/b/highres_537128827.jpeg",
 			"online": false,
 			"status": "ACTIVE",
@@ -35,12 +35,25 @@
 			"summary": "Celebrating 1 Year of React Hyderabad Join us for UTSAVAM 2026, React Hyderabad's first-anniversary celebration, bringing together 400–500 developers, students, tech enthusiasts, industry leaders, and innovators for a full-day technology experience."
 		},
 		{
+			"id": "317451375",
+			"title": "Claude Code MasterClass",
+			"url": "https://www.meetup.com/aiyatra/events/317451375/",
+			"start": "2026-11-18T21:00:00+05:30",
+			"end": "2026-11-18T22:00:00+05:30",
+			"going": 62,
+			"photo": "https://secure.meetupstatic.com/photos/event/b/f/e/c/highres_537169132.jpeg",
+			"online": true,
+			"status": "ACTIVE",
+			"formUrl": null,
+			"summary": "Curious about Claude Code and ready to build something real? Join this webinar for a beginner-friendly, hands-on session where we’ll explore Claude Code and learn how to turn ideas into working software."
+		},
+		{
 			"id": "317217848",
 			"title": "Beyond the Harness: Engineering Durable AI Agents on Your Favourite Harness",
 			"url": "https://www.meetup.com/aiyatra/events/317217848/",
 			"start": "2026-11-14T09:00:00+05:30",
 			"end": "2026-11-14T12:30:00+05:30",
-			"going": 287,
+			"going": 282,
 			"photo": "https://secure.meetupstatic.com/photos/event/e/5/f/highres_537003679.jpeg",
 			"online": false,
 			"status": "PAST",
