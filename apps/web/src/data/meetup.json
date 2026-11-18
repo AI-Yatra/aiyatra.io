@@ -1,8 +1,8 @@
 {
-	"syncedAt": "2026-11-17T01:55:14.811Z",
+	"syncedAt": "2026-11-18T01:03:58.236Z",
 	"source": "https://www.meetup.com/aiyatra/events/",
 	"group": {
-		"members": 8372,
+		"members": 8430,
 		"rating": 4.64,
 		"ratingsCount": 196,
 		"pastEvents": 19
@@ -13,13 +13,13 @@
 			"title": "LLM Observability: From Pre-Training to Production",
 			"url": "https://www.meetup.com/aiyatra/events/317425521/",
 			"start": "2026-11-28T09:00:00+05:30",
-			"end": "2026-11-28T12:30:00+05:30",
-			"going": 76,
-			"photo": "https://secure.meetupstatic.com/photos/event/2/0/e/f/highres_537128431.jpeg",
+			"end": "2026-11-28T17:00:00+05:30",
+			"going": 89,
+			"photo": "https://secure.meetupstatic.com/photos/event/1/b/a/f/highres_537187087.jpeg",
 			"online": false,
 			"status": "ACTIVE",
 			"formUrl": "https://forms.gle/QqPNKqavEGK7phjG9",
-			"summary": "About the event Traditional monitoring tracks infrastructure health, but it often misses failures unique to LLMs. Models can experience training instability, reward hacking, inference degradation, or hallucinations while conventional dashboards continue to show everything as…"
+			"summary": "About the Event Traditional monitoring focuses on infrastructure health, but monitoring LLM-based systems requires looking beyond CPU, memory, and GPU metrics."
 		},
 		{
 			"id": "317425727",
@@ -27,7 +27,7 @@
 			"url": "https://www.meetup.com/aiyatra/events/317425727/",
 			"start": "2026-11-21T09:00:00+05:30",
 			"end": "2026-11-21T17:00:00+05:30",
-			"going": 98,
+			"going": 108,
 			"photo": "https://secure.meetupstatic.com/photos/event/2/2/7/b/highres_537128827.jpeg",
 			"online": false,
 			"status": "ACTIVE",
@@ -40,7 +40,7 @@
 			"url": "https://www.meetup.com/aiyatra/events/317451375/",
 			"start": "2026-11-18T21:00:00+05:30",
 			"end": "2026-11-18T22:00:00+05:30",
-			"going": 62,
+			"going": 79,
 			"photo": "https://secure.meetupstatic.com/photos/event/b/f/e/c/highres_537169132.jpeg",
 			"online": true,
 			"status": "ACTIVE",
@@ -53,7 +53,7 @@
 			"url": "https://www.meetup.com/aiyatra/events/317217848/",
 			"start": "2026-11-14T09:00:00+05:30",
 			"end": "2026-11-14T12:30:00+05:30",
-			"going": 282,
+			"going": 279,
 			"photo": "https://secure.meetupstatic.com/photos/event/e/5/f/highres_537003679.jpeg",
 			"online": false,
 			"status": "PAST",
