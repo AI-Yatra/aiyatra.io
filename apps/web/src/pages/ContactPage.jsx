@@ -33,7 +33,7 @@ const CHANNELS = [
 	{ icon: Linkedin, label: 'LinkedIn', value: 'linkedin.com/company/aiyatra', href: LINKEDIN_URL },
 	{ icon: Github, label: 'GitHub', value: 'github.com/AI-Yatra', href: GITHUB_URL },
 	{ icon: Instagram, label: 'Instagram', value: 'instagram.com/aiyatra_io', href: INSTAGRAM_URL },
-	{ icon: WhatsAppIcon, label: 'WhatsApp', value: 'chat.whatsapp.com/GWXTDtGjIs99fDtUGKJy5J', href: WHATSAPP_URL },
+	{ icon: WhatsAppIcon, label: 'WhatsApp', value: 'chat.whatsapp.com/F2dvOZ9AiSN3g5wXsdnLhT', href: WHATSAPP_URL },
 ];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
