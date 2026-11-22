@@ -1,8 +1,8 @@
 {
-	"syncedAt": "2026-11-21T23:29:45.820Z",
+	"syncedAt": "2026-11-22T23:41:13.640Z",
 	"source": "https://www.meetup.com/aiyatra/events/",
 	"group": {
-		"members": 8735,
+		"members": 8803,
 		"rating": 4.64,
 		"ratingsCount": 203,
 		"pastEvents": 21
@@ -14,7 +14,7 @@
 			"url": "https://www.meetup.com/aiyatra/events/317425521/",
 			"start": "2026-11-28T09:00:00+05:30",
 			"end": "2026-11-28T17:00:00+05:30",
-			"going": 245,
+			"going": 274,
 			"photo": "https://secure.meetupstatic.com/photos/event/1/b/a/f/highres_537187087.jpeg",
 			"online": false,
 			"status": "ACTIVE",
@@ -27,7 +27,7 @@
 			"url": "https://www.meetup.com/aiyatra/events/317425727/",
 			"start": "2026-11-21T09:00:00+05:30",
 			"end": "2026-11-21T17:00:00+05:30",
-			"going": 103,
+			"going": 96,
 			"photo": "https://secure.meetupstatic.com/photos/event/2/2/7/b/highres_537128827.jpeg",
 			"online": false,
 			"status": "PAST",
