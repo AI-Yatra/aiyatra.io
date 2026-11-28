@@ -56,7 +56,7 @@ const repeats = Array.from({ length: 8 });
 		</a>
 		<nav class="hidden items-center gap-1 rounded-full border border-tone-blue-deep/10 bg-white/70 p-1 text-sm font-medium text-ink/80 xl:flex">
 			{NAV_LINKS.map((l) => (
-				<a href={l.href} class="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">{l.label}</a>
+				<a href={l.href} class="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">{l.live && <span class="relative mr-2 inline-flex h-2 w-2 align-middle" aria-hidden="true"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-tone-blue-deep/60 motion-reduce:animate-none"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-tone-blue-deep"></span></span>}{l.label}</a>
 			))}
 		</nav>
 		<div class="flex items-center gap-2">
@@ -88,7 +88,7 @@ const repeats = Array.from({ length: 8 });
 	<nav id="mobile-nav" class="mobile-nav glass overflow-hidden border-t border-tone-blue-deep/10 xl:hidden" hidden>
 		<div class="wrap flex flex-col gap-1 py-4">
 			{NAV_LINKS.map((l, i) => (
-				<a href={l.href} style={`--i:${i}`} class="mobile-nav-item block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">{l.label}</a>
+				<a href={l.href} style={`--i:${i}`} class="mobile-nav-item block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">{l.live && <span class="relative mr-2 inline-flex h-2 w-2 align-middle" aria-hidden="true"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-tone-blue-deep/60 motion-reduce:animate-none"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-tone-blue-deep"></span></span>}{l.label}</a>
 			))}
 			<a href={MEETUP_URL} target="_blank" rel="noreferrer" class="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-tone-blue-deep font-semibold text-white">
 				Join free on Meetup <Icon name="ArrowUpRight" class="h-4 w-4" />

@@ -8,6 +8,8 @@ import MEETUP from './meetup.json';
 import { EVENT_NOTES } from './event-notes';
 
 export const MEETUP_URL = 'https://www.meetup.com/aiyatra/';
+// AIYatra Hackathon, hosted on Leafcloud. Linked from the header nav and /hackathon.
+export const HACKATHON_URL = 'https://hackathon.apps.leafcloud.app';
 export const PAST_EVENTS_URL = 'https://www.meetup.com/aiyatra/events/past/';
 // Subscribing to this keeps every new AIYatra session in your own calendar.
 export const CALENDAR_FEED_URL = 'webcal://www.meetup.com/aiyatra/events/ical/';

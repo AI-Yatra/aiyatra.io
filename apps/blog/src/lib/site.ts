@@ -32,6 +32,7 @@ export const NAV_LINKS = [
 	{ href: '/labs', label: 'Research Labs' },
 	{ href: '/#community', label: 'Community' },
 	{ href: '/blog', label: 'Blog' },
+	{ href: 'https://hackathon.apps.leafcloud.app', label: 'Hackathon', live: true },
 	{ href: '/contact', label: 'Contact Us' },
 ];
 

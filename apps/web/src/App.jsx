@@ -3,6 +3,7 @@ import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import PauseOffscreen from './components/PauseOffscreen';
 import HomePage from './pages/HomePage';
+import { HACKATHON_URL } from './data/site';
 
 // The home page ships in the main bundle; every other page loads on demand.
 const AmbassadorsPage = lazy(() => import('./pages/AmbassadorsPage'));
@@ -24,6 +25,12 @@ function ToBlogAdmin() {
     return <PageFallback />;
 }
 
+// aiyatra.io/hackathon is a short, shareable link to the hackathon site.
+function ToHackathon() {
+    window.location.replace(HACKATHON_URL);
+    return <PageFallback />;
+}
+
 function App() {
     // Served from "/" (custom domain + Vercel).
     // Vite injects the build's base as import.meta.env.BASE_URL, so the
@@ -41,6 +48,7 @@ function App() {
                 <Route path="/labs" element={<LabsPage />} />
                 <Route path="/admin" element={<ToBlogAdmin />} />
                 <Route path="/contact" element={<ContactPage />} />
+                <Route path="/hackathon" element={<ToHackathon />} />
             </Routes>
             </Suspense>
         </Router>

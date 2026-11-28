@@ -6,7 +6,7 @@ import {
 	Ticket, Megaphone, Menu, X, GraduationCap, FlaskConical, Heart,
 } from 'lucide-react';
 import {
-	MEETUP_URL, AI_YATRA_LOGO, GROUP_STATS, CONTACT_EMAIL, LINKEDIN_URL, GITHUB_URL,
+	MEETUP_URL, HACKATHON_URL, AI_YATRA_LOGO, GROUP_STATS, CONTACT_EMAIL, LINKEDIN_URL, GITHUB_URL,
 	INSTAGRAM_URL, WHATSAPP_URL, formatDay, formatTime,
 } from '@/data/site';
 import { WhatsAppIcon } from '@/components/WhatsAppIcon';
@@ -19,13 +19,24 @@ export const NAV_LINKS = [
 	{ to: '/labs', label: 'Research Labs' },
 	{ to: '/#community', label: 'Community' },
 	{ to: '/blog', label: 'Blog' },
+	{ to: HACKATHON_URL, label: 'Hackathon', live: true },
 	{ to: '/contact', label: 'Contact Us' },
 ];
 
-// /blog is served by the Astro blog app, not this router — link to it with a
-// plain <a> so the browser loads the page instead of a client-side route.
+// /blog is served by the Astro blog app and the hackathon lives on its own
+// host, so both use a plain <a> (same tab) instead of a client-side route.
 function NavLink({ to, ...props }) {
-	return to.startsWith('/blog') ? <a href={to} {...props} /> : <Link to={to} {...props} />;
+	return to.startsWith('/blog') || /^https?:/.test(to) ? <a href={to} {...props} /> : <Link to={to} {...props} />;
+}
+
+// Small pulsing dot that marks the hackathon as happening now.
+function LiveDot() {
+	return (
+		<span className="relative mr-2 inline-flex h-2 w-2 align-middle" aria-hidden="true">
+			<span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-tone-blue-deep/60 motion-reduce:animate-none" />
+			<span className="relative inline-flex h-2 w-2 rounded-full bg-tone-blue-deep" />
+		</span>
+	);
 }
 
 function Logo({ dark = false }) {
@@ -110,7 +121,7 @@ export function Header() {
 					<nav className="hidden items-center gap-1 rounded-full border border-tone-blue-deep/10 bg-white/70 p-1 text-sm font-medium text-ink/80 xl:flex">
 						{NAV_LINKS.map((l) => (
 							<NavLink key={l.label} to={l.to} className="whitespace-nowrap rounded-full px-4 py-2 transition-colors hover:bg-tone-blue hover:text-tone-blue-deep">
-								{l.label}
+								{l.live && <LiveDot />}{l.label}
 							</NavLink>
 						))}
 					</nav>
@@ -147,7 +158,7 @@ export function Header() {
 								{NAV_LINKS.map((l, i) => (
 									<motion.div key={l.label} initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.05 }}>
 										<NavLink to={l.to} className="block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-tone-blue">
-											{l.label}
+											{l.live && <LiveDot />}{l.label}
 										</NavLink>
 									</motion.div>
 								))}
@@ -213,6 +224,7 @@ export function Footer() {
 						<li><a href="/blog/guide" className={footerLink}>Writing guide</a></li>
 						<li><Link to="/#community" className={footerLink}>People & voices</Link></li>
 						<li><Link to="/#faq" className={footerLink}>Quick answers</Link></li>
+						<li><a href={HACKATHON_URL} className={footerLink}>Hackathon</a></li>
 						<li><Link to="/contact" className={footerLink}>Contact us</Link></li>
 						<li><a href={MEETUP_URL} target="_blank" rel="noreferrer" className={`inline-flex items-center gap-1 ${footerLink}`}>Meetup group <ArrowUpRight className="h-3.5 w-3.5" /></a></li>
 					</ul>
